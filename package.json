@@ -1,0 +1,17 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "A simple task management system with web interface",
+  "main": "index.html",
+  "scripts": {
+    "start": "echo \"Please open index.html in a browser\"",
+    "test": "echo \"Please open index.html in a browser and test manually\""
+  },
+  "keywords": [
+    "task",
+    "manager",
+    "web"
+  ],
+  "author": "",
+  "license": "MIT"
+}
