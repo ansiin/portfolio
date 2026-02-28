@@ -33,3 +33,17 @@ Is there any way we can make it more readable or easier to understand or simplif
 ### 4. Improve Parameter Names
 
 Can we give understandable parameter names?
+
+Minu järgmine ül oleks: Full TypeScript conversion with strict mode
+Custom type definitions for all entities
+Generic utility functions (at least 3)
+Add: recurring tasks, task dependencies, statistics
+search, sorting
+Category +-< Task >-+ Priority relationships
+Deliverables:
+
+TypeScript source with tsconfig.json  
+ AI usage log: what worked, what didn't, kirjuta mida ma pean tegema ja kuidas see ära lahendada, nii, et kood oleks võimalikult lihtne ja loetav
+
+Enne kui me alustamne võiks lisada siisa ka arhitektuuri ehk, DAL, BLL, UI folderid kuhu sisse me kirjutame vastavaad andmed ja, et filed ei lähe liiga
+suureks siis võiks olla API-d ehk küsida infot

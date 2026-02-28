@@ -3,7 +3,7 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Task Manager</title>
+    <title>Task Manager (TypeScript)</title>
     <link rel="stylesheet" href="styles.css" />
   </head>
   <body>
@@ -14,6 +14,8 @@
         <button id="addTaskBtn">Add New Task</button>
         <button id="clearTasksBtn">Clear All Tasks</button>
       </div>
+
+      <div id="statsBox" class="filter-section"></div>
 
       <div class="search-section">
         <input type="text" id="searchInput" placeholder="Search tasks..." />
@@ -44,12 +46,35 @@
             </select>
           </div>
           <div class="form-group">
+            <label for="categoryFilter">Category:</label>
+            <select id="categoryFilter">
+              <option value="">All</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="dueDateFilter">Due Date:</label>
             <input type="date" id="dueDateFilter" />
           </div>
           <div class="form-group">
-            <label for="tagsFilter">Tags:</label>
-            <input type="text" id="tagsFilter" placeholder="Comma-separated" />
+            <label for="tagsFilter">Tag:</label>
+            <input type="text" id="tagsFilter" placeholder="single tag" />
+          </div>
+          <div class="form-group">
+            <label for="sortField">Sort Field:</label>
+            <select id="sortField">
+              <option value="createdAt">Created</option>
+              <option value="dueDate">Due Date</option>
+              <option value="title">Title</option>
+              <option value="priority">Priority</option>
+              <option value="status">Status</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="sortDirection">Sort Direction:</label>
+            <select id="sortDirection">
+              <option value="desc">Desc</option>
+              <option value="asc">Asc</option>
+            </select>
           </div>
         </div>
         <div style="margin-top: 15px">
@@ -58,9 +83,7 @@
         </div>
       </div>
 
-      <div class="task-list" id="taskList">
-        <!-- Tasks will be dynamically inserted here -->
-      </div>
+      <div class="task-list" id="taskList"></div>
     </div>
 
     <div id="taskModal" class="modal">
@@ -68,18 +91,18 @@
         <span class="close">&times;</span>
         <h2 id="modalTitle">Add New Task</h2>
         <form id="taskForm">
-          <input type="hidden" id="taskId" />
+          <input type="hidden" id="taskId" name="taskId" />
           <div class="form-group">
             <label for="taskTitle">Title:</label>
-            <input type="text" id="taskTitle" required />
+            <input type="text" id="taskTitle" name="taskTitle" required />
           </div>
           <div class="form-group">
             <label for="taskDescription">Description:</label>
-            <textarea id="taskDescription"></textarea>
+            <textarea id="taskDescription" name="taskDescription"></textarea>
           </div>
           <div class="form-group">
             <label for="taskStatus">Status:</label>
-            <select id="taskStatus">
+            <select id="taskStatus" name="taskStatus">
               <option value="todo">Todo</option>
               <option value="in-progress">In Progress</option>
               <option value="completed">Completed</option>
@@ -88,7 +111,7 @@
           </div>
           <div class="form-group">
             <label for="taskPriority">Priority:</label>
-            <select id="taskPriority">
+            <select id="taskPriority" name="taskPriority">
               <option value="low">Low</option>
               <option value="medium">Medium</option>
               <option value="high">High</option>
@@ -96,12 +119,46 @@
             </select>
           </div>
           <div class="form-group">
+            <label for="taskCategory">Category:</label>
+            <select id="taskCategory" name="taskCategory">
+              <option value="">None</option>
+            </select>
+          </div>
+          <div class="form-group">
             <label for="taskDueDate">Due Date:</label>
-            <input type="date" id="taskDueDate" />
+            <input type="date" id="taskDueDate" name="taskDueDate" />
           </div>
           <div class="form-group">
             <label for="taskTags">Tags:</label>
-            <input type="text" id="taskTags" placeholder="Comma-separated" />
+            <input type="text" id="taskTags" name="taskTags" placeholder="Comma-separated" />
+          </div>
+          <div class="form-group">
+            <label for="taskDependencies">Dependencies (Task IDs):</label>
+            <select id="taskDependencies" name="taskDependencies" multiple size="6"></select>
+            <small>Hold Ctrl (Windows) or Cmd (Mac) to select multiple tasks.</small>
+          </div>
+          <div class="form-group">
+            <label for="taskRecurrenceType">Recurrence:</label>
+            <select id="taskRecurrenceType" name="taskRecurrenceType">
+              <option value="none">None</option>
+              <option value="daily">Daily</option>
+              <option value="weekly">Weekly</option>
+              <option value="monthly">Monthly</option>
+            </select>
+          </div>
+          <div class="form-group">
+            <label for="taskRecurrenceInterval">Recurrence Interval:</label>
+            <input
+              type="number"
+              id="taskRecurrenceInterval"
+              name="taskRecurrenceInterval"
+              min="1"
+              value="1"
+            />
+          </div>
+          <div class="form-group">
+            <label for="taskRecurrenceEndDate">Recurrence End Date:</label>
+            <input type="date" id="taskRecurrenceEndDate" name="taskRecurrenceEndDate" />
           </div>
           <div class="form-group">
             <button type="submit">Save</button>
@@ -111,6 +168,6 @@
       </div>
     </div>
 
-    <script src="script.js"></script>
+    <script type="module" src="./dist/main.js"></script>
   </body>
 </html>

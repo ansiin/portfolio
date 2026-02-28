@@ -1,0 +1,24 @@
+{
+  "name": "task-manager",
+  "version": "1.0.0",
+  "description": "Task manager in strict TypeScript with DAL/BLL/UI architecture",
+  "main": "dist/main.js",
+  "type": "module",
+  "scripts": {
+    "build": "tsc && node fix-imports.mjs",
+    "typecheck": "tsc --noEmit",
+    "serve": "node server.mjs",
+    "start": "npm run build && echo \"Open index.html in browser\"",
+    "test": "npm run typecheck"
+  },
+  "keywords": [
+    "task",
+    "manager",
+    "web"
+  ],
+  "author": "",
+  "license": "MIT",
+  "devDependencies": {
+    "typescript": "^5.9.2"
+  }
+}
