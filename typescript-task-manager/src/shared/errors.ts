@@ -1,27 +1,21 @@
-export class ValidationError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "ValidationError";
-  }
+function createNamedError(name: string, message: string): Error {
+  const error = new Error(message);
+  error.name = name;
+  return error;
 }
 
-export class NotFoundError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "NotFoundError";
-  }
+export function validationError(message: string): Error {
+  return createNamedError("ValidationError", message);
 }
 
-export class DependencyError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "DependencyError";
-  }
+export function notFoundError(message: string): Error {
+  return createNamedError("NotFoundError", message);
 }
 
-export class DataAccessError extends Error {
-  constructor(message: string) {
-    super(message);
-    this.name = "DataAccessError";
-  }
+export function dependencyError(message: string): Error {
+  return createNamedError("DependencyError", message);
+}
+
+export function dataAccessError(message: string): Error {
+  return createNamedError("DataAccessError", message);
 }

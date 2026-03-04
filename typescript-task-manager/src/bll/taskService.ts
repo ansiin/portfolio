@@ -1,30 +1,50 @@
-import type { ITaskService } from "../api/bll/ITaskService";
-import type { IDependencyService } from "../api/bll/IDependencyService";
-import type { IQueryService } from "../api/bll/IQueryService";
-import type { IRecurrenceService } from "../api/bll/IRecurrenceService";
-import type { IStatsService } from "../api/bll/IStatsService";
-import type { ICategoryRepository } from "../api/dal/ICategoryRepository";
-import type { ITaskRepository } from "../api/dal/ITaskRepository";
 import type { CreateTaskInput, QueryInput, UpdateTaskInput } from "../types/dto";
 import type { Task, TaskStatistics } from "../types/entities";
-import { DependencyError, NotFoundError, ValidationError } from "../shared/errors";
+import type { CategoryRepository } from "../dal/categoryRepository";
+import type { TaskRepository } from "../dal/taskRepository";
+import { dependencyError, notFoundError, validationError } from "../shared/errors";
 import { generateId, uniqueBy } from "../shared/utils";
 import { validateTaskCreate, validateTaskUpdate } from "../shared/validators";
+import { canMarkTaskCompleted, hasDependencyCycle } from "./dependencyService";
+import { runTaskQuery } from "./queryService";
+import { createNextRecurringTask } from "./recurrenceService";
+import { calculateTaskStats } from "./statsService";
 
-export class TaskService implements ITaskService {
-  constructor(
-    private readonly tasks: ITaskRepository,
-    private readonly categories: ICategoryRepository,
-    private readonly dependencies: IDependencyService,
-    private readonly recurrence: IRecurrenceService,
-    private readonly stats: IStatsService,
-    private readonly queryService: IQueryService,
-  ) {}
+export type TaskService = {
+  add(input: CreateTaskInput): Promise<Task>;
+  update(id: string, input: UpdateTaskInput): Promise<Task>;
+  delete(id: string): Promise<void>;
+  list(): Promise<Task[]>;
+  clear(): Promise<void>;
+  query(query: QueryInput): Promise<Task[]>;
+  complete(id: string): Promise<Task>;
+  getStats(): Promise<TaskStatistics>;
+};
 
-  async add(input: CreateTaskInput): Promise<Task> {
+export function createTaskService(tasks: TaskRepository, categories: CategoryRepository): TaskService {
+  const ensureCategoryExists = async (categoryId?: string): Promise<void> => {
+    if (!categoryId) {
+      return;
+    }
+    const category = await categories.getById(categoryId);
+    if (!category) {
+      throw validationError(`Category not found: ${categoryId}`);
+    }
+  };
+
+  const ensureDependenciesExist = async (dependencyIds: string[]): Promise<void> => {
+    const all = await tasks.getAll();
+    for (const depId of dependencyIds) {
+      if (!all.some((task) => task.id === depId)) {
+        throw validationError(`Dependency not found: ${depId}`);
+      }
+    }
+  };
+
+  const add = async (input: CreateTaskInput): Promise<Task> => {
     validateTaskCreate(input);
-    await this.ensureCategoryExists(input.categoryId);
-    await this.ensureDependenciesExist(input.dependencyIds ?? []);
+    await ensureCategoryExists(input.categoryId);
+    await ensureDependenciesExist(input.dependencyIds ?? []);
 
     const now = new Date().toISOString();
     const recurrence = {
@@ -47,24 +67,24 @@ export class TaskService implements ITaskService {
       updatedAt: now,
     };
 
-    const all = await this.tasks.getAll();
-    if (this.dependencies.hasCycle(all, task.id, task.dependencyIds)) {
-      throw new DependencyError("Dependency cycle detected");
+    const all = await tasks.getAll();
+    if (hasDependencyCycle(all, task.id, task.dependencyIds)) {
+      throw dependencyError("Dependency cycle detected");
     }
 
-    await this.tasks.save(task);
+    await tasks.save(task);
     return task;
-  }
+  };
 
-  async update(id: string, input: UpdateTaskInput): Promise<Task> {
+  const update = async (id: string, input: UpdateTaskInput): Promise<Task> => {
     validateTaskUpdate(input);
-    const existing = await this.tasks.getById(id);
+    const existing = await tasks.getById(id);
     if (!existing) {
-      throw new NotFoundError(`Task not found: ${id}`);
+      throw notFoundError(`Task not found: ${id}`);
     }
 
-    await this.ensureCategoryExists(input.categoryId);
-    await this.ensureDependenciesExist(input.dependencyIds ?? existing.dependencyIds);
+    await ensureCategoryExists(input.categoryId);
+    await ensureDependenciesExist(input.dependencyIds ?? existing.dependencyIds);
 
     const updated: Task = {
       ...existing,
@@ -77,51 +97,50 @@ export class TaskService implements ITaskService {
       updatedAt: new Date().toISOString(),
     };
 
-    const all = await this.tasks.getAll();
-    if (this.dependencies.hasCycle(all, id, updated.dependencyIds)) {
-      throw new DependencyError("Dependency cycle detected");
+    const all = await tasks.getAll();
+    if (hasDependencyCycle(all, id, updated.dependencyIds)) {
+      throw dependencyError("Dependency cycle detected");
     }
 
-    await this.tasks.save(updated);
+    await tasks.save(updated);
     return updated;
-  }
+  };
 
-  async delete(id: string): Promise<void> {
-    const existing = await this.tasks.getById(id);
+  const remove = async (id: string): Promise<void> => {
+    const existing = await tasks.getById(id);
     if (!existing) {
-      throw new NotFoundError(`Task not found: ${id}`);
+      throw notFoundError(`Task not found: ${id}`);
     }
 
-    const all = await this.tasks.getAll();
+    const all = await tasks.getAll();
     const dependent = all.some((task) => task.dependencyIds.includes(id));
     if (dependent) {
-      throw new DependencyError("Cannot delete task that other tasks depend on");
+      throw dependencyError("Cannot delete task that other tasks depend on");
     }
-    await this.tasks.remove(id);
-  }
 
-  async list(): Promise<Task[]> {
-    return this.tasks.getAll();
-  }
+    await tasks.remove(id);
+  };
 
-  async clear(): Promise<void> {
-    await this.tasks.clear();
-  }
+  const list = async (): Promise<Task[]> => tasks.getAll();
 
-  async query(query: QueryInput): Promise<Task[]> {
-    const all = await this.tasks.getAll();
-    return this.queryService.run(all, query);
-  }
+  const clear = async (): Promise<void> => {
+    await tasks.clear();
+  };
 
-  async complete(id: string): Promise<Task> {
-    const task = await this.tasks.getById(id);
+  const query = async (input: QueryInput): Promise<Task[]> => {
+    const all = await tasks.getAll();
+    return runTaskQuery(all, input);
+  };
+
+  const complete = async (id: string): Promise<Task> => {
+    const task = await tasks.getById(id);
     if (!task) {
-      throw new NotFoundError(`Task not found: ${id}`);
+      throw notFoundError(`Task not found: ${id}`);
     }
 
-    const all = await this.tasks.getAll();
-    if (!this.dependencies.canMarkCompleted(all, task)) {
-      throw new DependencyError("Task dependencies are not completed");
+    const all = await tasks.getAll();
+    if (!canMarkTaskCompleted(all, task)) {
+      throw dependencyError("Task dependencies are not completed");
     }
 
     const updated: Task = {
@@ -129,37 +148,29 @@ export class TaskService implements ITaskService {
       status: "completed",
       updatedAt: new Date().toISOString(),
     };
-    await this.tasks.save(updated);
+    await tasks.save(updated);
 
-    const next = this.recurrence.createNext(updated);
+    const next = createNextRecurringTask(updated);
     if (next) {
-      await this.tasks.save(next);
+      await tasks.save(next);
     }
 
     return updated;
-  }
+  };
 
-  async getStats(): Promise<TaskStatistics> {
-    const all = await this.tasks.getAll();
-    return this.stats.calculate(all);
-  }
+  const getStats = async (): Promise<TaskStatistics> => {
+    const all = await tasks.getAll();
+    return calculateTaskStats(all);
+  };
 
-  private async ensureCategoryExists(categoryId?: string): Promise<void> {
-    if (!categoryId) {
-      return;
-    }
-    const category = await this.categories.getById(categoryId);
-    if (!category) {
-      throw new ValidationError(`Category not found: ${categoryId}`);
-    }
-  }
-
-  private async ensureDependenciesExist(dependencyIds: string[]): Promise<void> {
-    const all = await this.tasks.getAll();
-    for (const depId of dependencyIds) {
-      if (!all.some((task) => task.id === depId)) {
-        throw new ValidationError(`Dependency not found: ${depId}`);
-      }
-    }
-  }
+  return {
+    add,
+    update,
+    delete: remove,
+    list,
+    clear,
+    query,
+    complete,
+    getStats,
+  };
 }

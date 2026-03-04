@@ -2,19 +2,19 @@ export type TaskStatus = "todo" | "in-progress" | "completed" | "cancelled";
 export type TaskPriority = "low" | "medium" | "high" | "urgent";
 export type RecurrenceType = "none" | "daily" | "weekly" | "monthly";
 
-export interface Category {
+export type Category = {
   id: string;
   name: string;
   createdAt: string;
-}
+};
 
-export interface RecurrenceRule {
+export type RecurrenceRule = {
   type: RecurrenceType;
   interval: number;
   endDate?: string;
-}
+};
 
-export interface Task {
+export type Task = {
   id: string;
   title: string;
   description: string;
@@ -27,18 +27,18 @@ export interface Task {
   recurrence: RecurrenceRule;
   createdAt: string;
   updatedAt: string;
-}
+};
 
-export interface TaskStatistics {
+export type TaskStatistics = {
   total: number;
   completed: number;
   overdue: number;
   completionRate: number;
   byStatus: Record<TaskStatus, number>;
   byPriority: Record<TaskPriority, number>;
-}
+};
 
-export interface SortOption {
+export type SortOption = {
   field: "title" | "createdAt" | "dueDate" | "priority" | "status";
   direction: "asc" | "desc";
-}
+};

@@ -5,9 +5,6 @@ import { validateTaskData } from "../shared/validators.js";
 export function createTaskService({
   taskRepository,
   queryService,
-  statsService,
-  dependencyService,
-  recurrenceService,
 }) {
   function createTask(taskData) {
     const now = new Date().toISOString();
@@ -77,23 +74,6 @@ export function createTaskService({
     return queryService.search(taskRepository.getAll(), query);
   }
 
-  function complete(taskId) {
-    const existing = getById(taskId);
-    if (!dependencyService.canComplete(existing)) {
-      return existing;
-    }
-    const updated = update(taskId, { status: "completed" });
-    const next = recurrenceService.maybeCreateNextTask(updated);
-    if (next) {
-      taskRepository.save(next);
-    }
-    return updated;
-  }
-
-  function stats() {
-    return statsService.calculate(taskRepository.getAll());
-  }
-
   return {
     add,
     update,
@@ -103,7 +83,5 @@ export function createTaskService({
     clearAll,
     filter,
     search,
-    complete,
-    stats,
   };
 }

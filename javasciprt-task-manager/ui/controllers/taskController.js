@@ -1,7 +1,6 @@
 import { createFilterController } from "./filterController.js";
 import { closeTaskModal, openTaskModal, readTaskForm } from "../views/taskFormView.js";
 import { renderTaskList } from "../views/taskListView.js";
-import { renderStats } from "../views/statsView.js";
 
 export function createTaskController(dom, taskService) {
   let visibleTasks = [];
@@ -9,7 +8,6 @@ export function createTaskController(dom, taskService) {
   function refresh(tasks = taskService.list()) {
     visibleTasks = tasks;
     renderTaskList(dom.taskList, visibleTasks);
-    renderStats(taskService.stats());
   }
 
   function onTaskListClick(event) {

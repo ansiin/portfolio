@@ -1,57 +1,42 @@
-import type { IFilterController } from "../../api/ui/IFilterController";
 import type { QueryInput } from "../../types/dto";
 import type { TaskPriority, TaskStatus } from "../../types/entities";
 import type { AppDom } from "../domBindings";
 
-export class FilterController implements IFilterController {
-  constructor(
-    private readonly dom: AppDom,
-    private readonly onQuery: (query: QueryInput) => Promise<void>,
-  ) {}
+export type FilterController = {
+  bind(): void;
+};
 
-  bind(): void {
-    this.dom.searchBtn.addEventListener("click", () => void this.onQuery(this.getQuery()));
-    this.dom.applyFiltersBtn.addEventListener("click", () => void this.onQuery(this.getQuery()));
-    this.dom.clearFiltersBtn.addEventListener("click", () => {
-      this.dom.statusFilter.value = "";
-      this.dom.priorityFilter.value = "";
-      this.dom.categoryFilter.value = "";
-      this.dom.dueDateFilter.value = "";
-      this.dom.tagsFilter.value = "";
-      this.dom.searchInput.value = "";
-      this.dom.sortField.value = "createdAt";
-      this.dom.sortDirection.value = "desc";
-      void this.onQuery(this.getQuery());
-    });
-  }
-
-  private getQuery(): QueryInput {
+export function createFilterController(
+  dom: AppDom,
+  onQuery: (query: QueryInput) => Promise<void>,
+): FilterController {
+  const getQuery = (): QueryInput => {
     const query: QueryInput = {
       sort: {
-        field: this.dom.sortField.value as "title" | "createdAt" | "dueDate" | "priority" | "status",
-        direction: this.dom.sortDirection.value as "asc" | "desc",
+        field: dom.sortField.value as "title" | "createdAt" | "dueDate" | "priority" | "status",
+        direction: dom.sortDirection.value as "asc" | "desc",
       },
     };
 
-    const search = this.dom.searchInput.value.trim();
+    const search = dom.searchInput.value.trim();
     if (search) {
       query.search = search;
     }
 
     const filter: QueryInput["filter"] = {};
-    if (this.dom.statusFilter.value) {
-      filter.status = this.dom.statusFilter.value as TaskStatus;
+    if (dom.statusFilter.value) {
+      filter.status = dom.statusFilter.value as TaskStatus;
     }
-    if (this.dom.priorityFilter.value) {
-      filter.priority = this.dom.priorityFilter.value as TaskPriority;
+    if (dom.priorityFilter.value) {
+      filter.priority = dom.priorityFilter.value as TaskPriority;
     }
-    if (this.dom.categoryFilter.value) {
-      filter.categoryId = this.dom.categoryFilter.value;
+    if (dom.categoryFilter.value) {
+      filter.categoryId = dom.categoryFilter.value;
     }
-    if (this.dom.dueDateFilter.value) {
-      filter.dueDate = this.dom.dueDateFilter.value;
+    if (dom.dueDateFilter.value) {
+      filter.dueDate = dom.dueDateFilter.value;
     }
-    const tag = this.dom.tagsFilter.value.trim();
+    const tag = dom.tagsFilter.value.trim();
     if (tag) {
       filter.tag = tag;
     }
@@ -60,5 +45,23 @@ export class FilterController implements IFilterController {
     }
 
     return query;
-  }
+  };
+
+  const bind = (): void => {
+    dom.searchBtn.addEventListener("click", () => void onQuery(getQuery()));
+    dom.applyFiltersBtn.addEventListener("click", () => void onQuery(getQuery()));
+    dom.clearFiltersBtn.addEventListener("click", () => {
+      dom.statusFilter.value = "";
+      dom.priorityFilter.value = "";
+      dom.categoryFilter.value = "";
+      dom.dueDateFilter.value = "";
+      dom.tagsFilter.value = "";
+      dom.searchInput.value = "";
+      dom.sortField.value = "createdAt";
+      dom.sortDirection.value = "desc";
+      void onQuery(getQuery());
+    });
+  };
+
+  return { bind };
 }

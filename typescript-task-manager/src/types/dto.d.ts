@@ -1,6 +1,6 @@
 import type { SortOption, TaskPriority, TaskStatus } from "./entities";
 
-export interface CreateTaskInput {
+export type CreateTaskInput = {
   title: string;
   description?: string;
   status?: TaskStatus;
@@ -12,9 +12,9 @@ export interface CreateTaskInput {
   recurrenceType?: "none" | "daily" | "weekly" | "monthly";
   recurrenceInterval?: number;
   recurrenceEndDate?: string;
-}
+};
 
-export interface UpdateTaskInput {
+export type UpdateTaskInput = {
   title?: string;
   description?: string;
   status?: TaskStatus;
@@ -23,18 +23,18 @@ export interface UpdateTaskInput {
   tags?: string[];
   categoryId?: string;
   dependencyIds?: string[];
-}
+};
 
-export interface TaskFilterInput {
+export type TaskFilterInput = {
   status?: TaskStatus;
   priority?: TaskPriority;
   categoryId?: string;
   dueDate?: string;
   tag?: string;
-}
+};
 
-export interface QueryInput {
+export type QueryInput = {
   search?: string;
   filter?: TaskFilterInput;
   sort?: SortOption;
-}
+};

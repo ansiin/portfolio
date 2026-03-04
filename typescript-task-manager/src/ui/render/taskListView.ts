@@ -1,10 +1,10 @@
 import type { Category, Task } from "../../types/entities";
 
-interface TaskListHandlers {
+type TaskListHandlers = {
   onEdit: (id: string) => void;
   onDelete: (id: string) => void;
   onComplete: (id: string) => void;
-}
+};
 
 export function renderTaskList(
   root: HTMLElement,

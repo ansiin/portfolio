@@ -1,4 +1,4 @@
-export interface AppDom {
+export type AppDom = {
   taskList: HTMLElement;
   statsBox: HTMLElement;
   taskModal: HTMLElement;
@@ -20,12 +20,20 @@ export interface AppDom {
   sortField: HTMLSelectElement;
   sortDirection: HTMLSelectElement;
   taskDependencies: HTMLSelectElement;
-}
+};
 
 function byId<T extends HTMLElement>(id: string): T {
   const element = document.getElementById(id);
   if (!element) {
     throw new Error(`Missing DOM element: ${id}`);
+  }
+  return element as T;
+}
+
+function bySelector<T extends Element>(selector: string): T {
+  const element = document.querySelector(selector);
+  if (!element) {
+    throw new Error(`Missing DOM element: ${selector}`);
   }
   return element as T;
 }
@@ -40,7 +48,7 @@ export function bindDom(): AppDom {
     addTaskBtn: byId("addTaskBtn"),
     clearTasksBtn: byId("clearTasksBtn"),
     cancelBtn: byId("cancelBtn"),
-    closeBtn: document.querySelector(".close") as HTMLElement,
+    closeBtn: bySelector<HTMLElement>(".close"),
     searchInput: byId("searchInput"),
     searchBtn: byId("searchBtn"),
     applyFiltersBtn: byId("applyFiltersBtn"),

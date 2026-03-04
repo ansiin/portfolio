@@ -17,10 +17,6 @@ Pure TypeScript task manager with DAL/BLL/UI architecture and browser `localStor
 
 ```txt
 src/
-  api/
-    dal/
-    bll/
-    ui/
   types/
   dal/
   bll/
@@ -29,10 +25,10 @@ src/
   main.ts
 ```
 
-- `dal`: storage and repositories only
-- `bll`: business rules and orchestration
-- `ui`: rendering and event handling
-- `api`: interfaces/contracts per layer
+- `dal`: storage and repositories only (factory functions)
+- `bll`: business rules and orchestration (pure functions + service factory)
+- `ui`: rendering and event handling (controller factories)
+- `types`: shared type aliases (`.d.ts`, no runtime output)
 
 ## Main Entities
 
