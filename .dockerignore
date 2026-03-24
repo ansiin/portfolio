@@ -1,0 +1,9 @@
+.git
+.gitlab
+.gitlab-ci.yml
+README.md
+promts.md
+**/node_modules
+**/dist
+**/README.md
+**/AI_LOG.md

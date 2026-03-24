@@ -1,0 +1,54 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Task Managers</title>
+    <style>
+      :root {
+        color-scheme: light;
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      body {
+        margin: 0;
+        min-height: 100vh;
+        display: grid;
+        place-items: center;
+        background: linear-gradient(135deg, #f5f7fb, #dfe8f7);
+        color: #162033;
+      }
+
+      main {
+        width: min(720px, calc(100% - 32px));
+        background: rgba(255, 255, 255, 0.92);
+        border-radius: 20px;
+        padding: 32px;
+        box-shadow: 0 18px 45px rgba(22, 32, 51, 0.16);
+      }
+
+      h1 {
+        margin-top: 0;
+      }
+
+      ul {
+        padding-left: 20px;
+      }
+
+      a {
+        color: #0a5ad1;
+        font-weight: 600;
+      }
+    </style>
+  </head>
+  <body>
+    <main>
+      <h1>Task Manager Deployments</h1>
+      <p>This container serves both course projects from a single nginx instance.</p>
+      <ul>
+        <li><a href="/javascript-task-manager/">JavaScript Task Manager</a></li>
+        <li><a href="/typescript-task-manager/">TypeScript Task Manager</a></li>
+      </ul>
+    </main>
+  </body>
+</html>
