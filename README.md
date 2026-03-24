@@ -1,69 +1,56 @@
-# Docker Deployment for JS and TS Task Managers
+# JS and TS Task Managers Deployed to VPS
 
-This repository deploys both task manager projects from a single nginx Docker container on the VPS.
+This repository contains two frontend course projects deployed to a VPS as Docker containers behind nginx.
 
 ## Public URLs
 
-- JavaScript task manager: `https://ansiin.proxy.itcollege.ee/javascript-task-manager/`
-- TypeScript task manager: `https://ansiin.proxy.itcollege.ee/typescript-task-manager/`
 - Landing page: `https://ansiin.proxy.itcollege.ee/`
+- JavaScript project: `https://ansiin.proxy.itcollege.ee/javascript-task-manager/`
+- TypeScript project: `https://ansiin.proxy.itcollege.ee/typescript-task-manager/`
 
-These paths are served from one container with these internal nginx directories:
+## What Is Deployed
 
-- `/usr/share/nginx/html/javascript-task-manager/`
-- `/usr/share/nginx/html/typescript-task-manager/`
-
-## Repository Layout
-
-- `javasciprt-task-manager/` - plain JavaScript task manager
+- `javasciprt-task-manager/` - modular JavaScript task manager
 - `typescript-task-manager/` - strict TypeScript task manager
-- `deploy/` - nginx config and landing page for Docker image
-- `Dockerfile` - multi-stage image build
-- `docker-compose.yml` - VPS runtime definition
-- `.gitlab-ci.yml` - GitLab CI deploy job
 
-## Local Docker Run
+Both apps are served from one nginx container under separate subpaths:
+
+- `/javascript-task-manager/`
+- `/typescript-task-manager/`
+
+## Deployment Setup
+
+- VPS host is exposed through the university proxy on port `80`
+- GitLab Runner is installed on the VPS
+- Deployment is triggered from the `main` branch through GitLab CI
+- Docker uses a multi-stage build:
+  - TypeScript app is built in `node:20-alpine`
+  - Final static files are served from `nginx:alpine`
+
+## Important Files
+
+- `Dockerfile` - builds and packages both apps
+- `docker-compose.yml` - starts the nginx container on the VPS
+- `.gitlab-ci.yml` - deploys on push to `main`
+- `deploy/nginx.conf` - nginx routing for both apps
+- `deploy/index.html` - landing page with links to both projects
+
+## Run Locally With Docker
 
 ```bash
 docker compose up --build
 ```
 
-Open:
+Then open:
 
 - `http://localhost/`
 - `http://localhost/javascript-task-manager/`
 - `http://localhost/typescript-task-manager/`
 
-## VPS Setup Summary
+## CI/CD Deploy Command
 
-1. SSH into the VPS.
-2. If you want to clone over SSH from the VPS, generate a key and add the public key in GitLab:
-
-```bash
-ssh-keygen -t ed25519 -C "ansiin-vps"
-cat ~/.ssh/id_ed25519.pub
-```
-
-3. Install GitLab Runner and add it to the Docker group:
-
-```bash
-curl -L "https://packages.gitlab.com/install/repositories/runner/gitlab-runner/script.deb.sh" -o script.deb.sh
-bash script.deb.sh
-apt install gitlab-runner
-usermod -aG docker gitlab-runner
-```
-
-4. Register the runner against `https://gitlab.proxy.itcollege.ee` with the `shell` executor and tag `shared`.
-5. Make sure the proxy points `https://ansiin.proxy.itcollege.ee` to your VPS internal IP on port `80`.
-6. Push to `main`. GitLab runs:
+The GitLab pipeline runs this command on the VPS:
 
 ```bash
 docker compose -p ansiin-task-managers up --build --remove-orphans --detach
 ```
-
-## Deployment Notes
-
-- The Docker image builds the TypeScript project inside `node:20-alpine`.
-- The final image uses `nginx:alpine` and only serves static files.
-- Both apps are available side-by-side under their own subpaths.
-- If the proxy host or uni-id changes, update the URLs in this README and the VPS proxy mapping.
