@@ -1,4 +1,4 @@
-import type { CreateTaskInput, UpdateTaskInput } from "../../types/dto";
+﻿import type { CreateTaskInput, UpdateTaskInput } from "../../types/dto";
 import type { Category, Task } from "../../types/entities";
 import type { CategoryRepository } from "../../dal/categoryRepository";
 import type { TaskService } from "../../bll/taskService";
@@ -27,7 +27,8 @@ export function createTaskController(
   let allTasks: Task[] = [];
   let currentTasks: Task[] = [];
 
-  const formInput = (name: string): HTMLInputElement => dom.taskForm.elements.namedItem(name) as HTMLInputElement;
+  const formInput = (name: string): HTMLInputElement =>
+    dom.taskForm.elements.namedItem(name) as HTMLInputElement;
   const formTextarea = (name: string): HTMLTextAreaElement =>
     dom.taskForm.elements.namedItem(name) as HTMLTextAreaElement;
   const formSelect = (name: string): HTMLSelectElement =>
@@ -41,10 +42,15 @@ export function createTaskController(
   const fillFilterCategories = (): void => {
     dom.categoryFilter.innerHTML =
       `<option value="">All</option>` +
-      categories.map((c) => `<option value="${c.id}">${c.name}</option>`).join("");
+      categories
+        .map((c) => `<option value="${c.id}">${c.name}</option>`)
+        .join("");
   };
 
-  const refreshDependencyOptions = (selectedIds: string[] = [], excludeTaskId?: string): void => {
+  const refreshDependencyOptions = (
+    selectedIds: string[] = [],
+    excludeTaskId?: string,
+  ): void => {
     const categoryId = formSelect("taskCategory").value || undefined;
     const options: { excludeTaskId?: string; categoryId?: string } = {};
     if (excludeTaskId) {
@@ -106,7 +112,9 @@ export function createTaskController(
     const dueDate = formInput("taskDueDate").value;
     const tagsRaw = formInput("taskTags").value;
     const categoryId = formSelect("taskCategory").value;
-    const dependencyIds = Array.from(dom.taskDependencies.selectedOptions).map((option) => option.value);
+    const dependencyIds = Array.from(dom.taskDependencies.selectedOptions).map(
+      (option) => option.value,
+    );
     const recurrenceType = formSelect("taskRecurrenceType").value;
     const recurrenceInterval = formInput("taskRecurrenceInterval").value;
     const recurrenceEndDate = formInput("taskRecurrenceEndDate").value;
@@ -121,7 +129,9 @@ export function createTaskController(
         .map((tag) => tag.trim())
         .filter((tag) => tag.length > 0),
       dependencyIds,
-      recurrenceType: recurrenceType as NonNullable<CreateTaskInput["recurrenceType"]>,
+      recurrenceType: recurrenceType as NonNullable<
+        CreateTaskInput["recurrenceType"]
+      >,
       recurrenceInterval: Number(recurrenceInterval) || 1,
     };
     if (dueDate) {
@@ -137,7 +147,16 @@ export function createTaskController(
   };
 
   const toUpdateInput = (input: CreateTaskInput): UpdateTaskInput => {
-    const { title, description, status, priority, dueDate, tags, categoryId, dependencyIds } = input;
+    const {
+      title,
+      description,
+      status,
+      priority,
+      dueDate,
+      tags,
+      categoryId,
+      dependencyIds,
+    } = input;
     return {
       title,
       ...(description !== undefined ? { description } : {}),
@@ -205,9 +224,9 @@ export function createTaskController(
 
     formSelect("taskCategory").addEventListener("change", () => {
       const taskId = formInput("taskId").value;
-      const selectedDependencies = Array.from(dom.taskDependencies.selectedOptions).map(
-        (option) => option.value,
-      );
+      const selectedDependencies = Array.from(
+        dom.taskDependencies.selectedOptions,
+      ).map((option) => option.value);
       refreshDependencyOptions(selectedDependencies, taskId || undefined);
     });
   };
