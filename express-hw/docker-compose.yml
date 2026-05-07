@@ -1,0 +1,18 @@
+services:
+  express-hw:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    environment:
+      PORT: 4000
+      DATA_FILE: /app/data/db.json
+      JWT_SECRET: change-this-secret-in-vps-env
+      CORS_ORIGIN: "*"
+    ports:
+      - "4000:4000"
+    volumes:
+      - express-hw-data:/app/data
+    restart: unless-stopped
+
+volumes:
+  express-hw-data:

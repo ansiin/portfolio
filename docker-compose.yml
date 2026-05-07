@@ -8,6 +8,9 @@ services:
     restart: unless-stopped
     depends_on:
       - vue-task-manager
+      - express-hw
+      - react-hw-express
+      - vue-task-manager-express
 
   vue-task-manager:
     build:
@@ -17,3 +20,37 @@ services:
         VITE_API_BASE_URL: https://taltech.akaver.com/api/v1.0
         VITE_APP_BASE_PATH: /vue-task-manager/
     restart: unless-stopped
+
+  express-hw:
+    build:
+      context: ./express-hw
+      dockerfile: Dockerfile
+    environment:
+      PORT: 4000
+      DATA_FILE: /app/data/db.json
+      JWT_SECRET: ${EXPRESS_HW_JWT_SECRET:-change-this-secret-on-vps}
+      CORS_ORIGIN: "*"
+    volumes:
+      - express-hw-data:/app/data
+    restart: unless-stopped
+
+  react-hw-express:
+    build:
+      context: ./react-hw
+      dockerfile: Dockerfile
+      args:
+        NEXT_PUBLIC_API_BASE_URL: /express-hw-api/api/v1
+        NEXT_PUBLIC_BASE_PATH: /react-hw-express
+    restart: unless-stopped
+
+  vue-task-manager-express:
+    build:
+      context: ./vue-task-manager
+      dockerfile: Dockerfile
+      args:
+        VITE_API_BASE_URL: /express-hw-api/api/v1.0
+        VITE_APP_BASE_PATH: /vue-task-manager-express/
+    restart: unless-stopped
+
+volumes:
+  express-hw-data:
