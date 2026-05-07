@@ -8,6 +8,7 @@ This repository contains frontend course projects and the Express.js API assignm
 - JavaScript project: `https://ansiin.proxy.itcollege.ee/javascript-task-manager/`
 - TypeScript project: `https://ansiin.proxy.itcollege.ee/typescript-task-manager/`
 - Vue project: `https://ansiin.proxy.itcollege.ee/vue-task-manager/`
+- Assignment 5 React project: `https://ansiin.proxy.itcollege.ee/assignment-5/`
 - Express API assignment: `https://ansiin.proxy.itcollege.ee/express-hw-api/`
 - React client against Express API: `https://ansiin.proxy.itcollege.ee/react-hw-express/`
 - Vue client against Express API: `https://ansiin.proxy.itcollege.ee/vue-task-manager-express/`
@@ -17,6 +18,7 @@ This repository contains frontend course projects and the Express.js API assignm
 - `javasciprt-task-manager/` - modular JavaScript task manager
 - `typescript-task-manager/` - strict TypeScript task manager
 - `vue-task-manager/` - Vue 3 + Pinia + Router task manager with JWT and refresh-token security
+- `assignment-5/` - complete React/Next.js Assignment 5 client against `https://taltech.akaver.com/`
 - `react-hw/` - React/Next.js client reused for the Express backend deployment
 - `express-hw/` - Express.js reimplementation of the TalTech ToDo API auth and ToDo endpoints
 
@@ -28,6 +30,7 @@ The JavaScript and TypeScript apps are served from the main nginx container unde
 The Vue app is built into its own Docker container and reverse-proxied by nginx under:
 
 - `/vue-task-manager/`
+- `/assignment-5/`
 
 The Express assignment uses three separate containers:
 
@@ -43,6 +46,7 @@ The Express assignment uses three separate containers:
 - Docker uses a mixed setup:
   - JavaScript and TypeScript stay on the main web container
   - Vue 3 is built and served from a separate container
+  - Assignment 5 React is built and served from a separate container against the TalTech backend
   - Express HW is built and served from a separate API container with a persistent Docker volume
   - React and Vue are rebuilt into separate containers for the Express backend
   - nginx reverse-proxies `/vue-task-manager/` to that container
@@ -55,6 +59,7 @@ The Express assignment uses three separate containers:
 - `deploy/nginx.conf` - nginx routing for all public paths
 - `deploy/index.html` - landing page with links to all projects
 - `vue-task-manager/Dockerfile` - builds and serves the Vue app separately
+- `assignment-5/Dockerfile` - builds and serves the Assignment 5 React app separately
 - `express-hw/Dockerfile` - builds and serves the Express.js backend
 - `react-hw/Dockerfile` - builds and serves the React client reused for Express API deployment
 
@@ -70,6 +75,7 @@ Then open:
 - `http://localhost/javascript-task-manager/`
 - `http://localhost/typescript-task-manager/`
 - `http://localhost/vue-task-manager/`
+- `http://localhost/assignment-5/`
 - `http://localhost/express-hw-api/health`
 - `http://localhost/react-hw-express/`
 - `http://localhost/vue-task-manager-express/`
