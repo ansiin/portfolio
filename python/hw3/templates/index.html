@@ -1,0 +1,75 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Rahva Raamatu kaubad</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 32px;
+      color: #222;
+    }
+
+    form {
+      margin: 16px 0 24px;
+    }
+
+    input,
+    button {
+      padding: 8px;
+      font-size: 16px;
+    }
+
+    table {
+      border-collapse: collapse;
+      width: 100%;
+    }
+
+    th,
+    td {
+      border: 1px solid #ccc;
+      padding: 8px;
+      text-align: left;
+      vertical-align: top;
+    }
+
+    th {
+      background: #f1f1f1;
+    }
+  </style>
+</head>
+<body>
+  <h1>Rahva Raamatu kaubad</h1>
+  <p>Andmebaasis on {{ product_count }} toodet.</p>
+
+  <form method="get">
+    <label for="min_price">Näita kaupu, mis on kallimad kui</label>
+    <input id="min_price" name="min_price" type="number" min="0" step="0.01" value="{{ '%.2f'|format(min_price) }}">
+    <button type="submit">Otsi</button>
+  </form>
+
+  <p>Leiti {{ products|length }} toodet hinnaga üle {{ '%.2f'|format(min_price) }} euro.</p>
+
+  <table>
+    <thead>
+      <tr>
+        <th>Pealkiri</th>
+        <th>Hind</th>
+        <th>Pildi aadress</th>
+        <th>Toote link</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for product in products %}
+        <tr>
+          <td>{{ product.title }}</td>
+          <td>{{ '%.2f'|format(product.price) }} €</td>
+          <td><a href="{{ product.picture_href }}">{{ product.picture_href }}</a></td>
+          <td><a href="{{ product.product_url }}">{{ product.product_url }}</a></td>
+        </tr>
+      {% endfor %}
+    </tbody>
+  </table>
+</body>
+</html>

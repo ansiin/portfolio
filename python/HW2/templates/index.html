@@ -1,0 +1,123 @@
+<!doctype html>
+<html lang="et">
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>TalTechi kohvikud</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+</head>
+<body>
+    <main class="layout">
+        <section class="hero">
+            <p class="eyebrow">Flask + REST API</p>
+            <h1>TalTechi kohvikud</h1>
+            <p class="intro">
+                Veebiliides kasutab sama rakenduse API-t, et kuvada, filtreerida, lisada,
+                muuta ja kustutada söögikohti.
+            </p>
+        </section>
+
+        <section class="panel">
+            <h2>Avamisaja filter</h2>
+            <form id="filter-form" class="grid-form">
+                <label>
+                    Algus
+                    <input type="time" name="start" required>
+                </label>
+                <label>
+                    Lõpp
+                    <input type="time" name="end" required>
+                </label>
+                <div class="actions">
+                    <button type="submit">Filtreeri</button>
+                    <button type="button" id="show-all" class="secondary">Näita kõiki</button>
+                </div>
+            </form>
+            <p class="hint">Näide: 18:30-21:00 tagastab Nuudli ja Pizzakioski.</p>
+        </section>
+
+        <section class="panel">
+            <h2>Lisa uus kohvik</h2>
+            <form id="create-form" class="grid-form">
+                <label>
+                    Nimi
+                    <input type="text" name="name" required>
+                </label>
+                <label>
+                    Asukoht
+                    <input type="text" name="location" required>
+                </label>
+                <label>
+                    Avab
+                    <input type="time" name="time_open" required>
+                </label>
+                <label>
+                    Sulgeb
+                    <input type="time" name="time_closed" required>
+                </label>
+                <label>
+                    Teenusepakkuja
+                    <input type="text" name="provider">
+                </label>
+                <div class="actions">
+                    <button type="submit">Lisa</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Muuda kohvikut</h2>
+            <form id="update-form" class="grid-form">
+                <label>
+                    ID
+                    <input type="number" name="id" min="1" required>
+                </label>
+                <label>
+                    Nimi
+                    <input type="text" name="name">
+                </label>
+                <label>
+                    Asukoht
+                    <input type="text" name="location">
+                </label>
+                <label>
+                    Avab
+                    <input type="time" name="time_open">
+                </label>
+                <label>
+                    Sulgeb
+                    <input type="time" name="time_closed">
+                </label>
+                <label>
+                    Teenusepakkuja
+                    <input type="text" name="provider">
+                </label>
+                <div class="actions">
+                    <button type="submit">Muuda</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="panel">
+            <h2>Kustuta kohvik</h2>
+            <form id="delete-form" class="inline-form">
+                <label>
+                    ID
+                    <input type="number" name="id" min="1" required>
+                </label>
+                <button type="submit" class="danger">Kustuta</button>
+            </form>
+        </section>
+
+        <section class="panel">
+            <div class="list-header">
+                <h2>Kohvikute nimekiri</h2>
+                <span id="status" class="status"></span>
+            </div>
+            <div id="cafes" class="cards"></div>
+        </section>
+    </main>
+
+    <script src="{{ url_for('static', filename='app.js') }}"></script>
+</body>
+</html>
