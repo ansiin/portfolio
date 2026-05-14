@@ -1,0 +1,91 @@
+<!doctype html>
+<html lang="et">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Case Tracker Dashboard</title>
+  <link rel="stylesheet" href="/styles.css">
+</head>
+<body>
+  <div class="page-shell">
+    <header class="hero">
+      <div>
+        <p class="eyebrow">Steam Market Dashboard</p>
+        <h1>Case hindade liikumine uhes vaates</h1>
+        <p class="hero-copy">
+          Live hinnad, kasum vorreldes ostuhinnaga ja ajalugu graafikul.
+        </p>
+      </div>
+      <div class="hero-actions">
+        <button id="refreshButton" class="refresh-button">Uuenda</button>
+        <p id="statusLine" class="status-line">Laen andmeid...</p>
+      </div>
+    </header>
+
+    <main class="dashboard-grid">
+      <section class="panel current-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Praegu</p>
+            <h2>Hetke ulevaade</h2>
+          </div>
+        </div>
+        <div id="currentCards" class="card-grid"></div>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Ajalugu</p>
+            <h2>Hinnad ajas</h2>
+          </div>
+          <div class="legend">
+            <span><i class="legend-dot gloves"></i>Glove Case</span>
+            <span><i class="legend-dot spectrum"></i>Spectrum 2 Case</span>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <svg id="priceChart" class="chart" viewBox="0 0 900 360" preserveAspectRatio="none"></svg>
+        </div>
+      </section>
+
+      <section class="panel chart-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Kasum</p>
+            <h2>Positsiooni muutus ajas</h2>
+          </div>
+        </div>
+        <div class="chart-wrap">
+          <svg id="profitChart" class="chart" viewBox="0 0 900 320" preserveAspectRatio="none"></svg>
+        </div>
+      </section>
+
+      <section class="panel table-panel">
+        <div class="panel-head">
+          <div>
+            <p class="panel-kicker">Kirjed</p>
+            <h2>Viimased mootmised</h2>
+          </div>
+        </div>
+        <div class="table-wrap">
+          <table>
+            <thead>
+              <tr>
+                <th>Kuupaev</th>
+                <th>Glove hind</th>
+                <th>Spectrum hind</th>
+                <th>Glove kasum</th>
+                <th>Spectrum kasum</th>
+              </tr>
+            </thead>
+            <tbody id="historyTable"></tbody>
+          </table>
+        </div>
+      </section>
+    </main>
+  </div>
+
+  <script src="/app.js"></script>
+</body>
+</html>
