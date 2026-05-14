@@ -1,0 +1,26 @@
+# Build output
+**/bin/
+**/obj/
+
+# IDE/editor
+.vs/
+.idea/
+*.suo
+*.user
+*.userosscache
+*.sln.docstates
+
+# OS noise
+.DS_Store
+Thumbs.db
+
+# Local tooling/cache
+**/.g/
+**/.gradle-home/
+
+# Local app secrets/config overrides
+**/appsettings.Development.json
+**/appsettings.Local.json
+
+# Docs not required for submission/repo
+DOC/

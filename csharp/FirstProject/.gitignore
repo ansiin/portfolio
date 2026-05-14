@@ -1,0 +1,52 @@
+# .NET build artifacts
+**/bin/
+**/obj/
+
+# User-specific files
+*.user
+*.rsuser
+*.suo
+*.userosscache
+*.sln.docstates
+
+# IDE folders
+.vs/
+.idea/
+*.sln.iml
+
+# JetBrains Rider cache
+_ReSharper*/
+*.DotSettings.user
+
+# Test results and coverage
+TestResults/
+*.trx
+*.coverage
+*.coveragexml
+coverage/
+
+# Logs and temp files
+*.log
+*.tmp
+*.temp
+
+# Local SQLite / development databases
+*.db
+*.db-shm
+*.db-wal
+
+# Local tools and accidental folders
+.dotnet/
+$PWD/
+
+# Local secrets and environment files
+.env
+.env.*
+secrets.json
+
+# OS files
+.DS_Store
+Thumbs.db
+
+# Generated or local export artifacts
+app.pp.xml

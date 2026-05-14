@@ -1,0 +1,24 @@
+@model DAL.Entities.Note
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Note Details</h1>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Id)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AppUserId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AppUserId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.TransactionId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.TransactionId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Content)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Content)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CreatedAt)</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

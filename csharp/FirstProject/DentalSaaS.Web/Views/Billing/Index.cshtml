@@ -1,0 +1,82 @@
+@model IReadOnlyCollection<DentalSaaS.Application.Billing.InvoiceDto>
+@using DentalSaaS.Application.Patients
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientOptions = (IReadOnlyCollection<PatientListItem>?)ViewBag.PatientOptions ?? Array.Empty<PatientListItem>();
+    var patientLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.PatientLookup;
+    ViewData["Title"] = "Invoices";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Invoices</h1>
+    <p class="page-subtitle">Tenant billing and payment status tracking.</p>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Create invoice</h2>
+    <form method="post" action="/@tenantSlug/billing/create" class="form">
+        @Html.AntiForgeryToken()
+        <div class="form-row">
+            <div class="form-group">
+                <label class="label" for="PatientId">Patient</label>
+                <select id="PatientId" name="PatientId" required>
+                    <option value="">-- Select patient --</option>
+                    @foreach (var patient in patientOptions)
+                    {
+                        <option value="@patient.Id">@patient.FullName (@patient.Email)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label" for="Amount">Amount</label>
+                <input id="Amount" name="Amount" type="number" step="0.01" min="0.01" required />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Create invoice</button>
+    </form>
+</section>
+
+<section class="card fade-item">
+    <h2 class="card-title">Invoices</h2>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>Patient</th><th>Amount</th><th>Paid</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var invoice in Model)
+            {
+                <tr>
+                    <td>
+                        @if (patientLookup is not null && patientLookup.TryGetValue(invoice.PatientId, out var patientName))
+                        {
+                            @patientName
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown patient</span>
+                        }
+                    </td>
+                    <td>@invoice.Amount</td>
+                    <td>@(invoice.IsPaid ? "Yes" : "No")</td>
+                    <td>
+                        <div class="actions">
+                            @if (!invoice.IsPaid)
+                            {
+                                <form method="post" action="/@tenantSlug/billing/@invoice.Id/paid">
+                                    @Html.AntiForgeryToken()
+                                    <button type="submit" class="btn btn-secondary">Mark paid</button>
+                                </form>
+                            }
+                            <form method="post" action="/@tenantSlug/billing/@invoice.Id/delete">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-link">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

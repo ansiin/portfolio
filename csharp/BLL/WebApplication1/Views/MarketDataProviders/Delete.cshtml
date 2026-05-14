@@ -1,0 +1,24 @@
+@model DAL.Entities.MarketDataProvider
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete MarketDataProvider</h1>
+<h3>Are you sure?</h3>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Id)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Code)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Code)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Name)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.BaseUrl)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.BaseUrl)</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

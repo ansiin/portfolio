@@ -1,0 +1,31 @@
+@model WebApp.ViewModels.WatchlistCreateViewModel
+
+@{
+    ViewData["Title"] = UiText.T("CreateWatchlist");
+}
+
+<h1>@UiText.T("CreateWatchlist")</h1>
+<p class="text-muted">@UiText.T("CreateWatchlistLead")</p>
+
+<div class="row">
+    <div class="col-md-6 col-lg-5">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">@UiText.T("Name")</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">@UiText.T("Create")</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">@UiText.T("Back")</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

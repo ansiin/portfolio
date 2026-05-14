@@ -1,0 +1,93 @@
+@model DentalSaaS.Web.ViewModels.Appointments.AppointmentFormViewModel
+@using DentalSaaS.Application.Patients
+@using DentalSaaS.Application.PracticeSetup
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientOptions = (IReadOnlyCollection<PatientListItem>?)ViewBag.PatientOptions ?? Array.Empty<PatientListItem>();
+    var roomOptions = (IReadOnlyCollection<TreatmentRoomDto>?)ViewBag.RoomOptions ?? Array.Empty<TreatmentRoomDto>();
+    var dentistOptions = (IReadOnlyCollection<DentistDto>?)ViewBag.DentistOptions ?? Array.Empty<DentistDto>();
+    var planItemOptions = (IReadOnlyCollection<SelectListItem>?)ViewBag.PlanItemOptions ?? Array.Empty<SelectListItem>();
+    var overdueSummary = (DentalSaaS.Application.Xrays.XrayOverdueSummaryDto?)ViewBag.XrayOverdueSummary;
+    ViewData["Title"] = "Create Appointment";
+}
+
+<section class="card fade-item">
+    <h1 class="page-title">Create appointment</h1>
+    @if (overdueSummary is not null && overdueSummary.OverduePatientCount > 0)
+    {
+        <div class="alert alert-warning">
+            X-ray warning: @overdueSummary.OverduePatientCount patient(s) are overdue currently.
+        </div>
+    }
+    <form method="post" action="/@tenantSlug/appointments/create" class="form">
+        @Html.AntiForgeryToken()
+        <div class="form-row">
+            <div class="form-group">
+                <label class="label" for="PatientId">Patient</label>
+                <select asp-for="PatientId" required>
+                    <option value="">-- Select patient --</option>
+                    @foreach (var patient in patientOptions)
+                    {
+                        <option value="@patient.Id">@patient.FullName (@patient.Email)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label asp-for="TypeName" class="label"></label>
+                <input asp-for="TypeName" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label class="label" for="PlanItemId">Linked treatment plan item (optional)</label>
+            <select asp-for="PlanItemId">
+                <option value="">-- No linked plan item --</option>
+                @foreach (var item in planItemOptions)
+                {
+                    <option value="@item.Value">@item.Text</option>
+                }
+            </select>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="label" for="TreatmentRoomId">Treatment room</label>
+                <select asp-for="TreatmentRoomId" required>
+                    <option value="">-- Select room --</option>
+                    @foreach (var room in roomOptions)
+                    {
+                        <option value="@room.Id">@room.Name</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label" for="DentistId">Dentist</label>
+                <select asp-for="DentistId" required>
+                    <option value="">-- Select dentist --</option>
+                    @foreach (var dentist in dentistOptions)
+                    {
+                        <option value="@dentist.Id">@dentist.Name (@dentist.LicenseNumber)</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="StartAt" class="label"></label>
+                <input asp-for="StartAt" />
+            </div>
+            <div class="form-group">
+                <label asp-for="EndAt" class="label"></label>
+                <input asp-for="EndAt" />
+            </div>
+        </div>
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a class="btn btn-secondary" href="/@tenantSlug/appointments">Cancel</a>
+        </div>
+    </form>
+    <div asp-validation-summary="All" class="validation"></div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

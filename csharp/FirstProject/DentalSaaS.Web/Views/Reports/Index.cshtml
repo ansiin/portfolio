@@ -1,0 +1,48 @@
+@model DentalSaaS.Application.Reports.ReportsDashboardDto
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    ViewData["Title"] = "Reports";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Reports</h1>
+    <p class="page-subtitle">Computed KPI dashboard for leadership decisions.</p>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Period filter</h2>
+    <form method="get" action="/@tenantSlug/reports" class="form">
+        <div class="form-row">
+            <div class="form-group">
+                <label class="label" for="dateFrom">From</label>
+                <input id="dateFrom" name="dateFrom" type="date" value="@Model.DateFrom.ToString("yyyy-MM-dd")" />
+            </div>
+            <div class="form-group">
+                <label class="label" for="dateTo">To</label>
+                <input id="dateTo" name="dateTo" type="date" value="@Model.DateTo.ToString("yyyy-MM-dd")" />
+            </div>
+        </div>
+        <button class="btn btn-secondary" type="submit">Apply</button>
+    </form>
+</section>
+
+<div class="grid grid-2 fade-item">
+    <section class="card">
+        <h2 class="card-title">Clinical KPIs</h2>
+        <div class="kpi-item"><strong>Active Patients</strong><div class="hint">@Model.ActivePatients</div></div>
+        <div class="kpi-item"><strong>Appointments</strong><div class="hint">@Model.AppointmentsScheduled</div></div>
+        <div class="kpi-item"><strong>Room Utilization</strong><div class="hint">@Model.RoomUtilizationRate%</div></div>
+        <div class="kpi-item"><strong>Treatments Completed</strong><div class="hint">@Model.TreatmentCompletionCount</div></div>
+        <div class="kpi-item"><strong>Overdue X-ray Patients</strong><div class="hint">@Model.OverdueXrayPatients</div></div>
+    </section>
+    <section class="card">
+        <h2 class="card-title">Plan & Financial KPIs</h2>
+        <div class="kpi-item"><strong>Accepted Plan Items</strong><div class="hint">@Model.PlanItemsAcceptedCount</div></div>
+        <div class="kpi-item"><strong>Deferred Plan Items</strong><div class="hint">@Model.PlanItemsDeferredCount</div></div>
+        <div class="kpi-item"><strong>Urgent Acceptance Rate</strong><div class="hint">@Model.UrgentAcceptanceRate%</div></div>
+        <div class="kpi-item"><strong>Insurance Submissions</strong><div class="hint">@Model.InsuranceSubmissionCount</div></div>
+        <div class="kpi-item"><strong>Insurance Approval Rate</strong><div class="hint">@Model.InsuranceApprovalRate%</div></div>
+        <div class="kpi-item"><strong>Outstanding Receivables</strong><div class="hint">@Model.OutstandingReceivables</div></div>
+        <div class="kpi-item"><strong>Payment Plan Exposure</strong><div class="hint">@Model.PaymentPlanExposure</div></div>
+    </section>
+</div>

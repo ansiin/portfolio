@@ -1,0 +1,43 @@
+@model WebApp.ViewModels.PortfolioEditViewModel
+
+@{
+    ViewData["Title"] = UiText.T("EditPortfolio");
+}
+
+<h1>@UiText.T("EditPortfolio")</h1>
+<p class="text-muted">@UiText.T("EditPortfolioLead")</p>
+
+<div class="row">
+    <div class="col-md-6 col-lg-5">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">@UiText.T("Name")</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="BaseCurrencyId" class="form-label">@UiText.T("BaseCurrency")</label>
+                <select asp-for="BaseCurrencyId" asp-items="Model.CurrencySelectList" class="form-select"></select>
+                <span asp-validation-for="BaseCurrencyId" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-3">
+                <input asp-for="IsArchived" class="form-check-input" />
+                <label asp-for="IsArchived" class="form-check-label">@UiText.T("Archived")</label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">@UiText.T("Save")</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">@UiText.T("Back")</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

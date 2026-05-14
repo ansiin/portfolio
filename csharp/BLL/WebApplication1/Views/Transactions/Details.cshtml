@@ -1,0 +1,32 @@
+@model DAL.Entities.Transaction
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Transaction Details</h1>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Id)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.PortfolioId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.PortfolioId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.TradeTime)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.TradeTime)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Quantity)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Quantity)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.UnitPrice)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.UnitPrice)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CurrencyId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CurrencyId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CashAmount)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CashAmount)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Note)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Note)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CreatedAt)</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

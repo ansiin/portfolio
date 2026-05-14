@@ -1,0 +1,61 @@
+﻿@model DentalSaaS.Web.ViewModels.Onboarding.OnboardingViewModel
+@{
+    ViewData["Title"] = "Tenant Onboarding";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Tenant onboarding</h1>
+    <p class="page-subtitle">Create a new dental practice workspace with an owner account and unique tenant slug.</p>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Practice details</h2>
+    <p class="card-subtitle">Your tenant URL will use the slug, for example: <code>/acme-dental/patients</code></p>
+
+    <form method="post" class="form" novalidate>
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label asp-for="CompanyName" class="label"></label>
+            <input asp-for="CompanyName" />
+            <span asp-validation-for="CompanyName"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="TenantSlug" class="label"></label>
+            <input asp-for="TenantSlug" />
+            <span class="hint">Use lowercase letters, numbers and hyphens.</span>
+            <span asp-validation-for="TenantSlug"></span>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="OwnerEmail" class="label"></label>
+                <input asp-for="OwnerEmail" />
+                <span asp-validation-for="OwnerEmail"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="OwnerDisplayName" class="label"></label>
+                <input asp-for="OwnerDisplayName" />
+                <span asp-validation-for="OwnerDisplayName"></span>
+            </div>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="OwnerPassword" class="label"></label>
+            <input asp-for="OwnerPassword" type="password" />
+            <span asp-validation-for="OwnerPassword"></span>
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Create tenant</button>
+            <a class="btn btn-secondary" href="/">Cancel</a>
+        </div>
+    </form>
+
+    <div asp-validation-summary="All" class="validation"></div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

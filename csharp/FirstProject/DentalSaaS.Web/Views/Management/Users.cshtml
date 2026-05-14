@@ -1,0 +1,108 @@
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    ViewData["Title"] = "Users & Roles";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Users & roles</h1>
+    <p class="page-subtitle">
+        Define who can access patient data, treatment planning, insurance workflows, and tenant administration.
+    </p>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Tenant access model</h2>
+    <p class="card-subtitle">
+        Principle: least privilege with clear handoff between operational staff and clinical decision-makers.
+    </p>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Role</th>
+                <th>Main responsibilities</th>
+                <th>Primary entities</th>
+                <th>Critical limits</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td><span class="badge badge-neutral">CompanyEmployee</span></td>
+                <td>Manage appointments, room usage, and basic patient records.</td>
+                <td>Appointment, Patient, ToothRecord, Xray, TreatmentRoom</td>
+                <td>No treatment-plan approval, no subscription or insurance relationship changes.</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-neutral">CompanyManager</span></td>
+                <td>Lead clinical decisions and define treatment plans with sequencing and urgency.</td>
+                <td>TreatmentPlan, PlanItem, Treatment, Dentist</td>
+                <td>No owner-level tenant governance.</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-neutral">CompanyAdmin</span></td>
+                <td>Administer users, roles, and practice configuration.</td>
+                <td>AppUser, AppUserRole, CompanyMembership, CompanySettings</td>
+                <td>No ownership transfer or owner-only policy changes.</td>
+            </tr>
+            <tr>
+                <td><span class="badge badge-warning">CompanyOwner</span></td>
+                <td>Final authority for tenant, subscription, and regulatory configuration.</td>
+                <td>Company, Subscription, CompanySettings, InsurancePlan</td>
+                <td>Should be restricted to a small trusted group.</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<div class="grid grid-2 fade-item">
+    <section class="card">
+        <h2 class="card-title">Workflow ownership</h2>
+        <ul>
+            <li>Employees prepare appointments, treatment rooms, and basic chart updates.</li>
+            <li>Managers create treatment plans with itemized cost, sequence, and urgency.</li>
+            <li>Patients approve urgent work first and defer expensive elective items.</li>
+            <li>Admins maintain user access and keep operational configuration clean.</li>
+            <li>Owners control insurance relationships, company-level settings, and subscription.</li>
+        </ul>
+    </section>
+    <section class="card">
+        <h2 class="card-title">Entity boundary for identity</h2>
+        <ul>
+            <li><strong>AppUser:</strong> login identity and profile record.</li>
+            <li><strong>AppUserRole:</strong> system and tenant roles.</li>
+            <li><strong>CompanyMembership:</strong> link between user and company role.</li>
+            <li><strong>Company:</strong> tenant root with slug, tier, and active status.</li>
+        </ul>
+        <p class="hint">
+            Access reviews should verify that each CompanyMembership role still matches actual job function.
+        </p>
+    </section>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Operational control checklist</h2>
+    <div class="grid grid-2">
+        <div class="kpi-item">
+            <strong>Monthly</strong>
+            <div class="hint">Review active users, remove stale memberships, and confirm role boundaries.</div>
+        </div>
+        <div class="kpi-item">
+            <strong>Before release</strong>
+            <div class="hint">Validate role gates on management pages and reporting endpoints.</div>
+        </div>
+        <div class="kpi-item">
+            <strong>Incident response</strong>
+            <div class="hint">Use temporary elevated access only with explicit audit trail.</div>
+        </div>
+        <div class="kpi-item">
+            <strong>Compliance</strong>
+            <div class="hint">Ensure personal health data access is role-appropriate and logged.</div>
+        </div>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-secondary" href="/@tenantSlug/management/settings">Open company settings</a>
+        <a class="btn btn-secondary" href="/@tenantSlug/reports">Open reports</a>
+        <a class="btn btn-secondary" href="/@tenantSlug/patients">Back to operations</a>
+    </div>
+</section>

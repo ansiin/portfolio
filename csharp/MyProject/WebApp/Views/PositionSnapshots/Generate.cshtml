@@ -1,0 +1,37 @@
+@model WebApp.ViewModels.PositionSnapshotGenerateViewModel
+
+@{
+    ViewData["Title"] = UiText.T("GeneratePositionSnapshot");
+}
+
+<h1>@UiText.T("GeneratePositionSnapshot")</h1>
+<p class="text-muted">@UiText.T("GeneratePositionSnapshotLead")</p>
+
+<div class="row">
+    <div class="col-lg-7">
+        <form asp-action="Generate" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="PortfolioId" class="form-label">@UiText.T("Portfolio")</label>
+                <select asp-for="PortfolioId" asp-items="Model.PortfolioSelectList" class="form-select"></select>
+                <span asp-validation-for="PortfolioId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="SnapshotAt" class="form-label">@UiText.T("SnapshotAt")</label>
+                <input asp-for="SnapshotAt" class="form-control" />
+                <span asp-validation-for="SnapshotAt" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">@UiText.T("Generate")</button>
+                <a asp-action="Index" asp-route-portfolioId="@Model.PortfolioId" class="btn btn-outline-secondary">@UiText.T("Back")</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

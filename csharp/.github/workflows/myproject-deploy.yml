@@ -1,0 +1,56 @@
+name: MyProject Deploy
+
+on:
+  workflow_dispatch:
+  push:
+    branches:
+      - main
+      - master
+    paths:
+      - "MyProject/**"
+      - "MyProjectUI/**"
+      - ".github/workflows/myproject-deploy.yml"
+
+jobs:
+  deploy-to-vps:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Deploy over SSH
+        uses: appleboy/ssh-action@v1.0.3
+        with:
+          host: ${{ secrets.VPS_HOST }}
+          username: ${{ secrets.VPS_USERNAME }}
+          key: ${{ secrets.VPS_SSH_KEY }}
+          port: ${{ secrets.VPS_PORT || '22' }}
+          script: |
+            set -e
+            TARGET_PATH="${{ secrets.VPS_APP_PATH }}"
+
+            if [ -d "$TARGET_PATH/.git" ]; then
+              REPO_PATH="$TARGET_PATH"
+              PROJECT_PATH="$REPO_PATH/MyProject"
+            elif [ -d "$(dirname "$TARGET_PATH")/.git" ] && [ -f "$TARGET_PATH/docker-compose.vps.yml" ]; then
+              REPO_PATH=$(CDPATH= cd -- "$(dirname -- "$TARGET_PATH")" && pwd)
+              PROJECT_PATH="$TARGET_PATH"
+            else
+              echo "VPS_APP_PATH must point either to the repo root or to the MyProject folder"
+              exit 1
+            fi
+
+            if [ ! -d "$PROJECT_PATH" ]; then
+              echo "MyProject folder not found at $PROJECT_PATH"
+              exit 1
+            fi
+
+            cd "$REPO_PATH"
+            git checkout "${{ github.ref_name }}"
+            git pull --ff-only origin "${{ github.ref_name }}"
+
+            cd "$PROJECT_PATH"
+            if [ ! -f ".env.vps" ]; then
+              echo "Missing .env.vps in $PROJECT_PATH"
+              exit 1
+            fi
+
+            export COMPOSE_PROJECT_NAME=ansiin-investing
+            docker compose -f docker-compose.vps.yml --env-file .env.vps -p "$COMPOSE_PROJECT_NAME" up -d --build --remove-orphans

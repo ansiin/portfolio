@@ -1,0 +1,43 @@
+@model WebApp.Areas.Admin.ViewModels.AdminUserOverviewViewModel
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-0">@Model.Heading</h1>
+        <p class="text-muted mb-0">@Model.Description</p>
+    </div>
+    <div class="text-end">
+        <div><strong>@Model.UserCount</strong> @UiText.T("Users")</div>
+        <div><strong>@Model.RoleCount</strong> @UiText.T("Roles")</div>
+    </div>
+</div>
+
+@if (Model.Users.Count == 0)
+{
+    <div class="alert alert-info">
+        @UiText.T("NoUsersFound")
+    </div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+            <th>@UiText.T("Email")</th>
+            <th>@UiText.T("Username")</th>
+            <th>@UiText.T("EmailConfirmed")</th>
+            <th>@UiText.T("Roles")</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var user in Model.Users)
+        {
+            <tr>
+                <td>@user.Email</td>
+                <td>@(string.IsNullOrWhiteSpace(user.UserName) ? "-" : user.UserName)</td>
+                <td>@(user.EmailConfirmed ? UiText.T("Yes") : UiText.T("No"))</td>
+                <td>@(user.Roles.Count == 0 ? "-" : string.Join(", ", user.Roles))</td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

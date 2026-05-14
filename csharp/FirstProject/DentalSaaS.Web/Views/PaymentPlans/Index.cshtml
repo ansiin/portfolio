@@ -1,0 +1,84 @@
+@model IReadOnlyCollection<DentalSaaS.Application.PaymentPlans.PaymentPlanDto>
+@using Microsoft.AspNetCore.Mvc.Rendering
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var invoiceOptions = (IReadOnlyCollection<SelectListItem>?)ViewBag.InvoiceOptions ?? Array.Empty<SelectListItem>();
+    var invoiceLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.InvoiceLookup;
+    ViewData["Title"] = "Payment Plans";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Payment plans</h1>
+    <p class="page-subtitle">Premium-only installment planning for expensive procedures.</p>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Create plan</h2>
+    <form method="post" action="/@tenantSlug/payment-plans/create" class="form">
+        @Html.AntiForgeryToken()
+        <div class="form-row">
+            <div class="form-group">
+                <label class="label" for="InvoiceId">Invoice</label>
+                <select id="InvoiceId" name="InvoiceId" required>
+                    <option value="">-- Select invoice --</option>
+                    @foreach (var invoice in invoiceOptions)
+                    {
+                        <option value="@invoice.Value">@invoice.Text</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label" for="Months">Months</label>
+                <input id="Months" name="Months" type="number" value="12" />
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label class="label" for="MonthlyAmount">Monthly amount</label>
+                <input id="MonthlyAmount" name="MonthlyAmount" type="number" step="0.01" />
+            </div>
+            <div class="form-group">
+                <label class="label" for="StartDate">Start date</label>
+                <input id="StartDate" name="StartDate" type="date" value="@DateTime.UtcNow.ToString("yyyy-MM-dd")" />
+            </div>
+        </div>
+        <button type="submit" class="btn btn-primary">Create payment plan</button>
+    </form>
+</section>
+
+<section class="card fade-item">
+    <h2 class="card-title">Existing payment plans</h2>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>Invoice</th><th>Months</th><th>Monthly</th><th>Start</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (invoiceLookup is not null && invoiceLookup.TryGetValue(item.InvoiceId, out var invoiceLabel))
+                        {
+                            @invoiceLabel
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown invoice</span>
+                        }
+                    </td>
+                    <td>@item.Months</td>
+                    <td>@item.MonthlyAmount</td>
+                    <td>@item.StartDate</td>
+                    <td>
+                        <form method="post" action="/@tenantSlug/payment-plans/@item.Id/delete">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-link" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

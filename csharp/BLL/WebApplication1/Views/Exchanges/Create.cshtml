@@ -1,0 +1,35 @@
+@model DAL.Entities.Exchange
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create Exchange</h1>
+
+<form asp-action="Create" method="post">
+    <div class='mb-3'>
+        <label asp-for='Code' class='form-label'></label>
+        <input asp-for='Code' class='form-control' />
+        <span asp-validation-for='Code' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='Name' class='form-label'></label>
+        <input asp-for='Name' class='form-control' />
+        <span asp-validation-for='Name' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='Country' class='form-label'></label>
+        <input asp-for='Country' class='form-control' />
+        <span asp-validation-for='Country' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='Timezone' class='form-label'></label>
+        <input asp-for='Timezone' class='form-control' />
+        <span asp-validation-for='Timezone' class='text-danger'></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

@@ -1,0 +1,50 @@
+@model WebApp.ViewModels.NoteEditViewModel
+
+@{
+    ViewData["Title"] = UiText.T("EditNote");
+}
+
+<h1>@UiText.T("EditNote")</h1>
+<p class="text-muted">@UiText.T("EditNoteLead")</p>
+
+<div class="row">
+    <div class="col-lg-7">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="mb-3">
+                <label asp-for="Title" class="form-label">@UiText.T("Title")</label>
+                <input asp-for="Title" class="form-control" />
+                <span asp-validation-for="Title" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Content" class="form-label">@UiText.T("Content")</label>
+                <textarea asp-for="Content" class="form-control" rows="6"></textarea>
+                <span asp-validation-for="Content" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AssetId" class="form-label">@UiText.T("Asset")</label>
+                <select asp-for="AssetId" asp-items="Model.AssetSelectList" class="form-select"></select>
+                <span asp-validation-for="AssetId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="TransactionId" class="form-label">@UiText.T("Transactions")</label>
+                <select asp-for="TransactionId" asp-items="Model.TransactionSelectList" class="form-select"></select>
+                <span asp-validation-for="TransactionId" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">@UiText.T("Save")</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">@UiText.T("Back")</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

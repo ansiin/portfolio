@@ -1,0 +1,45 @@
+@model WebApp.Areas.Admin.ViewModels.LookupEditPageViewModel
+
+<h1>@Model.Heading</h1>
+<p class="text-muted">@Model.Description</p>
+
+<div class="row">
+    <div class="col-md-6 col-lg-5">
+        <form method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Form.Id" type="hidden" />
+
+            <div class="mb-3">
+                <label asp-for="Form.Code" class="form-label">@UiText.T("Code")</label>
+                <input asp-for="Form.Code" class="form-control" />
+                <span asp-validation-for="Form.Code" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Form.DisplayNameEn" class="form-label">@UiText.T("DisplayNameEn")</label>
+                <input asp-for="Form.DisplayNameEn" class="form-control" />
+                <span asp-validation-for="Form.DisplayNameEn" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Form.DisplayNameEt" class="form-label">@UiText.T("DisplayNameEt")</label>
+                <input asp-for="Form.DisplayNameEt" class="form-control" />
+                <span asp-validation-for="Form.DisplayNameEt" class="text-danger"></span>
+            </div>
+
+            <div class="form-check mb-3">
+                <input asp-for="Form.IsActive" class="form-check-input" />
+                <label asp-for="Form.IsActive" class="form-check-label">@UiText.T("Active")</label>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">@UiText.T("Save")</button>
+                <a asp-action="Index" class="btn btn-outline-secondary">@UiText.T("Back")</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

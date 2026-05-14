@@ -1,0 +1,45 @@
+@model DAL.Entities.CorporateAction
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create CorporateAction</h1>
+
+<form asp-action="Create" method="post">
+    <div class='mb-3'>
+        <label asp-for='AssetId' class='form-label'></label>
+        <input asp-for='AssetId' class='form-control' />
+        <span asp-validation-for='AssetId' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='ActionType' class='form-label'></label>
+        <input asp-for='ActionType' class='form-control' />
+        <span asp-validation-for='ActionType' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='ActionDate' class='form-label'></label>
+        <input asp-for='ActionDate' class='form-control' />
+        <span asp-validation-for='ActionDate' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='RatioFrom' class='form-label'></label>
+        <input asp-for='RatioFrom' class='form-control' />
+        <span asp-validation-for='RatioFrom' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='RatioTo' class='form-label'></label>
+        <input asp-for='RatioTo' class='form-control' />
+        <span asp-validation-for='RatioTo' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='Note' class='form-label'></label>
+        <input asp-for='Note' class='form-control' />
+        <span asp-validation-for='Note' class='text-danger'></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

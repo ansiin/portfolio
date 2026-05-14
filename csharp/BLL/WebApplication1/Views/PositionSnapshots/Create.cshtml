@@ -1,0 +1,60 @@
+@model DAL.Entities.PositionSnapshot
+@{
+    ViewData["Title"] = "Create";
+}
+
+<h1>Create PositionSnapshot</h1>
+
+<form asp-action="Create" method="post">
+    <div class='mb-3'>
+        <label asp-for='PortfolioId' class='form-label'></label>
+        <input asp-for='PortfolioId' class='form-control' />
+        <span asp-validation-for='PortfolioId' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='AssetId' class='form-label'></label>
+        <input asp-for='AssetId' class='form-control' />
+        <span asp-validation-for='AssetId' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='Month' class='form-label'></label>
+        <input asp-for='Month' class='form-control' />
+        <span asp-validation-for='Month' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='Quantity' class='form-label'></label>
+        <input asp-for='Quantity' class='form-control' />
+        <span asp-validation-for='Quantity' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='AvgCost' class='form-label'></label>
+        <input asp-for='AvgCost' class='form-control' />
+        <span asp-validation-for='AvgCost' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='CostCurrencyId' class='form-label'></label>
+        <input asp-for='CostCurrencyId' class='form-control' />
+        <span asp-validation-for='CostCurrencyId' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='MarketPrice' class='form-label'></label>
+        <input asp-for='MarketPrice' class='form-control' />
+        <span asp-validation-for='MarketPrice' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='MarketCurrencyId' class='form-label'></label>
+        <input asp-for='MarketCurrencyId' class='form-control' />
+        <span asp-validation-for='MarketCurrencyId' class='text-danger'></span>
+    </div>
+    <div class='mb-3'>
+        <label asp-for='CreatedAt' class='form-label'></label>
+        <input asp-for='CreatedAt' class='form-control' />
+        <span asp-validation-for='CreatedAt' class='text-danger'></span>
+    </div>
+    <button type="submit" class="btn btn-primary">Create</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

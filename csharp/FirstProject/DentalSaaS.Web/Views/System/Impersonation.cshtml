@@ -1,0 +1,63 @@
+@model DentalSaaS.Web.ViewModels.System.ImpersonationRequestViewModel
+@{
+    ViewData["Title"] = "Impersonation";
+    var companies = (IReadOnlyCollection<DentalSaaS.Application.Abstractions.SystemCompanyItem>)ViewBag.Companies;
+    var selectedCompanyId = (Guid?)ViewBag.SelectedCompanyId;
+    var members = (IEnumerable<DentalSaaS.Domain.Entities.CompanyMembership>)ViewBag.CompanyMembers;
+    var memberUserLookup = (IReadOnlyDictionary<string, string>?)ViewBag.MemberUserLookup;
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Impersonation</h1>
+    <p class="page-subtitle">System admin support flow. All sessions are audited.</p>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Select tenant</h2>
+    <form method="get" action="/system/impersonation" class="form">
+        <div class="form-group">
+            <label class="label" for="companyId">Company</label>
+            <select id="companyId" name="companyId">
+                <option value="">-- Select --</option>
+                @foreach (var company in companies)
+                {
+                    <option value="@company.CompanyId" selected="@(selectedCompanyId == company.CompanyId)">@company.Name (@company.Slug)</option>
+                }
+            </select>
+        </div>
+        <div class="btn-group">
+            <button type="submit" class="btn btn-secondary">Load members</button>
+        </div>
+    </form>
+</section>
+
+@if (selectedCompanyId.HasValue)
+{
+    <section class="card fade-item">
+        <h2 class="card-title">Start impersonation</h2>
+        <form method="post" action="/system/impersonation/start" class="form">
+            @Html.AntiForgeryToken()
+            <input type="hidden" name="CompanyId" value="@selectedCompanyId.Value" />
+            <div class="form-group">
+                <label class="label" for="TargetUserId">Tenant user</label>
+                <select id="TargetUserId" name="TargetUserId">
+                    @foreach (var member in members)
+                    {
+                        <option value="@member.UserId">
+                            @(memberUserLookup is not null && memberUserLookup.TryGetValue(member.UserId, out var userLabel)
+                                ? $"{userLabel} ({member.Role})"
+                                : $"Unknown user ({member.Role})")
+                        </option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label" for="Reason">Reason</label>
+                <input id="Reason" name="Reason" value="Support troubleshooting" />
+            </div>
+            <div class="btn-group">
+                <button type="submit" class="btn btn-primary">Start impersonation</button>
+            </div>
+        </form>
+    </section>
+}

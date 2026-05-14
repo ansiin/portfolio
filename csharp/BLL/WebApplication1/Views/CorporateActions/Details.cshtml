@@ -1,0 +1,26 @@
+@model DAL.Entities.CorporateAction
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>CorporateAction Details</h1>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Id)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.ActionType)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.ActionType)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.ActionDate)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.ActionDate)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.RatioFrom)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.RatioFrom)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.RatioTo)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.RatioTo)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Note)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Note)</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

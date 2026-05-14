@@ -1,0 +1,87 @@
+@model WebApp.ViewModels.TransactionEditViewModel
+
+@{
+    ViewData["Title"] = UiText.T("EditTransaction");
+}
+
+<h1>@UiText.T("EditTransaction")</h1>
+<p class="text-muted">@UiText.T("EditTransactionLead")</p>
+
+<div class="row">
+    <div class="col-md-8 col-lg-7">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="mb-3">
+                <label asp-for="PortfolioId" class="form-label">@UiText.T("Portfolio")</label>
+                <select asp-for="PortfolioId" asp-items="Model.PortfolioSelectList" class="form-select"></select>
+                <span asp-validation-for="PortfolioId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Type" class="form-label">@UiText.T("TransactionType")</label>
+                <select asp-for="Type" asp-items="Model.TransactionTypeSelectList" class="form-select"></select>
+                <span asp-validation-for="Type" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AssetId" class="form-label">@UiText.T("Asset")</label>
+                <select asp-for="AssetId" asp-items="Model.AssetSelectList" class="form-select"></select>
+                <span asp-validation-for="AssetId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ExecutedAt" class="form-label">@UiText.T("Date")</label>
+                <input asp-for="ExecutedAt" class="form-control" />
+                <span asp-validation-for="ExecutedAt" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-4 mb-3">
+                    <label asp-for="Quantity" class="form-label">@UiText.T("Quantity")</label>
+                    <input asp-for="Quantity" class="form-control" />
+                    <span asp-validation-for="Quantity" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label asp-for="UnitPrice" class="form-label">@UiText.T("LatestPrice")</label>
+                    <input asp-for="UnitPrice" class="form-control" />
+                    <span asp-validation-for="UnitPrice" class="text-danger"></span>
+                </div>
+                <div class="col-md-4 mb-3">
+                    <label asp-for="TotalAmount" class="form-label">@UiText.T("Total")</label>
+                    <input asp-for="TotalAmount" class="form-control" />
+                    <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Description" class="form-label">@UiText.T("Description")</label>
+                <input asp-for="Description" class="form-control" />
+                <span asp-validation-for="Description" class="text-danger"></span>
+            </div>
+
+            <div class="row">
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FeeType" class="form-label">@UiText.T("FeeType")</label>
+                    <input asp-for="FeeType" class="form-control" />
+                    <span asp-validation-for="FeeType" class="text-danger"></span>
+                </div>
+                <div class="col-md-6 mb-3">
+                    <label asp-for="FeeAmount" class="form-label">@UiText.T("FeeAmount")</label>
+                    <input asp-for="FeeAmount" class="form-control" />
+                    <span asp-validation-for="FeeAmount" class="text-danger"></span>
+                </div>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">@UiText.T("Save")</button>
+                <a asp-action="Index" asp-route-portfolioId="@Model.PortfolioId" class="btn btn-outline-secondary">@UiText.T("Back")</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

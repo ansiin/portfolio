@@ -1,0 +1,56 @@
+@model IReadOnlyList<App.DTO.v1.Notes.NoteDto>
+
+@{
+    ViewData["Title"] = UiText.T("Notes");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="mb-0">@UiText.T("Notes")</h1>
+        <p class="text-muted mb-0">@UiText.T("NotesLead")</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">@UiText.T("CreateNote")</a>
+</div>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">
+        @UiText.T("NoNotes")
+    </div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+            <th>@UiText.T("Title")</th>
+            <th>@UiText.T("Asset")</th>
+            <th>@UiText.T("Transactions")</th>
+            <th>@UiText.T("Created")</th>
+            <th>@UiText.T("Content")</th>
+            <th class="text-end">@UiText.T("Actions")</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var note in Model)
+        {
+            var preview = note.Content.Length > 120 ? note.Content.Substring(0, 120) + "..." : note.Content;
+
+            <tr>
+                <td>@(note.Title ?? "-")</td>
+                <td>@(note.AssetName ?? "-")</td>
+                <td>@(note.TransactionLabel ?? "-")</td>
+                <td>@note.CreatedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@preview</td>
+                <td class="text-end">
+                    <a asp-action="Edit" asp-route-id="@note.Id" class="btn btn-sm btn-outline-primary">@UiText.T("Edit")</a>
+                    <form asp-action="Delete" asp-route-id="@note.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger">@UiText.T("Delete")</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

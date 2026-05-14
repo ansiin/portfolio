@@ -1,0 +1,129 @@
+stages:
+  - build
+  - test
+  - deploy
+
+variables:
+  DOTNET_CLI_TELEMETRY_OPTOUT: "1"
+  DOTNET_NOLOGO: "true"
+
+firstproject_build:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - FirstProject/**/*
+        - FirstProject/.gitlab-ci.yml
+  tags:
+    - shared
+  script:
+    - docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -e DOTNET_CLI_HOME=/tmp -v "$CI_PROJECT_DIR:/workspace" -w /workspace/FirstProject mcr.microsoft.com/dotnet/sdk:9.0 sh -lc "dotnet restore DentalSaaS.sln && dotnet build DentalSaaS.sln --no-restore -c Release"
+
+firstproject_test:
+  stage: test
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - FirstProject/**/*
+        - FirstProject/.gitlab-ci.yml
+  tags:
+    - shared
+  needs:
+    - firstproject_build
+  script:
+    - docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -e DOTNET_CLI_HOME=/tmp -v "$CI_PROJECT_DIR:/workspace" -w /workspace/FirstProject mcr.microsoft.com/dotnet/sdk:9.0 sh -lc "dotnet restore DentalSaaS.sln && dotnet test DentalSaaS.sln --no-restore -c Release"
+
+firstproject_deploy:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - FirstProject/**/*
+        - FirstProject/.gitlab-ci.yml
+  tags:
+    - shared
+  needs:
+    - firstproject_test
+  environment:
+    name: production-firstproject
+    url: https://ansiin-first-project.proxy.itcollege.ee/acme
+  script:
+    - cd FirstProject
+    - export COMPOSE_PROJECT_NAME=ansiin-cweb
+    - export APP_PORT=84
+    - export POSTGRES_PASSWORD="${DENTAL_POSTGRES_PASSWORD:-${POSTGRES_PASSWORD:-}}"
+    - 'if [ -z "$POSTGRES_PASSWORD" ]; then echo "Missing GitLab variable: DENTAL_POSTGRES_PASSWORD or POSTGRES_PASSWORD"; exit 1; fi'
+    - docker compose -p "$COMPOSE_PROJECT_NAME" up --build --remove-orphans --detach
+    - docker compose -p "$COMPOSE_PROJECT_NAME" ps
+    - docker compose -p "$COMPOSE_PROJECT_NAME" logs app --tail=120 || true
+    - curl -I --max-time 15 http://127.0.0.1:84/ || true
+    - curl -I --max-time 15 http://127.0.0.1:84/acme || true
+
+myproject_build:
+  stage: build
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - MyProject/**/*
+        - MyProjectUI/**/*
+        - FirstProject/.gitlab-ci.yml
+  tags:
+    - shared
+  script:
+    - docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -e DOTNET_CLI_HOME=/tmp -v "$CI_PROJECT_DIR:/workspace" -w /workspace/MyProject mcr.microsoft.com/dotnet/sdk:8.0 sh -lc "dotnet restore HWDemo.sln && dotnet build HWDemo.sln --no-restore -c Release"
+
+myproject_test:
+  stage: test
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - MyProject/**/*
+        - MyProjectUI/**/*
+        - FirstProject/.gitlab-ci.yml
+  tags:
+    - shared
+  needs:
+    - myproject_build
+  script:
+    - docker run --rm --user "$(id -u):$(id -g)" -e HOME=/tmp -e DOTNET_CLI_HOME=/tmp -v "$CI_PROJECT_DIR:/workspace" -w /workspace/MyProject mcr.microsoft.com/dotnet/sdk:8.0 sh -lc "dotnet restore HWDemo.sln && dotnet test App.Tests/App.Tests.csproj --no-restore -c Release"
+    - docker run --rm -v "$CI_PROJECT_DIR:/workspace" -w /workspace/MyProject node:20-alpine sh -lc "node --check ../MyProjectUI/app.js"
+
+myproject_deploy:
+  stage: deploy
+  rules:
+    - if: '$CI_COMMIT_BRANCH == "main"'
+      changes:
+        - MyProject/**/*
+        - MyProjectUI/**/*
+        - FirstProject/.gitlab-ci.yml
+  tags:
+    - shared
+  needs:
+    - myproject_test
+  environment:
+    name: production-myproject
+    url: https://ansiin-investing.proxy.itcollege.ee
+  script:
+    - export COMPOSE_PROJECT_NAME=ansiin-investing
+    - export POSTGRES_DB=investingtracker
+    - export POSTGRES_USER=investingtracker
+    - export POSTGRES_PASSWORD="${INVESTING_POSTGRES_PASSWORD:-${POSTGRES_PASSWORD:-}}"
+    - export WEBAPP_PORT=82
+    - export CLIENT_PORT=83
+    - export ASPNETCORE_ENVIRONMENT=Production
+    - export USE_HTTPS_REDIRECTION=false
+    - export DATAINIT_DROP_DATABASE=false
+    - export DATAINIT_MIGRATE_DATABASE=true
+    - export DATAINIT_SEED_IDENTITY=true
+    - export DATAINIT_SEED_DATA=true
+    - export JWT__Key="${INVESTING_JWT_KEY:-${JWT__Key:-}}"
+    - export JWT__Issuer=itcollege.taltech.ee
+    - export JWT__Audience=itcollege.taltech.ee
+    - export LangStrDefaultCulture=en
+    - export PUBLIC_API_URL=https://ansiin-investing-api.proxy.itcollege.ee
+    - export CORS_ALLOWED_ORIGIN_0=https://ansiin-investing.proxy.itcollege.ee
+    - export CORS_ALLOWED_ORIGIN_1=http://192.168.181.136:83
+    - 'if [ -z "$POSTGRES_PASSWORD" ]; then echo "Missing GitLab variable: INVESTING_POSTGRES_PASSWORD or POSTGRES_PASSWORD"; exit 1; fi'
+    - 'if [ -z "$JWT__Key" ]; then echo "Missing GitLab variable: INVESTING_JWT_KEY or JWT__Key"; exit 1; fi'
+    - cd MyProject
+    - docker compose -f docker-compose.vps.yml -p "$COMPOSE_PROJECT_NAME" up --build --remove-orphans --detach

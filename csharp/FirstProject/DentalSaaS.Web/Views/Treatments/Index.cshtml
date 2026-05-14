@@ -1,0 +1,65 @@
+@model IReadOnlyCollection<DentalSaaS.Application.Treatments.TreatmentDto>
+@using DentalSaaS.Application.Patients
+@using DentalSaaS.Application.PracticeSetup
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.PatientLookup;
+    var treatmentTypeLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.TreatmentTypeLookup;
+    ViewData["Title"] = "Treatments";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Treatments</h1>
+    <p class="page-subtitle">Performed treatment history with per-procedure cost.</p>
+    <div class="toolbar">
+        <a class="btn btn-primary" href="/@tenantSlug/treatments/create">Add treatment</a>
+    </div>
+</div>
+
+<section class="card fade-item">
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>Patient</th><th>Treatment type</th><th>Performed at</th><th>Cost</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (patientLookup is not null && patientLookup.TryGetValue(item.PatientId, out var patientName))
+                        {
+                            @patientName
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown patient</span>
+                        }
+                    </td>
+                    <td>
+                        @if (treatmentTypeLookup is not null && treatmentTypeLookup.TryGetValue(item.TreatmentTypeId, out var typeName))
+                        {
+                            @typeName
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown type</span>
+                        }
+                    </td>
+                    <td>@item.PerformedAt</td>
+                    <td>@item.Cost</td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-secondary" href="/@tenantSlug/treatments/edit/@item.Id">Edit</a>
+                            <form method="post" action="/@tenantSlug/treatments/@item.Id/delete">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-link" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

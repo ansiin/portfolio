@@ -1,0 +1,52 @@
+@using DentalSaaS.Application.Abstractions
+@using DentalSaaS.Shared.Enums
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var subscriptions = ((IReadOnlyCollection<SystemSubscriptionItem>)ViewBag.Subscriptions)
+        .Where(s => s.CompanySlug.Equals(tenantSlug, StringComparison.OrdinalIgnoreCase))
+        .OrderByDescending(s => s.ValidFrom)
+        .ToArray();
+    var current = subscriptions.FirstOrDefault();
+    ViewData["Title"] = "Subscription & Billing";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Subscription & billing</h1>
+    <p class="page-subtitle">Owner-only capability area.</p>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Current subscription</h2>
+    <p class="page-subtitle">Current tier: <strong>@(current?.Tier.ToString() ?? "Free")</strong></p>
+
+    <form method="post" action="/@tenantSlug/management/subscription" class="form">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label class="label" for="tier">Change tier</label>
+            <select id="tier" name="tier">
+                <option value="@SubscriptionTier.Free">Free</option>
+                <option value="@SubscriptionTier.Standard">Standard</option>
+                <option value="@SubscriptionTier.Premium">Premium</option>
+            </select>
+        </div>
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Update tier</button>
+            <a class="btn btn-secondary" href="/@tenantSlug/patients">Back to operations</a>
+        </div>
+    </form>
+</section>
+
+<section class="card fade-item">
+    <h2 class="card-title">Tier history</h2>
+    <div class="table-wrap">
+        <table class="table">
+            <thead><tr><th>Tier</th><th>Valid from</th></tr></thead>
+            <tbody>
+            @foreach (var item in subscriptions)
+            {
+                <tr><td>@item.Tier</td><td>@item.ValidFrom</td></tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

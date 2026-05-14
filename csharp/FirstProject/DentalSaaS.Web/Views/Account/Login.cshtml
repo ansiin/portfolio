@@ -1,0 +1,58 @@
+@model DentalSaaS.Web.ViewModels.Account.LoginViewModel
+@{
+    ViewData["Title"] = "Login";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Sign in</h1>
+    <p class="page-subtitle">Use your account credentials to open tenant workspaces.</p>
+</div>
+
+<section class="card fade-item" style="max-width: 560px;">
+    <form method="post" class="form" novalidate>
+        @Html.AntiForgeryToken()
+        <input asp-for="ReturnUrl" type="hidden" />
+
+        <div class="form-group">
+            <label asp-for="Email" class="label"></label>
+            <input asp-for="Email" />
+            <span asp-validation-for="Email"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Password" class="label"></label>
+            <input asp-for="Password" />
+            <span asp-validation-for="Password"></span>
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Login</button>
+            <a class="btn btn-secondary" href="/account/register">Register</a>
+            <a class="btn btn-secondary" href="/account/forgot-password">Forgot password</a>
+        </div>
+    </form>
+
+    @if (TempData["GeneratedResetUrl"] is string resetUrl)
+    {
+        <div class="alert alert-warning" style="margin-top: 16px;">
+            Local reset link: <a href="@resetUrl">@resetUrl</a>
+        </div>
+    }
+
+    <div class="card" style="margin-top: 12px; background: var(--surface-soft);">
+        <h2 class="card-title">Seed accounts</h2>
+        <ul>
+            <li><code>owner@acme.local / Owner123!</code></li>
+            <li><code>admin@acme.local / Admin123!</code></li>
+            <li><code>manager@acme.local / Manager123!</code></li>
+            <li><code>employee@acme.local / Employee123!</code></li>
+            <li><code>systemadmin@dentalsaas.local / SystemAdmin123!</code></li>
+        </ul>
+    </div>
+
+    <div class="validation" asp-validation-summary="All"></div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

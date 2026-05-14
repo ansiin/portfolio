@@ -1,0 +1,32 @@
+@model DAL.Entities.PositionSnapshot
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>PositionSnapshot Details</h1>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Id)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.PortfolioId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.PortfolioId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Month)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Month)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Quantity)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Quantity)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AvgCost)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AvgCost)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CostCurrencyId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CostCurrencyId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.MarketPrice)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.MarketPrice)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.MarketCurrencyId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.MarketCurrencyId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CreatedAt)</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

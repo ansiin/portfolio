@@ -1,0 +1,56 @@
+@model WebApp.ViewModels.PriceSnapshotEditViewModel
+
+@{
+    ViewData["Title"] = UiText.T("EditPriceSnapshot");
+}
+
+<h1>@UiText.T("EditPriceSnapshot")</h1>
+<p class="text-muted">@UiText.T("EditPriceSnapshotLead")</p>
+
+<div class="row">
+    <div class="col-lg-7">
+        <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+            <input asp-for="Id" type="hidden" />
+
+            <div class="mb-3">
+                <label asp-for="AssetId" class="form-label">@UiText.T("Asset")</label>
+                <select asp-for="AssetId" asp-items="Model.AssetSelectList" class="form-select"></select>
+                <span asp-validation-for="AssetId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CurrencyId" class="form-label">@UiText.T("Currency")</label>
+                <select asp-for="CurrencyId" asp-items="Model.CurrencySelectList" class="form-select"></select>
+                <span asp-validation-for="CurrencyId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MarketDataProviderId" class="form-label">@UiText.T("MarketDataProvider")</label>
+                <select asp-for="MarketDataProviderId" asp-items="Model.ProviderSelectList" class="form-select"></select>
+                <span asp-validation-for="MarketDataProviderId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="RecordedAt" class="form-label">@UiText.T("Recorded")</label>
+                <input asp-for="RecordedAt" class="form-control" />
+                <span asp-validation-for="RecordedAt" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Price" class="form-label">@UiText.T("LatestPrice")</label>
+                <input asp-for="Price" class="form-control" />
+                <span asp-validation-for="Price" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">@UiText.T("Save")</button>
+                <a asp-action="Index" asp-route-assetId="@Model.AssetId" class="btn btn-outline-secondary">@UiText.T("Back")</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

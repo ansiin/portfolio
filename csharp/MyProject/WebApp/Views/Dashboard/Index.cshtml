@@ -1,0 +1,215 @@
+@model WebApp.ViewModels.DashboardPageViewModel
+@using System.Globalization
+@{
+    var totalMarketValue = Model.Summary.TotalMarketValue <= 0 ? 1 : Model.Summary.TotalMarketValue;
+    var bestPosition = Model.Allocation
+        .OrderByDescending(item => item.MarketValue)
+        .FirstOrDefault();
+    var timelineItems = Model.Timeline.ToList();
+    var chartWidth = 1000d;
+    var chartHeight = 240d;
+    var maxAmount = timelineItems.Count == 0 ? 1m : timelineItems.Max(item => Math.Abs(item.NetAmount));
+    var linePoints = timelineItems.Count <= 1
+        ? string.Empty
+        : string.Join(" ", timelineItems.Select((item, index) =>
+        {
+            var x = timelineItems.Count == 1 ? chartWidth / 2 : index * (chartWidth / (timelineItems.Count - 1));
+            var normalized = maxAmount == 0 ? 0m : item.NetAmount / maxAmount;
+            var y = chartHeight - ((double)(normalized + 1m) / 2d * chartHeight);
+            return $"{x.ToString("0.##", CultureInfo.InvariantCulture)},{y.ToString("0.##", CultureInfo.InvariantCulture)}";
+        }));
+}
+
+<section class="dashboard-hero mb-4">
+    <div>
+        <span class="eyebrow">@UiText.T("Dashboard")</span>
+        <h1 class="hero-title hero-title--compact">@Model.Heading</h1>
+        <p class="hero-copy hero-copy--compact">@Model.Description</p>
+    </div>
+    <div class="dashboard-hero__actions">
+        <a class="btn btn-primary" asp-controller="Transactions" asp-action="Create">@UiText.T("CreateTransaction")</a>
+        <a class="btn btn-outline-secondary" asp-controller="PriceSnapshots" asp-action="Create">@UiText.T("CreatePriceSnapshot")</a>
+    </div>
+</section>
+
+<section class="stats-grid mb-4">
+    <article class="stat-card stat-card--accent">
+        <span>@UiText.T("MarketValue")</span>
+        <strong>@Model.Summary.TotalMarketValue.ToString("N2")</strong>
+        <small>@UiText.T("AcrossPortfolios") @Model.Summary.PortfolioCount</small>
+    </article>
+    <article class="stat-card">
+        <span>@UiText.T("UnrealizedPL")</span>
+        <strong class="@(Model.Summary.TotalUnrealizedProfit >= 0 ? "text-success" : "text-danger")">
+            @Model.Summary.TotalUnrealizedProfit.ToString("N2")
+        </strong>
+        <small>@UiText.T("ActiveAssetsMetric") @Model.Summary.ActiveAssetCount</small>
+    </article>
+    <article class="stat-card">
+        <span>@UiText.T("NetCashFlow")</span>
+        <strong>@Model.Summary.NetCashFlow.ToString("N2")</strong>
+        <small>@UiText.T("TransactionsMetric") @Model.Summary.TransactionCount</small>
+    </article>
+    <article class="stat-card">
+        <span>@UiText.T("PortfolioPulse")</span>
+        <strong>@(bestPosition?.AssetSymbol ?? bestPosition?.AssetName ?? "-")</strong>
+        <small>
+            @(bestPosition == null
+                ? UiText.T("NoAllocationData")
+                : $"{UiText.T("MarketValue")}: {bestPosition.MarketValue:N2}")
+        </small>
+    </article>
+</section>
+
+<section class="row g-4 mb-4">
+    <div class="col-xl-7">
+        <article class="surface-card h-100">
+            <div class="section-header">
+                <div>
+                    <span class="eyebrow">@UiText.T("AllocationSnapshot")</span>
+                    <h2 class="section-title">@UiText.T("AllocationByValue")</h2>
+                </div>
+            </div>
+
+            @if (Model.Allocation.Count == 0)
+            {
+                <p class="text-muted mb-0">@UiText.T("NoAllocationData")</p>
+            }
+            else
+            {
+                <div class="allocation-list">
+                    @foreach (var item in Model.Allocation)
+                    {
+                        var share = item.MarketValue <= 0
+                            ? 0m
+                            : Math.Max(8m, Math.Round(item.MarketValue / totalMarketValue * 100m, 1));
+                        <div class="allocation-row">
+                            <div class="allocation-row__meta">
+                                <div>
+                                    <strong>@item.AssetName</strong>
+                                    @if (!string.IsNullOrWhiteSpace(item.AssetSymbol))
+                                    {
+                                        <span class="text-muted">(@item.AssetSymbol)</span>
+                                    }
+                                </div>
+                                <span>@item.PortfolioName</span>
+                            </div>
+                            <div class="allocation-row__bar">
+                                <span style="width: @share.ToString(CultureInfo.InvariantCulture)%"></span>
+                            </div>
+                            <div class="allocation-row__values">
+                                <strong>@item.MarketValue.ToString("N2")</strong>
+                                <span class="@(item.UnrealizedProfit >= 0 ? "text-success" : "text-danger")">
+                                    @item.UnrealizedProfit.ToString("N2")
+                                </span>
+                            </div>
+                        </div>
+                    }
+                </div>
+            }
+        </article>
+    </div>
+    <div class="col-xl-5">
+        <article class="surface-card h-100">
+            <div class="section-header">
+                <div>
+                    <span class="eyebrow">@UiText.T("MonthlyCashTimeline")</span>
+                    <h2 class="section-title">@UiText.T("PerformanceRange")</h2>
+                </div>
+            </div>
+
+            @if (timelineItems.Count == 0)
+            {
+                <p class="text-muted mb-0">@UiText.T("NoTimelineData")</p>
+            }
+            else
+            {
+                <div class="line-chart">
+                    <svg viewBox="0 0 1000 240" preserveAspectRatio="none" role="img" aria-label="@UiText.T("MonthlyCashTimeline")">
+                        <line x1="0" y1="120" x2="1000" y2="120" class="line-chart__baseline"></line>
+                        <polyline points="@linePoints" class="line-chart__path"></polyline>
+                    </svg>
+                </div>
+                <div class="timeline-list">
+                    @foreach (var item in timelineItems.TakeLast(5).Reverse())
+                    {
+                        <div class="timeline-list__item">
+                            <span>@item.Period</span>
+                            <strong class="@(item.NetAmount >= 0 ? "text-success" : "text-danger")">@item.NetAmount.ToString("N2")</strong>
+                        </div>
+                    }
+                </div>
+            }
+        </article>
+    </div>
+</section>
+
+<section class="surface-card">
+    <div class="section-header">
+        <div>
+            <span class="eyebrow">@UiText.T("Prices")</span>
+            <h2 class="section-title">@UiText.T("OpenPositions")</h2>
+        </div>
+    </div>
+
+    @if (Model.Allocation.Count == 0)
+    {
+        <p class="text-muted mb-0">@UiText.T("NoAllocationData")</p>
+    }
+    else
+    {
+        <div class="table-responsive">
+            <table class="table app-table align-middle mb-0">
+                <thead>
+                <tr>
+                    <th>@UiText.T("Asset")</th>
+                    <th>@UiText.T("Portfolio")</th>
+                    <th>@UiText.T("Quantity")</th>
+                    <th>@UiText.T("CostBasis")</th>
+                    <th>@UiText.T("LatestPrice")</th>
+                    <th>@UiText.T("MarketValue")</th>
+                    <th>@UiText.T("UnrealizedPL")</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var item in Model.Allocation)
+                {
+                    <tr>
+                        <td>
+                            <strong>@item.AssetName</strong>
+                            @if (!string.IsNullOrWhiteSpace(item.AssetSymbol))
+                            {
+                                <div class="small text-muted">@item.AssetSymbol</div>
+                            }
+                        </td>
+                        <td>@item.PortfolioName</td>
+                        <td>@item.Quantity.ToString("N4")</td>
+                        <td>@item.CostBasisAmount.ToString("N2")</td>
+                        <td>
+                            @if (item.LatestPrice.HasValue)
+                            {
+                                <span>@item.LatestPrice.Value.ToString("N2")</span>
+                                <div class="small text-muted">
+                                    @item.ValuationCurrencyCode
+                                    @if (item.LatestPriceRecordedAt.HasValue)
+                                    {
+                                        <span>| @item.LatestPriceRecordedAt.Value.ToString("yyyy-MM-dd")</span>
+                                    }
+                                </div>
+                            }
+                            else
+                            {
+                                <span class="text-muted">@UiText.T("NoPrice")</span>
+                            }
+                        </td>
+                        <td>@item.MarketValue.ToString("N2")</td>
+                        <td class="@(item.UnrealizedProfit >= 0 ? "text-success" : "text-danger")">
+                            @item.UnrealizedProfit.ToString("N2")
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    }
+</section>

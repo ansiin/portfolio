@@ -1,0 +1,82 @@
+@model IReadOnlyCollection<DentalSaaS.Application.Appointments.AppointmentItemDto>
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.PatientLookup;
+    var roomLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.RoomLookup;
+    var dentistLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.DentistLookup;
+    ViewData["Title"] = "Appointments";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Appointments</h1>
+    <p class="page-subtitle">Calendar-like operational schedule.</p>
+    <div class="toolbar">
+        <a class="btn btn-primary" href="/@tenantSlug/appointments/create">Create appointment</a>
+    </div>
+</div>
+
+<section class="card fade-item">
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Type</th>
+                <th>Patient</th>
+                <th>Room</th>
+                <th>Dentist</th>
+                <th>Plan Item</th>
+                <th>Start</th>
+                <th>End</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.TypeName</td>
+                    <td>
+                        @if (patientLookup is not null && patientLookup.TryGetValue(item.PatientId, out var patientName))
+                        {
+                            @patientName
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown patient</span>
+                        }
+                    </td>
+                    <td>
+                        @if (roomLookup is not null && roomLookup.TryGetValue(item.TreatmentRoomId, out var roomName))
+                        {
+                            @roomName
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown room</span>
+                        }
+                    </td>
+                    <td>
+                        @if (dentistLookup is not null && dentistLookup.TryGetValue(item.DentistId, out var dentistName))
+                        {
+                            @dentistName
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown dentist</span>
+                        }
+                    </td>
+                    <td>@(string.IsNullOrWhiteSpace(item.PlanItemDescription) ? "-" : item.PlanItemDescription)</td>
+                    <td>@item.StartAt</td>
+                    <td>@item.EndAt</td>
+                    <td>
+                        <form method="post" action="/@tenantSlug/appointments/@item.Id/delete">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-link">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>
