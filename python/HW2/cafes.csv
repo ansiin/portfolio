@@ -1,0 +1,16 @@
+id,name,location,time_open,time_closed,provider
+1,Plus Kohvik TalTech SOC,"Akadeemia tee 3, SOC building",08:30,16:00,Plus Kohvikud
+2,Plus Kohvik TalTech LIB,Akadeemia tee 1 / Ehitajate tee 7,08:30,16:00,Plus Kohvikud
+3,Caffeine,"Ehitajate tee 5, U01 building",08:00,19:00,Caffeine
+4,R-Kiosk - GO pood 24/7,"Ehitajate tee 5, U01 building",08:00,16:00,R-Kiosk
+5,R-Kiosk (U04 korpus),Ehitajate tee 5,09:00,16:00,R-Kiosk
+6,PRÕKS! Coffee shop,"Tudengimaja, Ehitajate tee 5",09:30,18:00,Prõks
+7,Helios Söögituba,Mäealuse 2/4,09:00,17:00,Helios
+8,Pannkoogimaja,Akadeemia tee 21,10:00,18:00,PanCake OÜ
+9,Lõunarestoran Mets ICT,Akadeemia tee 15a,08:30,15:00,Veniete OÜ
+10,Lõunarestoran Mets Tehnopolis,Mäealuse 2/1,08:30,15:30,Veniete OÜ
+11,Restoran Nuudel,Akadeemia tee 21-2,11:00,22:00,Nuudel
+12,Pizzakiosk Tehnopol,Akadeemia tee 21/6,11:00,21:00,Pizzakiosk OÜ
+13,Herne Kohvik,Männiliiva tn 7,11:00,14:00,TTÜ Spordiklubi
+14,IT Kolledži kohvik,Kohvik,11:00,18:00,IT Kolledž
+15,Test,Test,13:54,13:54,Test
