@@ -1,0 +1,202 @@
+<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <resheader name="resmimetype"><value>text/microsoft-resx</value></resheader>
+  <resheader name="version"><value>1.3</value></resheader>
+  <resheader name="reader"><value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <resheader name="writer"><value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=2.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value></resheader>
+  <data name="AppTitle" xml:space="preserve"><value>Investeeringute J&#228;lgija</value></data>
+  <data name="Home" xml:space="preserve"><value>Avaleht</value></data>
+  <data name="Privacy" xml:space="preserve"><value>Privaatsus</value></data>
+  <data name="PrivacyPolicy" xml:space="preserve"><value>Privaatsuspoliitika</value></data>
+  <data name="PrivacyLead" xml:space="preserve"><value>See demoprojekt salvestab konto, portfelli, tehingu ja m&#228;rkme andmeid, mida investing tracker kasutusjuhud vajavad.</value></data>
+  <data name="ErrorTitle" xml:space="preserve"><value>Viga</value></data>
+  <data name="ErrorLead" xml:space="preserve"><value>Sinu p&#228;ringu t&#246;&#246;tlemisel tekkis viga.</value></data>
+  <data name="RequestId" xml:space="preserve"><value>P&#228;ringu ID</value></data>
+  <data name="DevelopmentMode" xml:space="preserve"><value>Arendusre&#382;iim</value></data>
+  <data name="DevelopmentModeLead" xml:space="preserve"><value>Arendusre&#382;iim kuvab vea kohta detailsema info.</value></data>
+  <data name="DevelopmentModeWarning" xml:space="preserve"><value>&#196;ra kasuta arendusre&#382;iimi &#252;les seatud rakenduses, sest see v&#245;ib n&#228;idata tundlikku tehnilist infot l&#245;ppkasutajale.</value></data>
+  <data name="User" xml:space="preserve"><value>Kasutaja</value></data>
+  <data name="Users" xml:space="preserve"><value>Kasutajad</value></data>
+  <data name="Roles" xml:space="preserve"><value>Rollid</value></data>
+  <data name="UsersAndRoles" xml:space="preserve"><value>Kasutajad ja rollid</value></data>
+  <data name="Dashboard" xml:space="preserve"><value>&#220;levaade</value></data>
+  <data name="Portfolios" xml:space="preserve"><value>Portfellid</value></data>
+  <data name="Assets" xml:space="preserve"><value>Varad</value></data>
+  <data name="Transactions" xml:space="preserve"><value>Tehingud</value></data>
+  <data name="PriceSnapshots" xml:space="preserve"><value>Hinnasnapshotid</value></data>
+  <data name="PositionSnapshots" xml:space="preserve"><value>Positsioonisnapshotid</value></data>
+  <data name="Prices" xml:space="preserve"><value>Hinnad</value></data>
+  <data name="Positions" xml:space="preserve"><value>Positsioonid</value></data>
+  <data name="Watchlists" xml:space="preserve"><value>J&#228;lgimisnimekirjad</value></data>
+  <data name="Notes" xml:space="preserve"><value>M&#228;rkmed</value></data>
+  <data name="Admin" xml:space="preserve"><value>Admin</value></data>
+  <data name="Welcome" xml:space="preserve"><value>Tere tulemast</value></data>
+  <data name="WelcomeLead" xml:space="preserve"><value>Kasuta sama s&#252;steemi MVC rakenduse, REST API ja eraldi JavaScript kliendi kaudu, et hoida investeerimisandmed &#252;hes kohas.</value></data>
+  <data name="DashboardLead" xml:space="preserve"><value>Sinu investeerimisandmete koondvaade.</value></data>
+  <data name="PortfoliosMetric" xml:space="preserve"><value>Portfellid</value></data>
+  <data name="ActiveAssetsMetric" xml:space="preserve"><value>Aktiivsed varad</value></data>
+  <data name="TransactionsMetric" xml:space="preserve"><value>Tehingud</value></data>
+  <data name="NetCashFlow" xml:space="preserve"><value>Netorahavoog</value></data>
+  <data name="BuyVolume" xml:space="preserve"><value>Ostumaht</value></data>
+  <data name="SellVolume" xml:space="preserve"><value>M&#252;&#252;gimaht</value></data>
+  <data name="MarketValue" xml:space="preserve"><value>Turuv&#228;&#228;rtus</value></data>
+  <data name="UnrealizedPL" xml:space="preserve"><value>Realiseerimata P/L</value></data>
+  <data name="AllocationSnapshot" xml:space="preserve"><value>Jaotuse hetkeseis</value></data>
+  <data name="NoAllocationData" xml:space="preserve"><value>Varade jaotuse andmeid veel ei ole.</value></data>
+  <data name="Asset" xml:space="preserve"><value>Vara</value></data>
+  <data name="AssetType" xml:space="preserve"><value>Varat&#252;&#252;p</value></data>
+  <data name="AssetTypes" xml:space="preserve"><value>Varat&#252;&#252;bid</value></data>
+  <data name="Currencies" xml:space="preserve"><value>Valuutad</value></data>
+  <data name="Exchanges" xml:space="preserve"><value>B&#246;rsid</value></data>
+  <data name="Portfolio" xml:space="preserve"><value>Portfell</value></data>
+  <data name="Quantity" xml:space="preserve"><value>Kogus</value></data>
+  <data name="NetInvested" xml:space="preserve"><value>Neto investeering</value></data>
+  <data name="CostBasis" xml:space="preserve"><value>Soetusmaksumus</value></data>
+  <data name="AverageCost" xml:space="preserve"><value>Keskmine hind</value></data>
+  <data name="LatestPrice" xml:space="preserve"><value>Viimane hind</value></data>
+  <data name="NoPrice" xml:space="preserve"><value>Hind puudub</value></data>
+  <data name="MonthlyCashTimeline" xml:space="preserve"><value>Igakuine rahavoo ajajoon</value></data>
+  <data name="NoTimelineData" xml:space="preserve"><value>Ajajoone andmeid veel ei ole.</value></data>
+  <data name="Period" xml:space="preserve"><value>Periood</value></data>
+  <data name="NetAmount" xml:space="preserve"><value>Neto summa</value></data>
+  <data name="Name" xml:space="preserve"><value>Nimi</value></data>
+  <data name="Title" xml:space="preserve"><value>Pealkiri</value></data>
+  <data name="Description" xml:space="preserve"><value>Kirjeldus</value></data>
+  <data name="Content" xml:space="preserve"><value>Sisu</value></data>
+  <data name="Date" xml:space="preserve"><value>Kuup&#228;ev</value></data>
+  <data name="Recorded" xml:space="preserve"><value>Salvestatud</value></data>
+  <data name="SnapshotAt" xml:space="preserve"><value>Snapshoti aeg</value></data>
+  <data name="Total" xml:space="preserve"><value>Kokku</value></data>
+  <data name="Fees" xml:space="preserve"><value>Tasud</value></data>
+  <data name="FeeType" xml:space="preserve"><value>Tasu t&#252;&#252;p</value></data>
+  <data name="FeeAmount" xml:space="preserve"><value>Tasu summa</value></data>
+  <data name="Type" xml:space="preserve"><value>T&#252;&#252;p</value></data>
+  <data name="TransactionType" xml:space="preserve"><value>Tehingu t&#252;&#252;p</value></data>
+  <data name="TransactionType_Buy" xml:space="preserve"><value>Ost</value></data>
+  <data name="TransactionType_Sell" xml:space="preserve"><value>M&#252;&#252;k</value></data>
+  <data name="TransactionType_Deposit" xml:space="preserve"><value>Sissemakse</value></data>
+  <data name="TransactionType_Withdrawal" xml:space="preserve"><value>V&#228;ljamakse</value></data>
+  <data name="TransactionType_Dividend" xml:space="preserve"><value>Dividend</value></data>
+  <data name="Items" xml:space="preserve"><value>Kirjed</value></data>
+  <data name="Currency" xml:space="preserve"><value>Valuuta</value></data>
+  <data name="Exchange" xml:space="preserve"><value>B&#246;rs</value></data>
+  <data name="Provider" xml:space="preserve"><value>Pakkuja</value></data>
+  <data name="Providers" xml:space="preserve"><value>Pakkujad</value></data>
+  <data name="MarketDataProvider" xml:space="preserve"><value>Turuandmete pakkuja</value></data>
+  <data name="MarketDataProviders" xml:space="preserve"><value>Turuandmete pakkujad</value></data>
+  <data name="Code" xml:space="preserve"><value>Kood</value></data>
+  <data name="NameEn" xml:space="preserve"><value>Nimi EN</value></data>
+  <data name="NameEt" xml:space="preserve"><value>Nimi ET</value></data>
+  <data name="DisplayNameEn" xml:space="preserve"><value>Kuvanimi EN</value></data>
+  <data name="DisplayNameEt" xml:space="preserve"><value>Kuvanimi ET</value></data>
+  <data name="BaseCurrency" xml:space="preserve"><value>Baasvaluuta</value></data>
+  <data name="BaseUrl" xml:space="preserve"><value>Baas-URL</value></data>
+  <data name="Symbol" xml:space="preserve"><value>S&#252;mbol</value></data>
+  <data name="Email" xml:space="preserve"><value>E-post</value></data>
+  <data name="Username" xml:space="preserve"><value>Kasutajanimi</value></data>
+  <data name="EmailConfirmed" xml:space="preserve"><value>E-post kinnitatud</value></data>
+  <data name="Yes" xml:space="preserve"><value>Jah</value></data>
+  <data name="No" xml:space="preserve"><value>Ei</value></data>
+  <data name="Status" xml:space="preserve"><value>Staatus</value></data>
+  <data name="Actions" xml:space="preserve"><value>Tegevused</value></data>
+  <data name="Archived" xml:space="preserve"><value>Arhiveeritud</value></data>
+  <data name="Active" xml:space="preserve"><value>Aktiivne</value></data>
+  <data name="Inactive" xml:space="preserve"><value>Mitteaktiivne</value></data>
+  <data name="Back" xml:space="preserve"><value>Tagasi</value></data>
+  <data name="Save" xml:space="preserve"><value>Salvesta</value></data>
+  <data name="Create" xml:space="preserve"><value>Loo</value></data>
+  <data name="CreateWatchlist" xml:space="preserve"><value>Loo j&#228;lgimisnimekiri</value></data>
+  <data name="CreateNote" xml:space="preserve"><value>Loo m&#228;rge</value></data>
+  <data name="CreatePriceSnapshot" xml:space="preserve"><value>Loo hinnasnapshot</value></data>
+  <data name="CreateAsset" xml:space="preserve"><value>Loo vara</value></data>
+  <data name="CreateTransaction" xml:space="preserve"><value>Loo tehing</value></data>
+  <data name="CreatePortfolio" xml:space="preserve"><value>Loo portfell</value></data>
+  <data name="Open" xml:space="preserve"><value>Ava</value></data>
+  <data name="Add" xml:space="preserve"><value>Lisa</value></data>
+  <data name="Remove" xml:space="preserve"><value>Eemalda</value></data>
+  <data name="Generate" xml:space="preserve"><value>Genereeri</value></data>
+  <data name="GenerateSnapshot" xml:space="preserve"><value>Genereeri snapshot</value></data>
+  <data name="GeneratePositionSnapshot" xml:space="preserve"><value>Genereeri positsioonisnapshot</value></data>
+  <data name="Filter" xml:space="preserve"><value>Filtreeri</value></data>
+  <data name="Edit" xml:space="preserve"><value>Muuda</value></data>
+  <data name="EditPortfolio" xml:space="preserve"><value>Muuda portfelli</value></data>
+  <data name="EditAsset" xml:space="preserve"><value>Muuda vara</value></data>
+  <data name="EditTransaction" xml:space="preserve"><value>Muuda tehingut</value></data>
+  <data name="EditWatchlist" xml:space="preserve"><value>Muuda j&#228;lgimisnimekirja</value></data>
+  <data name="EditNote" xml:space="preserve"><value>Muuda m&#228;rget</value></data>
+  <data name="EditPriceSnapshot" xml:space="preserve"><value>Muuda hinnasnapshoti</value></data>
+  <data name="Delete" xml:space="preserve"><value>Kustuta</value></data>
+  <data name="Deactivate" xml:space="preserve"><value>Deaktiveeri</value></data>
+  <data name="Manage" xml:space="preserve"><value>Halda</value></data>
+  <data name="Hello" xml:space="preserve"><value>Tere</value></data>
+  <data name="Logout" xml:space="preserve"><value>Logi v&#228;lja</value></data>
+  <data name="Register" xml:space="preserve"><value>Registreeru</value></data>
+  <data name="Login" xml:space="preserve"><value>Logi sisse</value></data>
+  <data name="Password" xml:space="preserve"><value>Parool</value></data>
+  <data name="ConfirmPassword" xml:space="preserve"><value>Kinnita parool</value></data>
+  <data name="RememberMe" xml:space="preserve"><value>J&#228;ta mind meelde</value></data>
+  <data name="LoginLead" xml:space="preserve"><value>Logi sisse, et avada oma portfellid, varad, tehingud ja m&#228;rkmed.</value></data>
+  <data name="RegisterLead" xml:space="preserve"><value>Loo konto, et alustada investeeringute j&#228;lgimist MVC rakenduses ja API kaudu.</value></data>
+  <data name="NeedAccount" xml:space="preserve"><value>Kas sul veel ei ole kontot?</value></data>
+  <data name="AlreadyHaveAccount" xml:space="preserve"><value>Kas sul on konto juba olemas?</value></data>
+  <data name="CreateAccount" xml:space="preserve"><value>Loo konto</value></data>
+  <data name="BackToLogin" xml:space="preserve"><value>Tagasi sisselogimisse</value></data>
+  <data name="Language" xml:space="preserve"><value>Keel</value></data>
+  <data name="CreatePortfolioLead" xml:space="preserve"><value>Loo portfell ja vali aruandluseks kasutatav baasvaluuta.</value></data>
+  <data name="EditPortfolioLead" xml:space="preserve"><value>Muuda portfelli metaandmeid ja arhiveerimise olekut.</value></data>
+  <data name="CreateAssetLead" xml:space="preserve"><value>Lisa investeeritav vara &#252;hte oma portfellidest.</value></data>
+  <data name="EditAssetLead" xml:space="preserve"><value>Muuda vara metaandmeid ja aktiivsuse olekut.</value></data>
+  <data name="CreateTransactionLead" xml:space="preserve"><value>Lisa portfelli s&#252;ndmus nagu ost, m&#252;&#252;k, sissemakse v&#245;i dividend.</value></data>
+  <data name="EditTransactionLead" xml:space="preserve"><value>Muuda tehingut ja selle peamist tasurida.</value></data>
+  <data name="CreateWatchlistLead" xml:space="preserve"><value>Loo nimeline nimekiri varadest, mida soovid j&#228;lgida ja uurida.</value></data>
+  <data name="EditWatchlistLead" xml:space="preserve"><value>Muuda j&#228;lgimisnimekirja nime ja halda selles olevaid varasid.</value></data>
+  <data name="CreateNoteLead" xml:space="preserve"><value>Lisa vabavormiline m&#228;rge ja seo see soovi korral vara v&#245;i tehinguga.</value></data>
+  <data name="EditNoteLead" xml:space="preserve"><value>Muuda m&#228;rkme sisu ja selle seoseid vara v&#245;i tehinguga.</value></data>
+  <data name="PriceSnapshotsLead" xml:space="preserve"><value>Salvesta vara hinnad ajas, et toetada v&#228;&#228;rtustamist ja anal&#252;&#252;si.</value></data>
+  <data name="CreatePriceSnapshotLead" xml:space="preserve"><value>Lisa &#252;he oma vara ajalooline v&#245;i jooksev hinnakirje.</value></data>
+  <data name="EditPriceSnapshotLead" xml:space="preserve"><value>Muuda salvestatud hinda ja selle metaandmeid.</value></data>
+  <data name="PositionSnapshotsLead" xml:space="preserve"><value>K&#252;lmuta arvutatud positsioonid ajalooliseks portfelli seisuks.</value></data>
+  <data name="GeneratePositionSnapshotLead" xml:space="preserve"><value>Loo ajaloolised positsiooniread praeguse tehingu- ja hinnaseisu p&#245;hjal.</value></data>
+  <data name="NoPriceSnapshots" xml:space="preserve"><value>Hinnasnapshote veel ei ole. Lisa esimene, et alustada hinnajaloo loomist.</value></data>
+  <data name="NoPositionSnapshots" xml:space="preserve"><value>Positsioonisnapshote veel ei ole. Genereeri snapshot p&#228;rast tehingute ja hindade sisestamist.</value></data>
+  <data name="NoLinkedAssets" xml:space="preserve"><value>Varad puuduvad</value></data>
+  <data name="NoAssetsInWatchlist" xml:space="preserve"><value>Selles j&#228;lgimisnimekirjas pole veel varasid.</value></data>
+  <data name="SelectAssetBeforeAdd" xml:space="preserve"><value>Vali enne vara, kui lisad selle j&#228;lgimisnimekirja.</value></data>
+  <data name="AllPortfolios" xml:space="preserve"><value>K&#245;ik portfellid</value></data>
+  <data name="AllAssets" xml:space="preserve"><value>K&#245;ik varad</value></data>
+  <data name="SelectPortfolio" xml:space="preserve"><value>Vali portfell</value></data>
+  <data name="SelectCurrency" xml:space="preserve"><value>Vali valuuta</value></data>
+  <data name="SelectAssetType" xml:space="preserve"><value>Vali varat&#252;&#252;p</value></data>
+  <data name="SelectAsset" xml:space="preserve"><value>Vali vara</value></data>
+  <data name="NoAsset" xml:space="preserve"><value>Vara puudub</value></data>
+  <data name="NoProvider" xml:space="preserve"><value>Pakkuja puudub</value></data>
+  <data name="NoTransaction" xml:space="preserve"><value>Tehing puudub</value></data>
+  <data name="GeneratedPositionSnapshots" xml:space="preserve"><value>Genereeriti {0} positsioonisnapshoti rida.</value></data>
+  <data name="NoCurrentPositionsForSnapshotGeneration" xml:space="preserve"><value>Snapshoti genereerimiseks ei leitud &#252;htegi aktiivset positsiooni.</value></data>
+  <data name="BrandTagline" xml:space="preserve"><value>Portfelli &#252;levaade</value></data>
+  <data name="FooterLead" xml:space="preserve"><value>Halda portfelle, tehinguid, hinnalugu ja m&#228;rkmeid &#252;hes selges investeerimise t&#246;&#246;lauas.</value></data>
+  <data name="Navigation" xml:space="preserve"><value>Navigeerimine</value></data>
+  <data name="Environment" xml:space="preserve"><value>Keskkond</value></data>
+  <data name="More" xml:space="preserve"><value>Veel</value></data>
+  <data name="HeroTitle" xml:space="preserve"><value>Kaasaegsem investeerimise t&#246;&#246;laud portfellide, tehingute ja tootluse jaoks.</value></data>
+  <data name="HeroLead" xml:space="preserve"><value>See versioon eraldab sisse- ja registreerimisvaated, lisab demokontole n&#228;idisandmed ning annab dashboardile professionaalsema &#252;levaate.</value></data>
+  <data name="SeededPortfolioHint" xml:space="preserve"><value>demo jaoks valmis</value></data>
+  <data name="SeededTransactionHint" xml:space="preserve"><value>rahavoog ja tehinguajalugu</value></data>
+  <data name="SeededPriceHint" xml:space="preserve"><value>viimased hinnasnapshotid</value></data>
+  <data name="FeatureOneTitle" xml:space="preserve"><value>&#220;htne dashboard</value></data>
+  <data name="FeatureOneLead" xml:space="preserve"><value>N&#228;ed &#252;hes vaates portfelli v&#228;&#228;rtust, realiseerimata kasumit, jaotusi ja igakuist rahavoogu.</value></data>
+  <data name="FeatureTwoTitle" xml:space="preserve"><value>Selgem tehinguvoog</value></data>
+  <data name="FeatureTwoLead" xml:space="preserve"><value>Hoiad sissemaksed, ostud, m&#252;&#252;gid ja dividendid korrastatult koos puhtama navigeerimisega.</value></data>
+  <data name="FeatureThreeTitle" xml:space="preserve"><value>Hinnalugu kohe olemas</value></data>
+  <data name="FeatureThreeLead" xml:space="preserve"><value>N&#228;idishindade snapshotid annavad kohe visuaalse aluse positsioonide ja v&#228;&#228;rtuse liikumise jaoks.</value></data>
+  <data name="DemoCredentials" xml:space="preserve"><value>Demo sisselogimine</value></data>
+  <data name="TryDemoTitle" xml:space="preserve"><value>Ava seemendatud n&#228;idiskonto</value></data>
+  <data name="TryDemoLead" xml:space="preserve"><value>Vaikimisi kasutajale lisatakse kohe portfellid, varad, watchlist, m&#228;rkmed, tehingud ja hinnad.</value></data>
+  <data name="AuthFormLead" xml:space="preserve"><value>Sisesta oma andmed, et minna rakendusse edasi.</value></data>
+  <data name="AuthRegisterLead" xml:space="preserve"><value>Loo uus konto, et alustada puhta investeerimise t&#246;&#246;lauaga.</value></data>
+  <data name="AcrossPortfolios" xml:space="preserve"><value>Portfellide peale kokku</value></data>
+  <data name="PortfolioPulse" xml:space="preserve"><value>Portfelli pulss</value></data>
+  <data name="AllocationByValue" xml:space="preserve"><value>Jaotus turuv&#228;&#228;rtuse j&#228;rgi</value></data>
+  <data name="PerformanceRange" xml:space="preserve"><value>Viimane kuine voog</value></data>
+  <data name="OpenPositions" xml:space="preserve"><value>Avatud positsioonid</value></data>
+</root>

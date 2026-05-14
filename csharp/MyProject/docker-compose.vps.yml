@@ -1,0 +1,58 @@
+services:
+  db:
+    image: postgres:16-alpine
+    restart: unless-stopped
+    environment:
+      POSTGRES_DB: ${POSTGRES_DB:-investingtracker}
+      POSTGRES_USER: ${POSTGRES_USER:-investingtracker}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-change-me}
+    volumes:
+      - investing-postgres-data:/var/lib/postgresql/data
+    healthcheck:
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-investingtracker} -d ${POSTGRES_DB:-investingtracker}"]
+      interval: 10s
+      timeout: 5s
+      retries: 10
+
+  webapp:
+    build:
+      context: .
+      dockerfile: Dockerfile
+    restart: unless-stopped
+    depends_on:
+      db:
+        condition: service_healthy
+    environment:
+      ASPNETCORE_ENVIRONMENT: ${ASPNETCORE_ENVIRONMENT:-Production}
+      ASPNETCORE_URLS: http://+:8080
+      UseHttpsRedirection: ${USE_HTTPS_REDIRECTION:-false}
+      ConnectionStrings__DefaultConnection: Host=db;Port=5432;Database=${POSTGRES_DB:-investingtracker};Username=${POSTGRES_USER:-investingtracker};Password=${POSTGRES_PASSWORD:-change-me}
+      DataInitialization__DropDatabase: ${DATAINIT_DROP_DATABASE:-false}
+      DataInitialization__MigrateDatabase: ${DATAINIT_MIGRATE_DATABASE:-true}
+      DataInitialization__SeedIdentity: ${DATAINIT_SEED_IDENTITY:-true}
+      DataInitialization__SeedData: ${DATAINIT_SEED_DATA:-true}
+      JWT__Key: ${JWT__Key:-change-me-please}
+      JWT__Issuer: ${JWT__Issuer:-itcollege.taltech.ee}
+      JWT__Audience: ${JWT__Audience:-itcollege.taltech.ee}
+      LangStrDefaultCulture: ${LangStrDefaultCulture:-en}
+      Cors__AllowedOrigins__0: ${CORS_ALLOWED_ORIGIN_0:-https://ansiin-investing.proxy.itcollege.ee}
+      Cors__AllowedOrigins__1: ${CORS_ALLOWED_ORIGIN_1:-http://192.168.181.136:83}
+      PathBase: ${PATH_BASE:-}
+    ports:
+      - "${WEBAPP_PORT:-82}:8080"
+
+  client:
+    build:
+      context: ../MyProjectUI
+      dockerfile: Dockerfile
+      args:
+        API_BASE_URL: ${PUBLIC_API_URL:-https://ansiin-investing-api.proxy.itcollege.ee}
+    restart: unless-stopped
+    depends_on:
+      - webapp
+    ports:
+      - "${CLIENT_PORT:-83}:80"
+
+volumes:
+  investing-postgres-data:
+    name: ${COMPOSE_PROJECT_NAME:-ansiin-investing}-postgres-data

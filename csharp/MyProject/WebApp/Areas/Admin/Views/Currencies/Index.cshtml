@@ -1,0 +1,46 @@
+@model WebApp.Areas.Admin.ViewModels.AdminListPageViewModel<App.DTO.Admin.Lookups.AdminCurrencyDto>
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="mb-0">@Model.Heading</h1>
+        <p class="text-muted mb-0">@Model.Description</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">@Model.CreateButtonText</a>
+</div>
+
+<table class="table table-striped align-middle">
+    <thead>
+    <tr>
+        <th>@UiText.T("Code")</th>
+        <th>@UiText.T("Symbol")</th>
+        <th>@UiText.T("NameEn")</th>
+        <th>@UiText.T("NameEt")</th>
+        <th>@UiText.T("Status")</th>
+        <th class="text-end">@UiText.T("Actions")</th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model.Items)
+    {
+        <tr>
+            <td>@item.Code</td>
+            <td>@(item.Symbol ?? "-")</td>
+            <td>@item.DisplayNameEn</td>
+            <td>@item.DisplayNameEt</td>
+            <td>
+                @if (item.IsActive)
+                {
+                    <span class="badge text-bg-success">@UiText.T("Active")</span>
+                }
+                else
+                {
+                    <span class="badge text-bg-secondary">@UiText.T("Inactive")</span>
+                }
+            </td>
+            <td class="text-end">
+                <a asp-action="Edit" asp-route-id="@item.Id" class="btn btn-sm btn-outline-primary">@UiText.T("Edit")</a>
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>

@@ -1,0 +1,42 @@
+@model IEnumerable<DAL.Entities.PriceSnapshot>
+@{
+    ViewData["Title"] = "PriceSnapshots";
+}
+
+<h1>PriceSnapshots</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.Id)</th>
+            <th>@Html.DisplayNameFor(model => model.AssetId)</th>
+            <th>@Html.DisplayNameFor(model => model.ProviderId)</th>
+            <th>@Html.DisplayNameFor(model => model.Price)</th>
+            <th>@Html.DisplayNameFor(model => model.CurrencyId)</th>
+            <th>@Html.DisplayNameFor(model => model.AsOf)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.Id)</td>
+            <td>@Html.DisplayFor(modelItem => item.AssetId)</td>
+            <td>@Html.DisplayFor(modelItem => item.ProviderId)</td>
+            <td>@Html.DisplayFor(modelItem => item.Price)</td>
+            <td>@Html.DisplayFor(modelItem => item.CurrencyId)</td>
+            <td>@Html.DisplayFor(modelItem => item.AsOf)</td>
+            <td>
+                <a asp-action="Edit" asp-route-id="@item.Id">Edit</a> |
+                <a asp-action="Details" asp-route-id="@item.Id">Details</a> |
+                <a asp-action="Delete" asp-route-id="@item.Id">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

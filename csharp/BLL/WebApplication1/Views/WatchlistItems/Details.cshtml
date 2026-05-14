@@ -1,0 +1,18 @@
+@model DAL.Entities.WatchlistItem
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>WatchlistItem Details</h1>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.WatchlistId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.WatchlistId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CreatedAt)</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-WatchlistId="@Model.WatchlistId" asp-route-AssetId="@Model.AssetId" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

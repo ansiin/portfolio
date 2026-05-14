@@ -1,0 +1,136 @@
+﻿@model DentalSaaS.Application.TreatmentPlans.TreatmentPlanDto
+@using DentalSaaS.Application.Abstractions
+@using DentalSaaS.Shared.Constants
+@inject ICurrentUserAccessor CurrentUser
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.PatientLookup;
+    var patientLabel = patientLookup is not null && patientLookup.TryGetValue(Model.PatientId, out var patientName)
+        ? patientName
+        : "Unknown patient";
+    ViewData["Title"] = "Treatment Plan Details";
+    var role = CurrentUser.Current.ActiveTenantRole ?? string.Empty;
+    var canModify = role is Roles.CompanyOwner or Roles.CompanyAdmin or Roles.CompanyManager;
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">@Model.Title</h1>
+    <p class="page-subtitle">Patient: <span class="badge badge-neutral">@patientLabel</span> | Active role: <span class="badge badge-neutral">@role</span></p>
+    <div class="toolbar">
+        <a class="btn btn-secondary" href="/@tenantSlug/treatment-plans">Back to plans</a>
+    </div>
+</div>
+
+<div class="grid grid-2 fade-item">
+    <section class="card">
+        <h2 class="card-title">Add plan item</h2>
+        <p class="card-subtitle">Define description, cost, sequence and urgency.</p>
+
+        @if (canModify)
+        {
+            <form method="post" action="/@tenantSlug/treatment-plans/@Model.Id/items" class="form" novalidate>
+                @Html.AntiForgeryToken()
+                <input type="hidden" name="PlanId" value="@Model.Id" />
+
+                <div class="form-group">
+                    <label class="label" for="Description">Description</label>
+                    <input id="Description" name="Description" />
+                </div>
+
+                <div class="form-group">
+                    <label class="label" for="EstimatedCost">Estimated cost</label>
+                    <input id="EstimatedCost" name="EstimatedCost" type="number" step="0.01" />
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="label" for="Sequence">Sequence</label>
+                        <input id="Sequence" name="Sequence" type="number" value="1" />
+                    </div>
+                    <div class="form-group">
+                        <label class="label" for="Urgency">Urgency (1-5)</label>
+                        <input id="Urgency" name="Urgency" type="number" value="3" min="1" max="5" />
+                    </div>
+                </div>
+
+                <div class="btn-group">
+                    <button type="submit" class="btn btn-primary">Add item</button>
+                </div>
+            </form>
+        }
+        else
+        {
+            <div class="alert alert-warning">Your role can view this plan but cannot modify it.</div>
+        }
+    </section>
+
+    <section class="card">
+        <h2 class="card-title">Current items</h2>
+        <p class="card-subtitle">Review and record patient decision for each item.</p>
+
+        @if (!Model.Items.Any())
+        {
+            <div class="empty-state">
+                <p class="page-subtitle">No plan items yet. Add your first item.</p>
+            </div>
+        }
+        else
+        {
+            <div class="table-wrap">
+                <table class="table">
+                    <thead>
+                    <tr>
+                        <th>Description</th>
+                        <th>Cost</th>
+                        <th>Urgency</th>
+                        <th>Status</th>
+                        <th>Scheduled</th>
+                        <th>Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    @foreach (var item in Model.Items)
+                    {
+                        var badgeClass = item.Status.ToString() switch
+                        {
+                            "Accepted" => "badge badge-success",
+                            "Deferred" => "badge badge-warning",
+                            _ => "badge badge-neutral"
+                        };
+
+                        <tr>
+                            <td>@item.Description</td>
+                            <td>@item.EstimatedCost</td>
+                            <td>@item.Urgency</td>
+                            <td><span class="@badgeClass">@item.Status</span></td>
+                            <td>
+                                @item.ScheduledAppointments
+                                @if (item.NextScheduledAt.HasValue)
+                                {
+                                    <div class="hint">Next: @item.NextScheduledAt.Value</div>
+                                }
+                            </td>
+                            <td>
+                                <div class="actions">
+                                    <a class="btn btn-secondary" href="/@tenantSlug/appointments/create?planItemId=@item.Id">Schedule</a>
+                                    @if (canModify)
+                                    {
+                                        <form method="post" action="/@tenantSlug/treatment-plans/@Model.Id/items/@item.Id/accept">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-primary">Accept</button>
+                                        </form>
+                                        <form method="post" action="/@tenantSlug/treatment-plans/@Model.Id/items/@item.Id/defer">
+                                            @Html.AntiForgeryToken()
+                                            <button type="submit" class="btn btn-secondary">Defer</button>
+                                        </form>
+                                    }
+                                </div>
+                            </td>
+                        </tr>
+                    }
+                    </tbody>
+                </table>
+            </div>
+        }
+    </section>
+</div>

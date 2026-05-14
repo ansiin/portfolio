@@ -1,0 +1,23 @@
+@model WebApp.Areas.Admin.ViewModels.AdminHomeViewModel
+
+<div class="d-flex justify-content-between align-items-center mb-4">
+    <div>
+        <h1 class="mb-0">@Model.Heading</h1>
+        <p class="text-muted mb-0">@Model.Description</p>
+    </div>
+</div>
+
+<div class="row g-4">
+    @foreach (var card in Model.Sections)
+    {
+        <div class="col-md-6 col-xl-3">
+            <div class="card h-100">
+                <div class="card-body">
+                    <h2 class="h5">@card.Heading</h2>
+                    <p class="text-muted">@card.Description</p>
+                    <a asp-area="@card.Area" asp-controller="@card.Controller" asp-action="@card.Action" class="btn btn-outline-primary">@card.ButtonText</a>
+                </div>
+            </div>
+        </div>
+    }
+</div>

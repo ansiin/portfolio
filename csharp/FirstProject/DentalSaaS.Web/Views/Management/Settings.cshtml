@@ -1,0 +1,117 @@
+@model DentalSaaS.Web.ViewModels.Management.CompanySettingsFormViewModel
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    ViewData["Title"] = "Company Settings";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Company settings</h1>
+    <p class="page-subtitle">
+        Configure clinical defaults, country-specific insurance requirements, and operational governance for this practice.
+    </p>
+</div>
+
+<div class="grid grid-2 fade-item">
+    <section class="card">
+        <h2 class="card-title">Active settings</h2>
+        <form method="post" action="/@tenantSlug/management/settings" class="form">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="label" asp-for="CountryCode"></label>
+                <input asp-for="CountryCode" />
+                <span asp-validation-for="CountryCode"></span>
+            </div>
+            <div class="form-group">
+                <label class="label" asp-for="XrayIntervalDays"></label>
+                <input asp-for="XrayIntervalDays" type="number" min="30" max="730" />
+                <span asp-validation-for="XrayIntervalDays"></span>
+            </div>
+            <button type="submit" class="btn btn-primary">Save settings</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2 class="card-title">Practice configuration scope</h2>
+        <ul>
+            <li>Define treatment rooms and appointment types with duration and pricing.</li>
+            <li>Set default X-ray interval policy and follow-up expectations.</li>
+            <li>Maintain insurance configuration by country and payer type.</li>
+            <li>Align subscription tier with enabled modules (insurance, payment plans).</li>
+        </ul>
+    </section>
+    <section class="card">
+        <h2 class="card-title">Owner governance</h2>
+        <ul>
+            <li>CompanyAdmins can operate configuration, but ownership remains with CompanyOwner.</li>
+            <li>Clinical decisions stay with CompanyManagers (dentists).</li>
+            <li>Operational entry remains with CompanyEmployees.</li>
+            <li>All critical changes should be auditable and reversible.</li>
+        </ul>
+    </section>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Country and insurance policy blueprint</h2>
+    <p class="card-subtitle">
+        Support statutory vs private coverage, including legally required estimate formats (for example, Kostenvoranschlag in Germany).
+    </p>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Policy area</th>
+                <th>Configuration intent</th>
+                <th>Related entities</th>
+            </tr>
+            </thead>
+            <tbody>
+            <tr>
+                <td>Insurance templates</td>
+                <td>Per-country estimate templates and claim fields.</td>
+                <td>InsurancePlan, CostEstimate, CompanySettings</td>
+            </tr>
+            <tr>
+                <td>Coverage model</td>
+                <td>Statutory vs private rules and reimbursement expectations.</td>
+                <td>InsurancePlan, Invoice, PaymentPlan</td>
+            </tr>
+            <tr>
+                <td>Treatment costing</td>
+                <td>Duration, list price, and bundled estimation inputs.</td>
+                <td>TreatmentType, PlanItem, Treatment</td>
+            </tr>
+            <tr>
+                <td>Patient acceptance flow</td>
+                <td>Track urgent acceptance vs deferred elective items.</td>
+                <td>TreatmentPlan, PlanItem, Appointment</td>
+            </tr>
+            <tr>
+                <td>X-ray compliance</td>
+                <td>Interval policy for overdue diagnostics and reminders.</td>
+                <td>Xray, ToothRecord, Patient, CompanySettings</td>
+            </tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}
+
+<section class="card fade-item">
+    <h2 class="card-title">Entity map for tenant setup</h2>
+    <div class="grid grid-2">
+        <div class="kpi-item"><strong>Company</strong><div class="hint">Tenant identity, slug, active status, subscription.</div></div>
+        <div class="kpi-item"><strong>CompanySettings</strong><div class="hint">Country code and X-ray interval policy.</div></div>
+        <div class="kpi-item"><strong>Dentist + TreatmentRoom</strong><div class="hint">Clinical capacity and scheduling resources.</div></div>
+        <div class="kpi-item"><strong>TreatmentType</strong><div class="hint">Catalog of procedures with duration and pricing.</div></div>
+        <div class="kpi-item"><strong>InsurancePlan + CostEstimate</strong><div class="hint">Payer setup and legally compliant estimate flow.</div></div>
+        <div class="kpi-item"><strong>Subscription</strong><div class="hint">Feature envelope for insurance and payment modules.</div></div>
+    </div>
+    <div class="toolbar">
+        <a class="btn btn-secondary" href="/@tenantSlug/management/subscription">Open subscription</a>
+        <a class="btn btn-secondary" href="/@tenantSlug/management/users">Open users & roles</a>
+        <a class="btn btn-secondary" href="/@tenantSlug/patients">Back to operations</a>
+    </div>
+</section>

@@ -1,0 +1,53 @@
+﻿@model DentalSaaS.Web.ViewModels.Patients.PatientFormViewModel
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    ViewData["Title"] = "Edit Patient";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Edit patient</h1>
+    <p class="page-subtitle">Update demographic details while preserving tenant-safe records.</p>
+</div>
+
+<section class="card fade-item">
+    <form method="post" action="/@tenantSlug/patients/edit/@Model.Id" class="form" novalidate>
+        @Html.AntiForgeryToken()
+
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="FirstName" class="label"></label>
+                <input asp-for="FirstName" />
+                <span asp-validation-for="FirstName"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="LastName" class="label"></label>
+                <input asp-for="LastName" />
+                <span asp-validation-for="LastName"></span>
+            </div>
+        </div>
+
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="Email" class="label"></label>
+                <input asp-for="Email" />
+                <span asp-validation-for="Email"></span>
+            </div>
+            <div class="form-group">
+                <label asp-for="DateOfBirth" class="label"></label>
+                <input asp-for="DateOfBirth" type="date" />
+                <span asp-validation-for="DateOfBirth"></span>
+            </div>
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Save changes</button>
+            <a class="btn btn-secondary" href="/@tenantSlug/patients">Cancel</a>
+        </div>
+    </form>
+
+    <div asp-validation-summary="All" class="validation"></div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,44 @@
+﻿@{
+    ViewData["Title"] = "Dental SaaS";
+}
+
+<section class="hero fade-item">
+    <div class="hero-panel">
+        <div class="page-header">
+            <h1 class="page-title">Multi-tenant dental operations in one clean workspace</h1>
+            <p class="page-subtitle">Manage patients, treatment plans, and clinic workflows with tenant-safe routing and role-based access.</p>
+        </div>
+
+        <div class="btn-group">
+            <a class="btn btn-primary" asp-controller="Onboarding" asp-action="Index">Create tenant</a>
+            <a class="btn btn-secondary" href="/acme/patients">Open demo tenant</a>
+        </div>
+    </div>
+
+    <aside class="card">
+        <h2 class="card-title">Quick Access</h2>
+        <p class="card-subtitle">Use seeded tenant routes to explore core flows.</p>
+        <div class="kpi-list">
+            <div class="kpi-item">
+                <span class="kpi-value">/acme/patients</span>
+                <span class="hint">Patients CRUD and records</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-value">/acme/treatment-plans</span>
+                <span class="hint">Plan creation and approval workflow</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-value">/acme/appointments</span>
+                <span class="hint">Scheduling and calendar-like lists</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-value">/onboarding</span>
+                <span class="hint">Register a new tenant + owner</span>
+            </div>
+            <div class="kpi-item">
+                <span class="kpi-value">/system</span>
+                <span class="hint">System admin/support/billing console</span>
+            </div>
+        </div>
+    </aside>
+</section>

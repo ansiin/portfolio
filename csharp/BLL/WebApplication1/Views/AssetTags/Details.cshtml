@@ -1,0 +1,16 @@
+@model DAL.Entities.AssetTag
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>AssetTag Details</h1>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.TagId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.TagId)</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-AssetId="@Model.AssetId" asp-route-TagId="@Model.TagId" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

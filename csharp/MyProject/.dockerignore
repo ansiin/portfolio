@@ -1,0 +1,10 @@
+.git
+.idea
+**/bin/
+**/obj/
+**/.vs/
+**/*.user
+**/*.suo
+build.log
+build2.log
+webbuild.log

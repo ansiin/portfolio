@@ -1,0 +1,32 @@
+@model DAL.Entities.Asset
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>Asset Details</h1>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Id)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetTypeId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetTypeId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.ExchangeId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.ExchangeId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CurrencyId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CurrencyId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Symbol)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Symbol)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Name)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.SteamMarketHashName)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.SteamMarketHashName)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.ExternalId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.ExternalId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.IsActive)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.IsActive)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CreatedAt)</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

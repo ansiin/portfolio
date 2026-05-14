@@ -1,0 +1,36 @@
+@model DAL.Entities.Asset
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete Asset</h1>
+<h3>Are you sure?</h3>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Id)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetTypeId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetTypeId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.ExchangeId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.ExchangeId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CurrencyId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CurrencyId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Symbol)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Symbol)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Name)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Name)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.SteamMarketHashName)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.SteamMarketHashName)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.ExternalId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.ExternalId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.IsActive)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.IsActive)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CreatedAt)</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

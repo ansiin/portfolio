@@ -1,0 +1,74 @@
+@page
+@model WebApp.Areas.Identity.Pages.Account.RegisterModel
+@{
+    ViewData["Title"] = UiText.T("Register");
+}
+
+<section class="auth-shell">
+    <div class="auth-shell__panel auth-shell__panel--intro">
+        <span class="eyebrow">@UiText.T("AppTitle")</span>
+        <h1 class="auth-title">@UiText.T("Register")</h1>
+        <p class="auth-copy">@UiText.T("RegisterLead")</p>
+
+        <div class="auth-highlight">
+            <strong>@UiText.T("FeatureOneTitle")</strong>
+            <span>@UiText.T("FeatureOneLead")</span>
+        </div>
+
+        <div class="auth-bullets">
+            <div>@UiText.T("Portfolios") + @UiText.T("Assets")</div>
+            <div>@UiText.T("Transactions") + @UiText.T("Notes")</div>
+            <div>@UiText.T("PriceSnapshots") + @UiText.T("Dashboard")</div>
+        </div>
+    </div>
+
+    <div class="auth-shell__panel auth-shell__panel--form">
+        <div class="auth-card">
+            <div class="mb-4">
+                <h2 class="section-title mb-2">@UiText.T("CreateAccount")</h2>
+                <p class="text-muted mb-0">@UiText.T("AuthRegisterLead")</p>
+            </div>
+
+            <form method="post" class="d-grid gap-3">
+                <div asp-validation-summary="ModelOnly" class="text-danger small"></div>
+                <input asp-for="ReturnUrl" type="hidden"/>
+
+                <div>
+                    <label asp-for="Input.Email" class="form-label">@UiText.T("Email")</label>
+                    <input asp-for="Input.Email" class="form-control form-control-lg" autocomplete="username"/>
+                    <span asp-validation-for="Input.Email" class="text-danger small"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Input.Password" class="form-label">@UiText.T("Password")</label>
+                    <input asp-for="Input.Password" class="form-control form-control-lg" autocomplete="new-password"/>
+                    <span asp-validation-for="Input.Password" class="text-danger small"></span>
+                </div>
+
+                <div>
+                    <label asp-for="Input.ConfirmPassword" class="form-label">@UiText.T("ConfirmPassword")</label>
+                    <input asp-for="Input.ConfirmPassword" class="form-control form-control-lg" autocomplete="new-password"/>
+                    <span asp-validation-for="Input.ConfirmPassword" class="text-danger small"></span>
+                </div>
+
+                <button type="submit" class="btn btn-primary btn-lg w-100">@UiText.T("CreateAccount")</button>
+            </form>
+
+            <hr class="my-4"/>
+
+            <div class="text-center d-grid gap-2">
+                <p class="text-muted mb-1">@UiText.T("AlreadyHaveAccount")</p>
+                <a class="btn btn-outline-secondary"
+                   asp-area="Identity"
+                   asp-page="/Account/Login"
+                   asp-route-returnUrl="@Model.ReturnUrl">
+                    @UiText.T("BackToLogin")
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial"/>
+}

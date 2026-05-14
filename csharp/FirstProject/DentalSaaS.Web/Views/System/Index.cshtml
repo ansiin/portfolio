@@ -1,0 +1,34 @@
+@using DentalSaaS.Shared.Constants
+@inject IWebHostEnvironment HostEnvironment
+@{
+    ViewData["Title"] = "System Console";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">System console</h1>
+    <p class="page-subtitle">Platform-level area for operators, support, billing, and impersonation.</p>
+</div>
+
+<section class="card fade-item">
+    <div class="btn-group">
+        @if (User.IsInRole(Roles.SystemAdmin) || User.IsInRole(Roles.SystemSupport))
+        {
+            <a class="btn btn-secondary" href="/system/companies">Companies</a>
+        }
+        @if (User.IsInRole(Roles.SystemAdmin) || User.IsInRole(Roles.SystemBilling))
+        {
+            <a class="btn btn-secondary" href="/system/billing">Billing</a>
+        }
+        @if (User.IsInRole(Roles.SystemAdmin))
+        {
+            <a class="btn btn-secondary" href="/system/impersonation">Impersonation</a>
+            @if (HostEnvironment.IsDevelopment())
+            {
+                <form method="post" action="/system/demo/reseed-acme" onsubmit="return confirm('Reset and re-seed ACME demo data? This only affects local demo data.');">
+                    @Html.AntiForgeryToken()
+                    <button type="submit" class="btn btn-danger">Force Reseed ACME</button>
+                </form>
+            }
+        }
+    </div>
+</section>

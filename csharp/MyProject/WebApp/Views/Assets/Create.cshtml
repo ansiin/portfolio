@@ -1,0 +1,77 @@
+@model WebApp.ViewModels.AssetCreateViewModel
+
+@{
+    ViewData["Title"] = UiText.T("CreateAsset");
+}
+
+<h1>@UiText.T("CreateAsset")</h1>
+<p class="text-muted">@UiText.T("CreateAssetLead")</p>
+
+<div class="row">
+    <div class="col-md-7 col-lg-6">
+        <form asp-action="Create" method="post">
+            <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+
+            <div class="mb-3">
+                <label asp-for="PortfolioId" class="form-label">@UiText.T("Portfolio")</label>
+                <select asp-for="PortfolioId" asp-items="Model.PortfolioSelectList" class="form-select">
+                    <option value="">@UiText.T("SelectPortfolio")</option>
+                </select>
+                <span asp-validation-for="PortfolioId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Name" class="form-label">@UiText.T("Name")</label>
+                <input asp-for="Name" class="form-control" />
+                <span asp-validation-for="Name" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="Symbol" class="form-label">@UiText.T("Symbol")</label>
+                <input asp-for="Symbol" class="form-control" />
+                <span asp-validation-for="Symbol" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="AssetTypeId" class="form-label">@UiText.T("AssetType")</label>
+                <select asp-for="AssetTypeId" asp-items="Model.AssetTypeSelectList" class="form-select">
+                    <option value="">@UiText.T("SelectAssetType")</option>
+                </select>
+                <span asp-validation-for="AssetTypeId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="CurrencyId" class="form-label">@UiText.T("Currency")</label>
+                <select asp-for="CurrencyId" asp-items="Model.CurrencySelectList" class="form-select">
+                    <option value="">@UiText.T("SelectCurrency")</option>
+                </select>
+                <span asp-validation-for="CurrencyId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="ExchangeId" class="form-label">@UiText.T("Exchange")</label>
+                <select asp-for="ExchangeId" asp-items="Model.ExchangeSelectList" class="form-select">
+                    <option value="">@UiText.T("None")</option>
+                </select>
+                <span asp-validation-for="ExchangeId" class="text-danger"></span>
+            </div>
+
+            <div class="mb-3">
+                <label asp-for="MarketDataProviderId" class="form-label">@UiText.T("MarketDataProvider")</label>
+                <select asp-for="MarketDataProviderId" asp-items="Model.ProviderSelectList" class="form-select">
+                    <option value="">@UiText.T("NoProvider")</option>
+                </select>
+                <span asp-validation-for="MarketDataProviderId" class="text-danger"></span>
+            </div>
+
+            <div class="d-flex gap-2">
+                <button type="submit" class="btn btn-primary">@UiText.T("Create")</button>
+                <a asp-action="Index" asp-route-portfolioId="@Model.PortfolioId" class="btn btn-outline-secondary">@UiText.T("Back")</a>
+            </div>
+        </form>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

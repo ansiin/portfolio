@@ -1,0 +1,115 @@
+@model WebApp.ViewModels.WatchlistEditViewModel
+
+@{
+    ViewData["Title"] = UiText.T("EditWatchlist");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="mb-0">@UiText.T("EditWatchlist")</h1>
+        <p class="text-muted mb-0">@UiText.T("EditWatchlistLead")</p>
+    </div>
+    <a asp-action="Index" class="btn btn-outline-secondary">@UiText.T("Back")</a>
+</div>
+
+@if (TempData["Error"] is string errorMessage)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+<div class="row g-4">
+    <div class="col-lg-5">
+        <div class="card">
+            <div class="card-body">
+                <h2 class="h5">@UiText.T("Details")</h2>
+                <form asp-action="Edit" asp-route-id="@Model.Id" method="post">
+                    <div asp-validation-summary="ModelOnly" class="text-danger"></div>
+                    <input asp-for="Id" type="hidden" />
+
+                    <div class="mb-3">
+                        <label asp-for="Name" class="form-label">@UiText.T("Name")</label>
+                        <input asp-for="Name" class="form-control" />
+                        <span asp-validation-for="Name" class="text-danger"></span>
+                    </div>
+
+                    <button type="submit" class="btn btn-primary">@UiText.T("Save")</button>
+                </form>
+            </div>
+        </div>
+    </div>
+    <div class="col-lg-7">
+        <div class="card mb-4">
+            <div class="card-body">
+                <h2 class="h5">@UiText.T("AddAsset")</h2>
+                <form asp-action="AddItem" asp-route-id="@Model.Id" method="post" class="row g-2 align-items-end">
+                    @Html.AntiForgeryToken()
+                    <div class="col-md-9">
+                        <label asp-for="AssetId" class="form-label">@UiText.T("Asset")</label>
+                        <select asp-for="AssetId" asp-items="Model.AssetSelectList" class="form-select"></select>
+                    </div>
+                    <div class="col-md-3">
+                        <button type="submit" class="btn btn-outline-primary w-100">@UiText.T("Add")</button>
+                    </div>
+                </form>
+            </div>
+        </div>
+
+        <div class="card">
+            <div class="card-body">
+                <h2 class="h5">@UiText.T("Assets")</h2>
+                @if (Model.Items.Count == 0)
+                {
+                    <p class="text-muted mb-0">@UiText.T("NoAssetsInWatchlist")</p>
+                }
+                else
+                {
+                    <table class="table table-sm align-middle mb-0">
+                        <thead>
+                        <tr>
+                            <th>@UiText.T("Asset")</th>
+                            <th>@UiText.T("Portfolio")</th>
+                            <th>@UiText.T("Status")</th>
+                            <th class="text-end">@UiText.T("Actions")</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        @foreach (var item in Model.Items)
+                        {
+                            <tr>
+                                <td>
+                                    @item.AssetName
+                                    @if (!string.IsNullOrWhiteSpace(item.AssetSymbol))
+                                    {
+                                        <span class="text-muted">(@item.AssetSymbol)</span>
+                                    }
+                                </td>
+                                <td>@item.PortfolioName</td>
+                                <td>
+                                    @if (item.AssetIsActive)
+                                    {
+                                        <span class="badge text-bg-success">@UiText.T("Active")</span>
+                                    }
+                                    else
+                                    {
+                                        <span class="badge text-bg-secondary">@UiText.T("Inactive")</span>
+                                    }
+                                </td>
+                                <td class="text-end">
+                                    <form asp-action="RemoveItem" asp-route-id="@Model.Id" asp-route-itemId="@item.Id" method="post" class="d-inline">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-sm btn-outline-danger">@UiText.T("Remove")</button>
+                                    </form>
+                                </td>
+                            </tr>
+                        }
+                        </tbody>
+                    </table>
+                }
+            </div>
+        </div>
+    </div>
+</div>
+
+@section Scripts {
+    @{await Html.RenderPartialAsync("_ValidationScriptsPartial");}
+}

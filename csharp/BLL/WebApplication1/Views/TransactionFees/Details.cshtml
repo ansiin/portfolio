@@ -1,0 +1,22 @@
+@model DAL.Entities.TransactionFee
+@{
+    ViewData["Title"] = "Details";
+}
+
+<h1>TransactionFee Details</h1>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Id)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.TransactionId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.TransactionId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.FeeType)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.FeeType)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Amount)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Amount)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CurrencyId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CurrencyId)</dd>
+</dl>
+
+<a asp-action="Edit" asp-route-id="@Model.Id" class="btn btn-primary">Edit</a>
+<a asp-action="Index" class="btn btn-secondary">Back to List</a>

@@ -1,0 +1,130 @@
+@using DentalSaaS.Application.Abstractions
+@using DentalSaaS.Shared.Constants
+@using DentalSaaS.Shared.Enums
+@inject ICurrentUserAccessor CurrentUser
+@inject ICurrentTenantAccessor CurrentTenant
+@inject ISubscriptionRepository Subscriptions
+
+@{
+    var role = CurrentUser.Current.ActiveTenantRole ?? string.Empty;
+    var isAuth = User.Identity?.IsAuthenticated == true;
+    var tenantSlug = CurrentTenant.Current.IsResolved ? CurrentTenant.Current.TenantSlug : "acme";
+    var isSystemOperator = User.IsInRole(Roles.SystemAdmin) || User.IsInRole(Roles.SystemSupport) || User.IsInRole(Roles.SystemBilling);
+    var subscription = CurrentTenant.Current.IsResolved
+        ? await Subscriptions.GetActiveAsync(CurrentTenant.Current.CompanyId)
+        : null;
+    var tier = subscription?.Tier ?? SubscriptionTier.Free;
+
+    var canManageUsers = role.Equals(Roles.CompanyOwner, StringComparison.OrdinalIgnoreCase)
+                         || role.Equals(Roles.CompanyAdmin, StringComparison.OrdinalIgnoreCase);
+    var canManageSettings = role.Equals(Roles.CompanyOwner, StringComparison.OrdinalIgnoreCase)
+                            || role.Equals(Roles.CompanyAdmin, StringComparison.OrdinalIgnoreCase);
+    var canManageSubscription = role.Equals(Roles.CompanyOwner, StringComparison.OrdinalIgnoreCase);
+    var canViewReports = role.Equals(Roles.CompanyOwner, StringComparison.OrdinalIgnoreCase)
+                         || role.Equals(Roles.CompanyAdmin, StringComparison.OrdinalIgnoreCase)
+                         || role.Equals(Roles.CompanyManager, StringComparison.OrdinalIgnoreCase);
+}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - DentalSaaS</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link href="https://fonts.googleapis.com/css2?family=Manrope:wght@400;600;700;800&display=swap" rel="stylesheet" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+<div class="app-shell">
+    <header class="topbar">
+        <div class="topbar-inner">
+            <a class="brand" href="/">
+                <span class="brand-mark" aria-hidden="true"></span>
+                <span class="brand-text">DentalSaaS</span>
+            </a>
+            <nav class="nav-links" aria-label="Main navigation">
+                <a class="nav-link" href="/">Home</a>
+                <a class="nav-link" href="/onboarding">Onboarding</a>
+                <a class="nav-link" href="/@tenantSlug/patients">Patients</a>
+                <a class="nav-link" href="/@tenantSlug/treatment-plans">Treatment Plans</a>
+                <a class="nav-link" href="/@tenantSlug/appointments">Appointments</a>
+                <a class="nav-link" href="/@tenantSlug/tooth-records">Tooth Records</a>
+                <a class="nav-link" href="/@tenantSlug/xrays">X-rays</a>
+                <a class="nav-link" href="/@tenantSlug/treatments">Treatments</a>
+                <a class="nav-link" href="/@tenantSlug/practice-setup">Practice Setup</a>
+                <a class="nav-link" href="/@tenantSlug/billing">Invoices</a>
+                @if (tier != SubscriptionTier.Free)
+                {
+                    <a class="nav-link" href="/@tenantSlug/insurance">Insurance</a>
+                }
+                @if (tier == SubscriptionTier.Premium)
+                {
+                    <a class="nav-link" href="/@tenantSlug/payment-plans">Payment Plans</a>
+                }
+
+                @if (canManageUsers)
+                {
+                    <a class="nav-link" href="/@tenantSlug/management/users">Users & Roles</a>
+                }
+                @if (canManageSettings)
+                {
+                    <a class="nav-link" href="/@tenantSlug/management/settings">Company Settings</a>
+                }
+                @if (canManageSubscription)
+                {
+                    <a class="nav-link" href="/@tenantSlug/management/subscription">Subscription</a>
+                    <a class="nav-link" href="/@tenantSlug/management/ownership">Transfer Ownership</a>
+                }
+                @if (canViewReports)
+                {
+                    <a class="nav-link" href="/@tenantSlug/reports">Reports</a>
+                }
+                @if (isSystemOperator)
+                {
+                    <a class="nav-link" href="/system">System Console</a>
+                }
+
+                @if (!isAuth)
+                {
+                    <a class="nav-link" href="/account/login">Login</a>
+                }
+                else
+                {
+                    if (CurrentUser.Current.IsImpersonating)
+                    {
+                        <span class="badge badge-warning">Impersonating</span>
+                        <form method="post" action="/system/impersonation/stop">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-danger">Stop Impersonation</button>
+                        </form>
+                    }
+
+                    <span class="badge badge-neutral">Tenant role: @(string.IsNullOrWhiteSpace(role) ? "N/A" : role)</span>
+                    <form method="post" action="/account/logout">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-secondary">Logout</button>
+                    </form>
+                }
+            </nav>
+        </div>
+    </header>
+
+    <main class="page" role="main">
+        @if (TempData["Success"] is string success)
+        {
+            <div class="alert alert-success">@success</div>
+        }
+        @if (TempData["Error"] is string error)
+        {
+            <div class="alert alert-error">@error</div>
+        }
+
+        @RenderBody()
+    </main>
+</div>
+
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

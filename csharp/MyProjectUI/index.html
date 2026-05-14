@@ -1,0 +1,498 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>Investing Tracker Workspace</title>
+    <style>
+        [hidden] { display: none !important; }
+        body[data-session="guest"] #app-shell { display: none !important; }
+        body[data-session="auth"] #auth-overlay { display: none !important; }
+        body[data-session="auth"] #app-shell { display: grid !important; }
+    </style>
+    <link rel="stylesheet" href="./styles.css?v=20260415d" />
+</head>
+<body data-session="guest">
+<div class="ambient ambient-a"></div>
+<div class="ambient ambient-b"></div>
+<p id="message" class="message toast-message" hidden></p>
+
+<div id="auth-overlay" class="auth-overlay">
+    <div class="auth-shell">
+        <section class="auth-showcase">
+            <p class="eyebrow" data-i18n="standaloneFrontend">Standalone frontend</p>
+            <h1 data-i18n="appTitle">Investing Tracker</h1>
+            <p class="auth-lede" data-i18n="authLead">Track portfolios, assets and transactions in a cleaner standalone workspace.</p>
+
+            <div class="auth-showcase-card">
+                <p class="eyebrow" data-i18n="workspaceLabel">Personal investing workspace</p>
+                <h2 data-i18n="authTitle">Sign in to your investing workspace</h2>
+                <p data-i18n="appLead">Minimal JavaScript client for the same versioned REST API.</p>
+            </div>
+
+            <div class="auth-feature-grid">
+                <article class="auth-feature-card">
+                    <span class="feature-index">01</span>
+                    <h3 data-i18n="authFeatureOverview">Live portfolio overview</h3>
+                    <p>Focused dashboard cards, position snapshots and readable trend visuals.</p>
+                </article>
+                <article class="auth-feature-card">
+                    <span class="feature-index">02</span>
+                    <h3 data-i18n="authFeatureActions">Fast CRUD workflows</h3>
+                    <p>Portfolios, assets and transactions stay one click away without clutter.</p>
+                </article>
+                <article class="auth-feature-card">
+                    <span class="feature-index">03</span>
+                    <h3 data-i18n="authFeatureSecurity">JWT + refresh auth</h3>
+                    <p>Session state is visible and refresh token flow remains connected to the API.</p>
+                </article>
+            </div>
+        </section>
+
+        <section class="auth-panel">
+            <div class="auth-panel-head">
+                <p class="eyebrow" data-i18n="login">Login</p>
+                <h2 data-i18n="authTitle">Sign in to your investing workspace</h2>
+                <p class="muted" data-i18n="demoCredentialsHint">Demo account: user@taltech.ee / Kala.12345</p>
+            </div>
+
+            <form id="login-form" class="panel stack auth-card">
+                <label>
+                    <span data-i18n="email">Email</span>
+                    <input id="email" type="email" value="user@taltech.ee" required />
+                </label>
+                <label>
+                    <span data-i18n="password">Password</span>
+                    <input id="password" type="password" value="Kala.12345" required />
+                </label>
+                <div class="actions">
+                    <button type="submit" class="button button-primary button-block" data-i18n="login">Login</button>
+                </div>
+            </form>
+
+            <form id="register-form" class="panel stack auth-card auth-card-subtle">
+                <div class="section-heading">
+                    <div>
+                        <p class="eyebrow" data-i18n="register">Register</p>
+                        <h3 data-i18n="createAccount">Create Account</h3>
+                    </div>
+                </div>
+                <label>
+                    <span data-i18n="email">Email</span>
+                    <input id="register-email" type="email" required />
+                </label>
+                <div class="split-inputs">
+                    <label>
+                        <span data-i18n="firstName">First name</span>
+                        <input id="register-firstname" type="text" />
+                    </label>
+                    <label>
+                        <span data-i18n="lastName">Last name</span>
+                        <input id="register-lastname" type="text" />
+                    </label>
+                </div>
+                <label>
+                    <span data-i18n="password">Password</span>
+                    <input id="register-password" type="password" required />
+                </label>
+                <p class="helper" data-i18n="registerHint">Create a new account and the client signs you in immediately.</p>
+                <button type="submit" class="button button-secondary button-block" data-i18n="createAccount">Create Account</button>
+            </form>
+        </section>
+    </div>
+</div>
+
+<div id="app-shell" class="app-shell" hidden>
+    <header class="topbar">
+        <div class="brand-block">
+            <h1 data-i18n="appTitle">Investing Tracker</h1>
+            <p class="lede" data-i18n="dashboardLead">This client uses JWT, refresh token rotation and CRUD calls against the ASP.NET Core backend.</p>
+        </div>
+        <div class="topbar-actions">
+            <div class="status-chip">
+                <span data-i18n="status">Status</span>
+                <strong id="topbar-auth-status">Signed out</strong>
+            </div>
+            <button id="reload-all" type="button" class="button button-primary" data-i18n="reloadData">Reload Data</button>
+        </div>
+    </header>
+
+    <div class="workspace-shell">
+        <aside class="nav-rail">
+            <section class="nav-card nav-card-primary">
+                <p class="eyebrow" data-i18n="quickActions">Quick actions</p>
+                <button type="button" class="nav-link is-active" data-nav-page="dashboard">
+                    <span class="nav-link-copy">
+                        <strong data-i18n="dashboard">Dashboard</strong>
+                        <small data-i18n="navDashboardHint">Overview and charts</small>
+                    </span>
+                    <span class="nav-link-index">01</span>
+                </button>
+                <button type="button" class="nav-link" data-nav-page="portfolios">
+                    <span class="nav-link-copy">
+                        <strong data-i18n="portfolios">Portfolios</strong>
+                        <small data-i18n="navPortfoliosHint">Create and manage containers</small>
+                    </span>
+                    <span class="nav-link-index">02</span>
+                </button>
+                <button type="button" class="nav-link" data-nav-page="assets">
+                    <span class="nav-link-copy">
+                        <strong data-i18n="assets">Assets</strong>
+                        <small data-i18n="navAssetsHint">Track positions and symbols</small>
+                    </span>
+                    <span class="nav-link-index">03</span>
+                </button>
+                <button type="button" class="nav-link" data-nav-page="transactions">
+                    <span class="nav-link-copy">
+                        <strong data-i18n="transactions">Transactions</strong>
+                        <small data-i18n="navTransactionsHint">CRUD for trading activity</small>
+                    </span>
+                    <span class="nav-link-index">04</span>
+                </button>
+                <button type="button" class="nav-link" data-nav-page="access">
+                    <span class="nav-link-copy">
+                        <strong data-i18n="connection">Connection</strong>
+                        <small data-i18n="navAccessHint">Session and API settings</small>
+                    </span>
+                    <span class="nav-link-index">05</span>
+                </button>
+            </section>
+
+            <section class="nav-card stack">
+                <h2 data-i18n="session">Session</h2>
+                <div class="meta-row"><span data-i18n="status">Status</span><strong id="auth-status">Signed out</strong></div>
+                <div class="meta-row"><span data-i18n="jwt">JWT</span><strong id="jwt-state">Missing</strong></div>
+                <div class="meta-row"><span data-i18n="refresh">Refresh</span><strong id="refresh-state">Missing</strong></div>
+            </section>
+
+            <section class="nav-card stack">
+                <p class="eyebrow" data-i18n="connectionDesk">Connection desk</p>
+                <strong id="sidebar-api-host">-</strong>
+                <p class="helper" data-i18n="settingsHint">On the deployed site the correct API host is applied automatically. Only change this when testing another backend.</p>
+            </section>
+        </aside>
+
+        <main class="workspace">
+            <section class="page is-active" data-page="dashboard">
+                <section class="dashboard-hero panel">
+                    <div class="dashboard-hero-copy">
+                        <p class="eyebrow" data-i18n="apiDriven">API-driven</p>
+                        <h2 data-i18n="dashboard">Dashboard</h2>
+                        <p class="muted" data-i18n="dashboardLead">This client uses JWT, refresh token rotation and CRUD calls against the ASP.NET Core backend.</p>
+                        <div class="actions">
+                            <button type="button" class="button button-primary" data-nav-page="portfolios" data-i18n="openPortfolios">Open portfolios</button>
+                            <button type="button" class="button button-secondary" data-nav-page="assets" data-i18n="openAssets">Open assets</button>
+                            <button type="button" class="button button-ghost" data-nav-page="transactions" data-i18n="openTransactions">Open transactions</button>
+                        </div>
+                    </div>
+                    <div class="hero-glance">
+                        <div class="hero-glance-card">
+                            <span class="metric-label" data-i18n="latestPeriod">Latest period</span>
+                            <strong id="dashboard-latest-period">-</strong>
+                            <span id="dashboard-latest-period-value" class="muted">0</span>
+                        </div>
+                        <div class="hero-glance-card">
+                            <span class="metric-label" data-i18n="topPosition">Top position</span>
+                            <strong id="dashboard-top-position">-</strong>
+                            <span id="dashboard-top-position-value" class="muted">0</span>
+                        </div>
+                        <div class="hero-glance-card">
+                            <span class="metric-label" data-i18n="strongestMover">Strongest mover</span>
+                            <strong id="dashboard-strongest-mover">-</strong>
+                            <span id="dashboard-strongest-mover-value" class="muted">0</span>
+                        </div>
+                    </div>
+                </section>
+
+                <section class="grid cards">
+                    <article class="panel metric-card">
+                        <span class="metric-label" data-i18n="portfolios">Portfolios</span>
+                        <strong id="metric-portfolios" class="metric-value">0</strong>
+                    </article>
+                    <article class="panel metric-card">
+                        <span class="metric-label" data-i18n="activeAssets">Active Assets</span>
+                        <strong id="metric-assets" class="metric-value">0</strong>
+                    </article>
+                    <article class="panel metric-card">
+                        <span class="metric-label" data-i18n="marketValue">Market Value</span>
+                        <strong id="metric-market-value" class="metric-value">0</strong>
+                    </article>
+                    <article class="panel metric-card">
+                        <span class="metric-label" data-i18n="unrealizedPl">Unrealized P/L</span>
+                        <strong id="metric-unrealized" class="metric-value">0</strong>
+                    </article>
+                </section>
+
+                <section class="dashboard-grid">
+                    <section class="panel stack chart-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow" data-i18n="trendChart">Trend chart</p>
+                                <h2 data-i18n="timeline">Timeline</h2>
+                            </div>
+                        </div>
+                        <div id="timeline-chart" class="chart-surface"></div>
+                        <div class="table-wrap compact-table">
+                            <table>
+                                <thead><tr><th data-i18n="period">Period</th><th data-i18n="netAmount">Net Amount</th></tr></thead>
+                                <tbody id="timeline-rows"></tbody>
+                            </table>
+                        </div>
+                    </section>
+
+                    <section class="panel stack chart-panel">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow" data-i18n="allocationChart">Allocation chart</p>
+                                <h2 data-i18n="allocation">Allocation</h2>
+                            </div>
+                        </div>
+                        <div id="allocation-chart" class="allocation-bars"></div>
+                        <div class="table-wrap compact-table">
+                            <table>
+                                <thead><tr><th data-i18n="asset">Asset</th><th data-i18n="portfolio">Portfolio</th><th data-i18n="quantity">Quantity</th><th data-i18n="costBasis">Cost Basis</th><th data-i18n="latestPrice">Latest Price</th><th data-i18n="marketValue">Market Value</th><th data-i18n="unrealizedPl">Unrealized P/L</th></tr></thead>
+                                <tbody id="allocation-rows"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </section>
+
+                <section class="dashboard-grid dashboard-grid-secondary">
+                    <section class="panel stack">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow" data-i18n="recentActivity">Recent activity</p>
+                                <h2 data-i18n="transactions">Transactions</h2>
+                            </div>
+                        </div>
+                        <div id="dashboard-activity" class="activity-feed"></div>
+                    </section>
+
+                    <section class="panel stack">
+                        <div class="section-heading">
+                            <div>
+                                <p class="eyebrow" data-i18n="quickActions">Quick actions</p>
+                                <h2 data-i18n="connection">Connection</h2>
+                            </div>
+                        </div>
+                        <div class="stack">
+                            <div class="meta-row"><span data-i18n="apiBaseUrl">API base URL</span><strong id="dashboard-api-host">-</strong></div>
+                            <div class="actions">
+                                <button type="button" class="button button-secondary" data-nav-page="access" data-i18n="openSettings">Open settings</button>
+                                <button type="button" class="button button-ghost" id="dashboard-refresh-button" data-i18n="refreshData">Refresh data</button>
+                            </div>
+                        </div>
+                    </section>
+                </section>
+            </section>
+
+            <section class="page" data-page="portfolios">
+                <section class="page-hero panel">
+                    <div>
+                        <p class="eyebrow" data-i18n="apiPortfolios">API: Portfolios</p>
+                        <h2 data-i18n="portfolios">Portfolios</h2>
+                        <p class="muted" data-i18n="portfoliosLead">Keep base currencies and archive state readable in one place.</p>
+                    </div>
+                </section>
+                <section class="page-grid">
+                    <section class="panel stack">
+                        <div class="form-header">
+                            <h3 id="portfolio-form-title" class="h5">Create Portfolio</h3>
+                        </div>
+                        <form id="portfolio-form" class="stack compact">
+                            <label><span data-i18n="name">Name</span><input id="portfolio-name" type="text" placeholder="Main Portfolio" required /></label>
+                            <label><span data-i18n="baseCurrency">Base currency</span><select id="portfolio-base-currency" required></select></label>
+                            <label class="inline-check"><input id="portfolio-is-archived" type="checkbox" /><span data-i18n="archived">Archived</span></label>
+                            <div class="actions">
+                                <button id="portfolio-submit" type="submit" class="button button-primary">Create Portfolio</button>
+                                <button id="portfolio-cancel" type="button" class="button button-secondary" hidden data-i18n="cancel">Cancel</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="panel stack">
+                        <div class="section-heading">
+                            <div><p class="eyebrow" data-i18n="apiPortfolios">API: Portfolios</p><h2 data-i18n="portfolios">Portfolios</h2></div>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead><tr><th data-i18n="name">Name</th><th data-i18n="baseCurrency">Base Currency</th><th data-i18n="archived">Archived</th><th data-i18n="actions">Actions</th></tr></thead>
+                                <tbody id="portfolio-rows"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </section>
+            </section>
+
+            <section class="page" data-page="assets">
+                <section class="page-hero panel">
+                    <div>
+                        <p class="eyebrow" data-i18n="apiAssets">API: Assets</p>
+                        <h2 data-i18n="assets">Assets</h2>
+                        <p class="muted" data-i18n="assetsLead">Maintain symbols, providers and activation state with less friction.</p>
+                    </div>
+                </section>
+                <section class="page-grid">
+                    <section class="panel stack">
+                        <div class="form-header">
+                            <h3 id="asset-form-title" class="h5">Create Asset</h3>
+                        </div>
+                        <form id="asset-form" class="stack compact">
+                            <label><span data-i18n="portfolio">Portfolio</span><select id="asset-portfolio" required></select></label>
+                            <label><span data-i18n="name">Name</span><input id="asset-name" type="text" placeholder="Apple Inc." required /></label>
+                            <div class="split-inputs">
+                                <label><span data-i18n="symbol">Symbol</span><input id="asset-symbol" type="text" placeholder="AAPL" /></label>
+                                <label><span data-i18n="assetType">Asset type</span><select id="asset-type" required></select></label>
+                            </div>
+                            <div class="split-inputs">
+                                <label><span data-i18n="currency">Currency</span><select id="asset-currency" required></select></label>
+                                <label><span data-i18n="exchange">Exchange</span><select id="asset-exchange"></select></label>
+                            </div>
+                            <label><span data-i18n="marketDataProvider">Market data provider</span><select id="asset-provider"></select></label>
+                            <label class="inline-check"><input id="asset-is-active" type="checkbox" checked /><span data-i18n="active">Active</span></label>
+                            <div class="actions">
+                                <button id="asset-submit" type="submit" class="button button-primary">Create Asset</button>
+                                <button id="asset-cancel" type="button" class="button button-secondary" hidden data-i18n="cancel">Cancel</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="panel stack">
+                        <div class="section-heading">
+                            <div><p class="eyebrow" data-i18n="apiAssets">API: Assets</p><h2 data-i18n="assets">Assets</h2></div>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead><tr><th data-i18n="asset">Asset</th><th data-i18n="portfolio">Portfolio</th><th data-i18n="type">Type</th><th data-i18n="currency">Currency</th><th data-i18n="active">Active</th><th data-i18n="actions">Actions</th></tr></thead>
+                                <tbody id="asset-rows"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </section>
+            </section>
+
+            <section class="page" data-page="transactions">
+                <section class="page-hero panel">
+                    <div>
+                        <p class="eyebrow" data-i18n="apiTransactions">API: Transactions</p>
+                        <h2 data-i18n="transactions">Transactions</h2>
+                        <p class="muted" data-i18n="transactionsLead">Capture buys, sells, deposits and dividends from one focused form.</p>
+                    </div>
+                </section>
+                <section class="page-grid">
+                    <section class="panel stack">
+                        <div class="form-header">
+                            <h3 id="transaction-form-title" class="h5">Create Transaction</h3>
+                        </div>
+                        <form id="transaction-form" class="stack compact">
+                            <label><span data-i18n="portfolio">Portfolio</span><select id="transaction-portfolio" required></select></label>
+                            <label><span data-i18n="asset">Asset</span><select id="transaction-asset"></select></label>
+                            <label>
+                                <span data-i18n="type">Type</span>
+                                <select id="transaction-type" required>
+                                    <option value="1">Buy</option>
+                                    <option value="2">Sell</option>
+                                    <option value="3">Deposit</option>
+                                    <option value="4">Withdrawal</option>
+                                    <option value="5">Dividend</option>
+                                </select>
+                            </label>
+                            <div class="split-inputs">
+                                <label><span data-i18n="executedAt">Executed at</span><input id="transaction-executed-at" type="datetime-local" required /></label>
+                                <label><span data-i18n="quantity">Quantity</span><input id="transaction-quantity" type="number" step="0.0001" value="1" required /></label>
+                            </div>
+                            <div class="split-inputs">
+                                <label><span data-i18n="unitPrice">Unit price</span><input id="transaction-unit-price" type="number" step="0.0001" value="0" required /></label>
+                                <label><span data-i18n="totalAmount">Total amount</span><input id="transaction-total-amount" type="number" step="0.0001" value="0" /></label>
+                            </div>
+                            <label><span data-i18n="description">Description</span><input id="transaction-description" type="text" placeholder="Optional note" /></label>
+                            <div class="split-inputs">
+                                <label><span data-i18n="singleFeeType">Single fee type</span><input id="transaction-fee-type" type="text" placeholder="Broker" /></label>
+                                <label><span data-i18n="singleFeeAmount">Single fee amount</span><input id="transaction-fee-amount" type="number" step="0.0001" value="0" /></label>
+                            </div>
+                            <div class="actions">
+                                <button id="transaction-submit" type="submit" class="button button-primary">Create Transaction</button>
+                                <button id="transaction-cancel" type="button" class="button button-secondary" hidden data-i18n="cancel">Cancel</button>
+                            </div>
+                        </form>
+                    </section>
+
+                    <section class="panel stack">
+                        <div class="section-heading">
+                            <div><p class="eyebrow" data-i18n="apiTransactions">API: Transactions</p><h2 data-i18n="transactions">Transactions</h2></div>
+                        </div>
+                        <div class="table-wrap">
+                            <table>
+                                <thead><tr><th data-i18n="date">Date</th><th data-i18n="type">Type</th><th data-i18n="portfolio">Portfolio</th><th data-i18n="asset">Asset</th><th data-i18n="total">Total</th><th data-i18n="fees">Fees</th><th data-i18n="actions">Actions</th></tr></thead>
+                                <tbody id="transaction-rows"></tbody>
+                            </table>
+                        </div>
+                    </section>
+                </section>
+            </section>
+
+            <section class="page" data-page="access">
+                <section class="page-hero panel">
+                    <div>
+                        <p class="eyebrow" data-i18n="connectionDesk">Connection desk</p>
+                        <h2 data-i18n="connection">Connection</h2>
+                        <p class="muted" data-i18n="connectionLead">Manage API host, language and session state without leaving the workspace.</p>
+                    </div>
+                </section>
+
+                <section class="access-grid">
+                    <form id="settings-form" class="panel stack">
+                        <div>
+                            <p class="eyebrow" data-i18n="connection">Connection</p>
+                            <h2 data-i18n="saveApiBase">Save Settings</h2>
+                        </div>
+                        <label>
+                            <span data-i18n="apiBaseUrl">API base URL</span>
+                            <input id="api-base-url" type="url" placeholder="https://localhost:7192" />
+                        </label>
+                        <label>
+                            <span data-i18n="language">Language</span>
+                            <select id="language-select">
+                                <option value="en">English</option>
+                                <option value="et">Eesti</option>
+                            </select>
+                        </label>
+                        <p class="helper" data-i18n="settingsHint">On the deployed site the correct API host is applied automatically. Only change this when testing another backend.</p>
+                        <button type="submit" class="button button-secondary" data-i18n="saveApiBase">Save Settings</button>
+                    </form>
+
+                    <section class="panel stack">
+                        <div>
+                            <p class="eyebrow" data-i18n="sessionControls">Session controls</p>
+                            <h2 data-i18n="session">Session</h2>
+                        </div>
+                        <div class="meta-row"><span data-i18n="status">Status</span><strong id="access-auth-status">Signed out</strong></div>
+                        <div class="meta-row"><span data-i18n="jwt">JWT</span><strong id="access-jwt-status">Missing</strong></div>
+                        <div class="meta-row"><span data-i18n="refresh">Refresh</span><strong id="access-refresh-status">Missing</strong></div>
+                        <div class="actions">
+                            <button type="button" id="refresh-session" class="button button-secondary" data-i18n="refreshToken">Refresh Token</button>
+                            <button type="button" id="logout-button" class="button button-ghost" data-i18n="logout">Logout</button>
+                        </div>
+                    </section>
+
+                    <section class="panel stack">
+                        <div>
+                            <p class="eyebrow" data-i18n="quickActions">Quick actions</p>
+                            <h2 data-i18n="dashboard">Dashboard</h2>
+                        </div>
+                        <p class="helper" data-i18n="accessHelp">Use this page for connection tuning and session maintenance. The main operational screens stay focused on portfolios, assets and transactions.</p>
+                        <div class="actions">
+                            <button type="button" class="button button-primary" data-nav-page="dashboard" data-i18n="openDashboard">Open dashboard</button>
+                            <button type="button" class="button button-secondary" data-nav-page="transactions">Open transactions</button>
+                        </div>
+                    </section>
+                </section>
+            </section>
+        </main>
+    </div>
+</div>
+
+<script src="./config.js?v=20260415d"></script>
+<script src="./app.js?v=20260415d"></script>
+</body>
+</html>

@@ -1,0 +1,15 @@
+﻿@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    ViewData["Title"] = "Transfer Ownership";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Transfer ownership</h1>
+    <p class="page-subtitle">Owner-only capability area for controlled tenant ownership transfer.</p>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Ownership transfer (MVP stub)</h2>
+    <p class="page-subtitle">In production this requires additional verification steps and full audit trail.</p>
+    <a class="btn btn-secondary" href="/@tenantSlug/patients">Back to operations</a>
+</section>

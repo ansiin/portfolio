@@ -1,0 +1,171 @@
+@model (IReadOnlyCollection<DentalSaaS.Application.Insurance.InsurancePlanDto> Plans, IReadOnlyCollection<DentalSaaS.Application.Insurance.CostEstimateDto> Estimates)
+@using DentalSaaS.Application.Patients
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientOptions = (IReadOnlyCollection<PatientListItem>?)ViewBag.PatientOptions ?? Array.Empty<PatientListItem>();
+    var patientLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.PatientLookup;
+    ViewData["Title"] = "Insurance";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Insurance</h1>
+    <p class="page-subtitle">Plans, cost estimates, and claim tracking.</p>
+</div>
+
+<div class="grid grid-2 fade-item">
+    <section class="card">
+        <h2 class="card-title">Create insurance plan</h2>
+        <form method="post" action="/@tenantSlug/insurance/plans" class="form">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="label" for="Name">Name</label>
+                <input id="Name" name="Name" required />
+            </div>
+            <div class="form-group">
+                <label class="label" for="CoverageType">Coverage type</label>
+                <input id="CoverageType" name="CoverageType" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Add plan</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2 class="card-title">Create cost estimate</h2>
+        <form method="post" action="/@tenantSlug/insurance/estimates" class="form">
+            @Html.AntiForgeryToken()
+            <div class="form-group">
+                <label class="label" for="PatientId">Patient</label>
+                <select id="PatientId" name="PatientId" required>
+                    <option value="">-- Select patient --</option>
+                    @foreach (var patient in patientOptions)
+                    {
+                        <option value="@patient.Id">@patient.FullName (@patient.Email)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label" for="InsurancePlanId">Insurance plan (optional)</label>
+                <select id="InsurancePlanId" name="InsurancePlanId">
+                    <option value="">-- None --</option>
+                    @foreach (var plan in Model.Plans)
+                    {
+                        <option value="@plan.Id">@plan.Name (@plan.CoverageType)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label" for="CountryTemplate">Country template</label>
+                <input id="CountryTemplate" name="CountryTemplate" value="US-DEFAULT" required />
+            </div>
+            <div class="form-group">
+                <label class="label" for="TotalAmount">Total amount</label>
+                <input id="TotalAmount" name="TotalAmount" type="number" step="0.01" min="0.01" required />
+            </div>
+            <button type="submit" class="btn btn-primary">Create estimate</button>
+        </form>
+    </section>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Insurance plans</h2>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>Name</th><th>Coverage Type</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var plan in Model.Plans)
+            {
+                <tr>
+                    <td>@plan.Name</td>
+                    <td>@plan.CoverageType</td>
+                    <td>
+                        <form method="post" action="/@tenantSlug/insurance/plans/@plan.Id/delete">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-link" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<section class="card fade-item">
+    <h2 class="card-title">Cost estimates and claims</h2>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>Patient</th><th>Template</th><th>Total</th><th>Claim</th><th>Submission</th><th>Submit</th><th>Mock Provider</th><th>Delete</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var estimate in Model.Estimates)
+            {
+                <tr>
+                    <td>
+                        @if (patientLookup is not null && patientLookup.TryGetValue(estimate.PatientId, out var patientName))
+                        {
+                            @patientName
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown patient</span>
+                        }
+                    </td>
+                    <td>@estimate.CountryTemplate</td>
+                    <td>@estimate.TotalAmount</td>
+                    <td>@estimate.ClaimStatus</td>
+                    <td>
+                        <div class="hint">
+                            @estimate.SubmissionState
+                            @if (estimate.SubmittedAt.HasValue)
+                            {
+                                <span> | @estimate.SubmittedAt.Value</span>
+                            }
+                            @if (!string.IsNullOrWhiteSpace(estimate.ExternalSubmissionId))
+                            {
+                                <span> | Ref: @estimate.ExternalSubmissionId</span>
+                            }
+                        </div>
+                        @if (!string.IsNullOrWhiteSpace(estimate.ProviderResponseMessage))
+                        {
+                            <div class="hint">@estimate.ProviderResponseMessage</div>
+                        }
+                    </td>
+                    <td>
+                        <form method="post" action="/@tenantSlug/insurance/estimates/@estimate.Id/submit">
+                            @Html.AntiForgeryToken()
+                            <button type="submit" class="btn btn-primary">Submit</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="/@tenantSlug/insurance/estimates/@estimate.Id/status" class="actions">
+                            @Html.AntiForgeryToken()
+                            <input name="claimStatus" placeholder="Submitted/Approved/Rejected" />
+                            <button type="submit" class="btn btn-secondary">Save</button>
+                        </form>
+                        <form method="post" action="/@tenantSlug/insurance/estimates/@estimate.Id/submission-state" class="actions">
+                            @Html.AntiForgeryToken()
+                            <select name="state">
+                                <option value="Submitted">Submitted</option>
+                                <option value="Accepted">Accepted</option>
+                                <option value="Rejected">Rejected</option>
+                                <option value="Error">Error</option>
+                            </select>
+                            <input name="message" placeholder="Provider message (optional)" />
+                            <button type="submit" class="btn btn-secondary">Set mock state</button>
+                        </form>
+                    </td>
+                    <td>
+                        <form method="post" action="/@tenantSlug/insurance/estimates/@estimate.Id/delete">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-link" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

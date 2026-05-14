@@ -1,0 +1,97 @@
+﻿@model IReadOnlyCollection<DentalSaaS.Application.Patients.PatientListItem>
+@using DentalSaaS.Application.Abstractions
+@using DentalSaaS.Shared.Constants
+@inject ICurrentUserAccessor CurrentUser
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientOverdueDays = (IReadOnlyDictionary<Guid, int>?)ViewBag.PatientOverdueDays;
+    var overdueSummary = (DentalSaaS.Application.Xrays.XrayOverdueSummaryDto?)ViewBag.XrayOverdueSummary;
+    ViewData["Title"] = "Patients";
+    var role = CurrentUser.Current.ActiveTenantRole ?? string.Empty;
+    var canCreate = role is Roles.CompanyOwner or Roles.CompanyAdmin or Roles.CompanyManager or Roles.CompanyEmployee;
+    var canEditAny = role is Roles.CompanyOwner or Roles.CompanyAdmin or Roles.CompanyManager;
+    var canDelete = role is Roles.CompanyOwner or Roles.CompanyAdmin or Roles.CompanyManager;
+    var canEditOwnOnly = role == Roles.CompanyEmployee;
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Patients</h1>
+    <p class="page-subtitle">Operational data access follows your active role: <span class="badge badge-neutral">@role</span></p>
+    <div class="toolbar">
+        @if (canCreate)
+        {
+            <a class="btn btn-primary" href="/@tenantSlug/patients/create">Create patient</a>
+        }
+        <a class="btn btn-secondary" href="/@tenantSlug/treatment-plans">Treatment plans</a>
+        <a class="btn btn-secondary" href="/@tenantSlug/tooth-records">Tooth records</a>
+        <a class="btn btn-secondary" href="/@tenantSlug/xrays">X-rays</a>
+        <a class="btn btn-secondary" href="/@tenantSlug/treatments">Treatments</a>
+    </div>
+</div>
+
+@if (overdueSummary is not null && overdueSummary.OverduePatientCount > 0)
+{
+    <div class="alert alert-warning fade-item">
+        X-ray warning: @overdueSummary.OverduePatientCount patient(s) have overdue diagnostics.
+    </div>
+}
+
+@if (!Model.Any())
+{
+    <section class="empty-state fade-item">
+        <h2 class="card-title">No patients yet</h2>
+        <p class="page-subtitle">Add your first patient to start managing appointments and treatment plans.</p>
+        @if (canCreate)
+        {
+            <a class="btn btn-primary" href="/@tenantSlug/patients/create">Add first patient</a>
+        }
+    </section>
+}
+else
+{
+    <section class="card fade-item">
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Name</th>
+                    <th>Date of birth</th>
+                    <th>Email</th>
+                    <th>Actions</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>
+                            @p.FullName
+                            @if (patientOverdueDays is not null && patientOverdueDays.TryGetValue(p.Id, out var overdueDays))
+                            {
+                                <span class="badge badge-warning">X-ray overdue @overdueDays d</span>
+                            }
+                        </td>
+                        <td>@p.DateOfBirth</td>
+                        <td>@p.Email</td>
+                        <td>
+                            <div class="actions">
+                                @if (canEditAny || canEditOwnOnly)
+                                {
+                                    <a class="btn btn-secondary" href="/@tenantSlug/patients/edit/@p.Id">Edit</a>
+                                }
+                                @if (canDelete)
+                                {
+                                    <form method="post" action="/@tenantSlug/patients/delete/@p.Id" onsubmit="return confirm('Delete this patient record?');">
+                                        @Html.AntiForgeryToken()
+                                        <button type="submit" class="btn btn-danger">Delete</button>
+                                    </form>
+                                }
+                            </div>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+}

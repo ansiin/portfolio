@@ -1,0 +1,52 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.0.31903.59
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalSaaS.Web", "DentalSaaS.Web\DentalSaaS.Web.csproj", "{9C582F7C-D3A9-4135-BDE2-6099E75E178C}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalSaaS.Application", "DentalSaaS.Application\DentalSaaS.Application.csproj", "{F87139C1-1043-4076-AC69-0E27577B32CE}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalSaaS.Domain", "DentalSaaS.Domain\DentalSaaS.Domain.csproj", "{26CE5B41-4A03-417A-A70B-5144FBF6F7A0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalSaaS.Infrastructure", "DentalSaaS.Infrastructure\DentalSaaS.Infrastructure.csproj", "{E7D692D7-8A78-4E70-AF18-CB9BA764EA2D}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalSaaS.Shared", "DentalSaaS.Shared\DentalSaaS.Shared.csproj", "{41F0E834-CDB3-4F0C-B2AD-BB26AA1154E1}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "DentalSaaS.Application.Tests", "DentalSaaS.Application.Tests\DentalSaaS.Application.Tests.csproj", "{80A89F3E-F28A-447D-BBEC-B545E7681FA0}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{9C582F7C-D3A9-4135-BDE2-6099E75E178C}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{9C582F7C-D3A9-4135-BDE2-6099E75E178C}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{9C582F7C-D3A9-4135-BDE2-6099E75E178C}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{9C582F7C-D3A9-4135-BDE2-6099E75E178C}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F87139C1-1043-4076-AC69-0E27577B32CE}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F87139C1-1043-4076-AC69-0E27577B32CE}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F87139C1-1043-4076-AC69-0E27577B32CE}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F87139C1-1043-4076-AC69-0E27577B32CE}.Release|Any CPU.Build.0 = Release|Any CPU
+		{26CE5B41-4A03-417A-A70B-5144FBF6F7A0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{26CE5B41-4A03-417A-A70B-5144FBF6F7A0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{26CE5B41-4A03-417A-A70B-5144FBF6F7A0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{26CE5B41-4A03-417A-A70B-5144FBF6F7A0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{E7D692D7-8A78-4E70-AF18-CB9BA764EA2D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E7D692D7-8A78-4E70-AF18-CB9BA764EA2D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E7D692D7-8A78-4E70-AF18-CB9BA764EA2D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E7D692D7-8A78-4E70-AF18-CB9BA764EA2D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{41F0E834-CDB3-4F0C-B2AD-BB26AA1154E1}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{41F0E834-CDB3-4F0C-B2AD-BB26AA1154E1}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{41F0E834-CDB3-4F0C-B2AD-BB26AA1154E1}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{41F0E834-CDB3-4F0C-B2AD-BB26AA1154E1}.Release|Any CPU.Build.0 = Release|Any CPU
+		{80A89F3E-F28A-447D-BBEC-B545E7681FA0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{80A89F3E-F28A-447D-BBEC-B545E7681FA0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{80A89F3E-F28A-447D-BBEC-B545E7681FA0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{80A89F3E-F28A-447D-BBEC-B545E7681FA0}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+EndGlobal

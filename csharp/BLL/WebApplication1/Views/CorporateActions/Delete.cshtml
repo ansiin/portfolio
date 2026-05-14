@@ -1,0 +1,30 @@
+@model DAL.Entities.CorporateAction
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete CorporateAction</h1>
+<h3>Are you sure?</h3>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Id)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Id)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.ActionType)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.ActionType)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.ActionDate)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.ActionDate)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.RatioFrom)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.RatioFrom)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.RatioTo)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.RatioTo)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.Note)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.Note)</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="Id" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

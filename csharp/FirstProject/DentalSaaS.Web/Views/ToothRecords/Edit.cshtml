@@ -1,0 +1,46 @@
+@model DentalSaaS.Web.ViewModels.ToothRecords.ToothRecordFormViewModel
+@using DentalSaaS.Application.Patients
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientOptions = (IReadOnlyCollection<PatientListItem>?)ViewBag.PatientOptions ?? Array.Empty<PatientListItem>();
+    ViewData["Title"] = "Edit Tooth Record";
+}
+
+<section class="card fade-item">
+    <h1 class="page-title">Edit tooth record</h1>
+    <form method="post" action="/@tenantSlug/tooth-records/edit/@Model.Id" class="form">
+        @Html.AntiForgeryToken()
+        <div class="form-group">
+            <label class="label" for="PatientId">Patient</label>
+            <select asp-for="PatientId" disabled>
+                @foreach (var patient in patientOptions)
+                {
+                    <option value="@patient.Id">@patient.FullName (@patient.Email)</option>
+                }
+            </select>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="ToothNumber" class="label"></label>
+                <input asp-for="ToothNumber" type="number" min="1" max="32" />
+            </div>
+            <div class="form-group">
+                <label asp-for="ConditionStatus" class="label"></label>
+                <input asp-for="ConditionStatus" />
+            </div>
+        </div>
+        <div class="form-group">
+            <label asp-for="Notes" class="label"></label>
+            <textarea asp-for="Notes"></textarea>
+        </div>
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Save</button>
+            <a class="btn btn-secondary" href="/@tenantSlug/tooth-records">Cancel</a>
+        </div>
+    </form>
+    <div asp-validation-summary="All" class="validation"></div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

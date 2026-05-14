@@ -1,0 +1,47 @@
+@model DentalSaaS.Web.ViewModels.TreatmentPlans.TreatmentPlanCreateViewModel
+@using DentalSaaS.Application.Patients
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientOptions = (IReadOnlyCollection<PatientListItem>?)ViewBag.PatientOptions ?? Array.Empty<PatientListItem>();
+    ViewData["Title"] = "Create Treatment Plan";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Create treatment plan</h1>
+    <p class="page-subtitle">Attach a plan to a patient and start structuring the treatment sequence.</p>
+</div>
+
+<section class="card fade-item">
+    <form method="post" action="/@tenantSlug/treatment-plans/create" class="form" novalidate>
+        @Html.AntiForgeryToken()
+
+        <div class="form-group">
+            <label class="label" for="PatientId">Patient</label>
+            <select asp-for="PatientId" required>
+                <option value="">-- Select patient --</option>
+                @foreach (var patient in patientOptions)
+                {
+                    <option value="@patient.Id">@patient.FullName (@patient.Email)</option>
+                }
+            </select>
+            <span asp-validation-for="PatientId"></span>
+        </div>
+
+        <div class="form-group">
+            <label asp-for="Title" class="label"></label>
+            <input asp-for="Title" />
+            <span asp-validation-for="Title"></span>
+        </div>
+
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Create plan</button>
+            <a class="btn btn-secondary" href="/@tenantSlug/treatment-plans">Cancel</a>
+        </div>
+    </form>
+
+    <div asp-validation-summary="All" class="validation"></div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

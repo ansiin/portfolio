@@ -1,0 +1,57 @@
+@model DentalSaaS.Web.ViewModels.Treatments.TreatmentFormViewModel
+@using DentalSaaS.Application.Patients
+@using DentalSaaS.Application.PracticeSetup
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientOptions = (IReadOnlyCollection<PatientListItem>?)ViewBag.PatientOptions ?? Array.Empty<PatientListItem>();
+    var typeOptions = (IReadOnlyCollection<TreatmentTypeDto>?)ViewBag.TreatmentTypeOptions ?? Array.Empty<TreatmentTypeDto>();
+    ViewData["Title"] = "Create Treatment";
+}
+
+<section class="card fade-item">
+    <h1 class="page-title">Add treatment</h1>
+    <form method="post" action="/@tenantSlug/treatments/create" class="form">
+        @Html.AntiForgeryToken()
+        <div class="form-row">
+            <div class="form-group">
+                <label class="label" for="PatientId">Patient</label>
+                <select asp-for="PatientId" required>
+                    <option value="">-- Select patient --</option>
+                    @foreach (var patient in patientOptions)
+                    {
+                        <option value="@patient.Id">@patient.FullName (@patient.Email)</option>
+                    }
+                </select>
+            </div>
+            <div class="form-group">
+                <label class="label" for="TreatmentTypeId">Treatment type</label>
+                <select asp-for="TreatmentTypeId" required>
+                    <option value="">-- Select type --</option>
+                    @foreach (var type in typeOptions)
+                    {
+                        <option value="@type.Id">@type.Name (@type.DurationMinutes min / @type.Price)</option>
+                    }
+                </select>
+            </div>
+        </div>
+        <div class="form-row">
+            <div class="form-group">
+                <label asp-for="PerformedAt" class="label"></label>
+                <input asp-for="PerformedAt" />
+            </div>
+            <div class="form-group">
+                <label asp-for="Cost" class="label"></label>
+                <input asp-for="Cost" type="number" step="0.01" min="0.01" />
+            </div>
+        </div>
+        <div class="btn-group">
+            <button type="submit" class="btn btn-primary">Create</button>
+            <a class="btn btn-secondary" href="/@tenantSlug/treatments">Cancel</a>
+        </div>
+    </form>
+    <div asp-validation-summary="All" class="validation"></div>
+</section>
+
+@section Scripts {
+    <partial name="_ValidationScriptsPartial" />
+}

@@ -1,0 +1,74 @@
+﻿@model IReadOnlyCollection<DentalSaaS.Application.TreatmentPlans.TreatmentPlanDto>
+@using DentalSaaS.Application.Abstractions
+@using DentalSaaS.Shared.Constants
+@inject ICurrentUserAccessor CurrentUser
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.PatientLookup;
+    ViewData["Title"] = "Treatment Plans";
+    var role = CurrentUser.Current.ActiveTenantRole ?? string.Empty;
+    var canCreate = role is Roles.CompanyOwner or Roles.CompanyAdmin or Roles.CompanyManager;
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Treatment plans</h1>
+    <p class="page-subtitle">Role-aware actions enabled for: <span class="badge badge-neutral">@role</span></p>
+    <div class="toolbar">
+        @if (canCreate)
+        {
+            <a class="btn btn-primary" href="/@tenantSlug/treatment-plans/create">Create plan</a>
+        }
+        <a class="btn btn-secondary" href="/@tenantSlug/patients">Back to patients</a>
+    </div>
+</div>
+
+@if (!Model.Any())
+{
+    <section class="empty-state fade-item">
+        <h2 class="card-title">No treatment plans yet</h2>
+        <p class="page-subtitle">Create a plan to start defining procedures, urgency, and patient approvals.</p>
+        @if (canCreate)
+        {
+            <a class="btn btn-primary" href="/@tenantSlug/treatment-plans/create">Create first plan</a>
+        }
+    </section>
+}
+else
+{
+    <section class="card fade-item">
+        <div class="table-wrap">
+            <table class="table">
+                <thead>
+                <tr>
+                    <th>Plan</th>
+                    <th>Patient</th>
+                    <th>Items</th>
+                    <th>Open</th>
+                </tr>
+                </thead>
+                <tbody>
+                @foreach (var p in Model)
+                {
+                    <tr>
+                        <td>@p.Title</td>
+                        <td>
+                            @if (patientLookup is not null && patientLookup.TryGetValue(p.PatientId, out var patientName))
+                            {
+                                @patientName
+                            }
+                            else
+                            {
+                                <span class="hint">Unknown patient</span>
+                            }
+                        </td>
+                        <td>@p.Items.Count</td>
+                        <td>
+                            <a class="btn btn-secondary" href="/@tenantSlug/treatment-plans/@p.Id">Details</a>
+                        </td>
+                    </tr>
+                }
+                </tbody>
+            </table>
+        </div>
+    </section>
+}

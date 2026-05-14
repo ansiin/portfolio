@@ -1,0 +1,46 @@
+@model IReadOnlyCollection<DentalSaaS.Application.Abstractions.SystemCompanyItem>
+@{
+    ViewData["Title"] = "Companies";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Companies</h1>
+    <p class="page-subtitle">Cross-tenant company list for system operations.</p>
+</div>
+
+<section class="card fade-item">
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr>
+                <th>Name</th>
+                <th>Slug</th>
+                <th>Tier</th>
+                <th>Active</th>
+                <th>Action</th>
+            </tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>@item.Name</td>
+                    <td>@item.Slug</td>
+                    <td>@item.Tier</td>
+                    <td>@(item.IsActive ? "Yes" : "No")</td>
+                    <td>
+                        @if (User.IsInRole(DentalSaaS.Shared.Constants.Roles.SystemAdmin))
+                        {
+                            <form method="post" action="/system/companies/@item.CompanyId/active" class="actions">
+                                @Html.AntiForgeryToken()
+                                <input type="hidden" name="isActive" value="@(!item.IsActive)" />
+                                <button type="submit" class="btn btn-link">@((item.IsActive) ? "Deactivate" : "Activate")</button>
+                            </form>
+                        }
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

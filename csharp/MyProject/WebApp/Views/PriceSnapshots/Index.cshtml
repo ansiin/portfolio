@@ -1,0 +1,74 @@
+@model IReadOnlyList<App.DTO.v1.PriceSnapshots.PriceSnapshotDto>
+
+@{
+    ViewData["Title"] = UiText.T("PriceSnapshots");
+    var assets = ViewBag.Assets as List<SelectListItem> ?? new List<SelectListItem>();
+    Guid? selectedAssetId = ViewBag.SelectedAssetId is Guid value ? value : null;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="mb-0">@UiText.T("PriceSnapshots")</h1>
+        <p class="text-muted mb-0">@UiText.T("PriceSnapshotsLead")</p>
+    </div>
+    <a asp-action="Create" asp-route-assetId="@selectedAssetId" class="btn btn-primary">@UiText.T("CreatePriceSnapshot")</a>
+</div>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-5">
+        <label class="form-label">@UiText.T("Asset")</label>
+        <select name="assetId" asp-items="assets" class="form-select"></select>
+    </div>
+    <div class="col-md-auto">
+        <button type="submit" class="btn btn-outline-secondary">@UiText.T("Filter")</button>
+    </div>
+</form>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">
+        @UiText.T("NoPriceSnapshots")
+    </div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+            <th>@UiText.T("Recorded")</th>
+            <th>@UiText.T("Asset")</th>
+            <th>@UiText.T("Portfolio")</th>
+            <th>@UiText.T("Currency")</th>
+            <th>@UiText.T("Provider")</th>
+            <th>@UiText.T("LatestPrice")</th>
+            <th class="text-end">@UiText.T("Actions")</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var snapshot in Model)
+        {
+            <tr>
+                <td>@snapshot.RecordedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>
+                    @snapshot.AssetName
+                    @if (!string.IsNullOrWhiteSpace(snapshot.AssetSymbol))
+                    {
+                        <span class="text-muted">(@snapshot.AssetSymbol)</span>
+                    }
+                </td>
+                <td>@snapshot.PortfolioName</td>
+                <td>@snapshot.CurrencyCode</td>
+                <td>@(snapshot.MarketDataProviderCode ?? "-")</td>
+                <td>@snapshot.Price</td>
+                <td class="text-end">
+                    <a asp-action="Edit" asp-route-id="@snapshot.Id" class="btn btn-sm btn-outline-primary">@UiText.T("Edit")</a>
+                    <form asp-action="Delete" asp-route-id="@snapshot.Id" asp-route-assetId="@selectedAssetId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger">@UiText.T("Delete")</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

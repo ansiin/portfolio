@@ -1,0 +1,36 @@
+@model IEnumerable<DAL.Entities.WatchlistItem>
+@{
+    ViewData["Title"] = "WatchlistItems";
+}
+
+<h1>WatchlistItems</h1>
+
+<p>
+    <a asp-action="Create" class="btn btn-primary">Create New</a>
+</p>
+
+<table class="table table-striped table-sm">
+    <thead>
+        <tr>
+            <th>@Html.DisplayNameFor(model => model.WatchlistId)</th>
+            <th>@Html.DisplayNameFor(model => model.AssetId)</th>
+            <th>@Html.DisplayNameFor(model => model.CreatedAt)</th>
+            <th></th>
+        </tr>
+    </thead>
+    <tbody>
+@foreach (var item in Model)
+{
+        <tr>
+            <td>@Html.DisplayFor(modelItem => item.WatchlistId)</td>
+            <td>@Html.DisplayFor(modelItem => item.AssetId)</td>
+            <td>@Html.DisplayFor(modelItem => item.CreatedAt)</td>
+            <td>
+                <a asp-action="Edit" asp-route-WatchlistId="@item.WatchlistId" asp-route-AssetId="@item.AssetId">Edit</a> |
+                <a asp-action="Details" asp-route-WatchlistId="@item.WatchlistId" asp-route-AssetId="@item.AssetId">Details</a> |
+                <a asp-action="Delete" asp-route-WatchlistId="@item.WatchlistId" asp-route-AssetId="@item.AssetId">Delete</a>
+            </td>
+        </tr>
+}
+    </tbody>
+</table>

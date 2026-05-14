@@ -1,0 +1,135 @@
+@using App.Domain.Identity
+@using Microsoft.AspNetCore.Identity
+@using System.Globalization
+@using WebApp.ViewModels
+@inject SignInManager<AppUser> _signInManager
+@{
+    var pageTitle = Model is IPageViewModel pageViewModel && !string.IsNullOrWhiteSpace(pageViewModel.PageTitle)
+        ? pageViewModel.PageTitle
+        : ViewData["Title"] as string ?? UiText.T("AppTitle");
+    var currentController = ViewContext.RouteData.Values["controller"]?.ToString();
+    var isAuthenticated = _signInManager.IsSignedIn(User);
+}
+<!DOCTYPE html>
+<html lang="@CultureInfo.CurrentUICulture.TwoLetterISOLanguageName">
+<head>
+    <meta charset="utf-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>@pageTitle - @UiText.T("AppTitle")</title>
+    <script type="importmap"></script>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css"/>
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true"/>
+    <link rel="stylesheet" href="~/WebApp.styles.css" asp-append-version="true"/>
+</head>
+<body>
+<div class="app-shell">
+    <header class="site-header">
+        <div class="container">
+            <nav class="navbar navbar-expand-lg site-navbar">
+                <a class="navbar-brand brand-mark" asp-area="" asp-controller="Home" asp-action="Index">
+                    <span class="brand-mark__logo">IT</span>
+                    <span>
+                        <strong>@UiText.T("AppTitle")</strong>
+                        <small>@UiText.T("BrandTagline")</small>
+                    </span>
+                </a>
+                <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#siteNav"
+                        aria-controls="siteNav"
+                        aria-expanded="false" aria-label="Toggle navigation">
+                    <span class="navbar-toggler-icon"></span>
+                </button>
+                <div class="collapse navbar-collapse" id="siteNav">
+                    <ul class="navbar-nav me-auto mb-3 mb-lg-0">
+                        <li class="nav-item">
+                            <a class="nav-link @(currentController == "Home" ? "active" : null)"
+                               asp-area="" asp-controller="Home" asp-action="Index">@UiText.T("Home")</a>
+                        </li>
+                        @if (isAuthenticated)
+                        {
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Dashboard" ? "active" : null)"
+                                   asp-area="" asp-controller="Dashboard" asp-action="Index">@UiText.T("Dashboard")</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Portfolios" ? "active" : null)"
+                                   asp-area="" asp-controller="Portfolios" asp-action="Index">@UiText.T("Portfolios")</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Assets" ? "active" : null)"
+                                   asp-area="" asp-controller="Assets" asp-action="Index">@UiText.T("Assets")</a>
+                            </li>
+                            <li class="nav-item">
+                                <a class="nav-link @(currentController == "Transactions" ? "active" : null)"
+                                   asp-area="" asp-controller="Transactions" asp-action="Index">@UiText.T("Transactions")</a>
+                            </li>
+                            <li class="nav-item dropdown">
+                                <a class="nav-link dropdown-toggle" href="#" id="toolsDropdown" role="button"
+                                   data-bs-toggle="dropdown" aria-expanded="false">
+                                    @UiText.T("More")
+                                </a>
+                                <ul class="dropdown-menu dropdown-menu-end">
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="PriceSnapshots" asp-action="Index">@UiText.T("Prices")</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="PositionSnapshots" asp-action="Index">@UiText.T("Positions")</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Watchlists" asp-action="Index">@UiText.T("Watchlists")</a></li>
+                                    <li><a class="dropdown-item" asp-area="" asp-controller="Notes" asp-action="Index">@UiText.T("Notes")</a></li>
+                                    @if (User.IsInRole("admin"))
+                                    {
+                                        <li><hr class="dropdown-divider"></li>
+                                        <li><a class="dropdown-item" asp-area="Admin" asp-controller="Home" asp-action="Index">@UiText.T("Admin")</a></li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    </ul>
+                    <div class="site-navbar__actions">
+                        <partial name="_LanguageSelection"/>
+                        <partial name="_LoginPartial"/>
+                    </div>
+                </div>
+            </nav>
+        </div>
+    </header>
+
+    <div class="container">
+        <main role="main" class="page-frame">
+            @RenderBody()
+        </main>
+    </div>
+
+    <footer class="site-footer">
+        <div class="container">
+            <div class="footer-grid">
+                <div>
+                    <div class="footer-brand">@UiText.T("AppTitle")</div>
+                    <p class="footer-copy">@UiText.T("FooterLead")</p>
+                </div>
+                <div>
+                    <div class="footer-title">@UiText.T("Navigation")</div>
+                    <div class="footer-links">
+                        <a asp-area="" asp-controller="Home" asp-action="Index">@UiText.T("Home")</a>
+                        <a asp-area="" asp-controller="Home" asp-action="Privacy">@UiText.T("Privacy")</a>
+                        @if (isAuthenticated)
+                        {
+                            <a asp-area="" asp-controller="Dashboard" asp-action="Index">@UiText.T("Dashboard")</a>
+                        }
+                        else
+                        {
+                            <a asp-area="Identity" asp-page="/Account/Login">@UiText.T("Login")</a>
+                        }
+                    </div>
+                </div>
+                <div>
+                    <div class="footer-title">@UiText.T("Environment")</div>
+                    <div class="footer-copy">@Thread.CurrentThread.CurrentUICulture.Name</div>
+                    <div class="footer-copy">@DateTime.UtcNow.ToString("yyyy-MM-dd") UTC</div>
+                </div>
+            </div>
+        </div>
+    </footer>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>

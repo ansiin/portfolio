@@ -1,0 +1,68 @@
+@model IReadOnlyList<App.DTO.v1.Transactions.TransactionDto>
+
+@{
+    ViewData["Title"] = UiText.T("Transactions");
+    var portfolios = ViewBag.Portfolios as List<SelectListItem> ?? new List<SelectListItem>();
+    Guid? selectedPortfolioId = ViewBag.SelectedPortfolioId is Guid value ? value : null;
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="mb-0">@UiText.T("Transactions")</h1>
+        <p class="text-muted mb-0">@UiText.T("TransactionsLead")</p>
+    </div>
+    <a asp-action="Create" asp-route-portfolioId="@selectedPortfolioId" class="btn btn-primary">@UiText.T("CreateTransaction")</a>
+</div>
+
+<form method="get" class="row g-2 align-items-end mb-3">
+    <div class="col-md-4">
+        <label class="form-label">@UiText.T("PortfolioFilter")</label>
+        <select name="portfolioId" asp-items="portfolios" class="form-select"></select>
+    </div>
+    <div class="col-md-auto">
+        <button type="submit" class="btn btn-outline-secondary">@UiText.T("Filter")</button>
+    </div>
+</form>
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">
+        @UiText.T("NoTransactions")
+    </div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+            <th>@UiText.T("Date")</th>
+            <th>@UiText.T("Type")</th>
+            <th>@UiText.T("Portfolio")</th>
+            <th>@UiText.T("Asset")</th>
+            <th>@UiText.T("Total")</th>
+            <th>@UiText.T("Fees")</th>
+            <th class="text-end">@UiText.T("Actions")</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var transaction in Model)
+        {
+            <tr>
+                <td>@transaction.ExecutedAt.ToString("yyyy-MM-dd HH:mm")</td>
+                <td>@UiText.T($"TransactionType_{transaction.Type}")</td>
+                <td>@transaction.PortfolioName</td>
+                <td>@(transaction.AssetName ?? "-")</td>
+                <td>@transaction.TotalAmount</td>
+                <td>@transaction.FeeTotal</td>
+                <td class="text-end">
+                    <a asp-action="Edit" asp-route-id="@transaction.Id" class="btn btn-sm btn-outline-primary">@UiText.T("Edit")</a>
+                    <form asp-action="Delete" asp-route-id="@transaction.Id" asp-route-portfolioId="@selectedPortfolioId" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger">@UiText.T("Delete")</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

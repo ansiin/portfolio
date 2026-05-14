@@ -1,0 +1,88 @@
+@{
+    ViewData["Title"] = UiText.T("Home");
+}
+
+<section class="hero-panel mb-4">
+    <div class="row align-items-center g-4">
+        <div class="col-lg-7">
+            <span class="eyebrow">@UiText.T("Welcome")</span>
+            <h1 class="hero-title">@UiText.T("HeroTitle")</h1>
+            <p class="hero-copy">@UiText.T("HeroLead")</p>
+            <div class="d-flex flex-wrap gap-3">
+                <a class="btn btn-primary btn-lg"
+                   asp-area="Identity"
+                   asp-page="/Account/Login"
+                   asp-route-returnUrl="@Url.Action("Index", "Dashboard", new { area = "" })">
+                    @UiText.T("Login")
+                </a>
+                <a class="btn btn-outline-light btn-lg"
+                   asp-area="Identity"
+                   asp-page="/Account/Register"
+                   asp-route-returnUrl="@Url.Action("Index", "Dashboard", new { area = "" })">
+                    @UiText.T("CreateAccount")
+                </a>
+            </div>
+        </div>
+        <div class="col-lg-5">
+            <div class="hero-metrics">
+                <div class="metric-card">
+                    <span>@UiText.T("Portfolios")</span>
+                    <strong>2</strong>
+                    <small>@UiText.T("SeededPortfolioHint")</small>
+                </div>
+                <div class="metric-card">
+                    <span>@UiText.T("Transactions")</span>
+                    <strong>8</strong>
+                    <small>@UiText.T("SeededTransactionHint")</small>
+                </div>
+                <div class="metric-card">
+                    <span>@UiText.T("Prices")</span>
+                    <strong>6</strong>
+                    <small>@UiText.T("SeededPriceHint")</small>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<section class="row g-4 mb-4">
+    <div class="col-lg-4">
+        <article class="surface-card h-100">
+            <span class="eyebrow">@UiText.T("Dashboard")</span>
+            <h2 class="section-title">@UiText.T("FeatureOneTitle")</h2>
+            <p class="section-copy">@UiText.T("FeatureOneLead")</p>
+        </article>
+    </div>
+    <div class="col-lg-4">
+        <article class="surface-card h-100">
+            <span class="eyebrow">@UiText.T("Transactions")</span>
+            <h2 class="section-title">@UiText.T("FeatureTwoTitle")</h2>
+            <p class="section-copy">@UiText.T("FeatureTwoLead")</p>
+        </article>
+    </div>
+    <div class="col-lg-4">
+        <article class="surface-card h-100">
+            <span class="eyebrow">@UiText.T("PriceSnapshots")</span>
+            <h2 class="section-title">@UiText.T("FeatureThreeTitle")</h2>
+            <p class="section-copy">@UiText.T("FeatureThreeLead")</p>
+        </article>
+    </div>
+</section>
+
+<section class="surface-card demo-card">
+    <div>
+        <span class="eyebrow">@UiText.T("DemoCredentials")</span>
+        <h2 class="section-title mb-2">@UiText.T("TryDemoTitle")</h2>
+        <p class="section-copy mb-0">@UiText.T("TryDemoLead")</p>
+    </div>
+    <div class="demo-credentials">
+        <div>
+            <span>@UiText.T("Email")</span>
+            <strong>user@taltech.ee</strong>
+        </div>
+        <div>
+            <span>@UiText.T("Password")</span>
+            <strong>Kala.12345</strong>
+        </div>
+    </div>
+</section>

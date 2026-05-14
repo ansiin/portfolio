@@ -1,0 +1,64 @@
+@model IReadOnlyList<App.DTO.v1.Portfolios.PortfolioDto>
+
+@{
+    ViewData["Title"] = UiText.T("Portfolios");
+}
+
+<div class="d-flex justify-content-between align-items-center mb-3">
+    <div>
+        <h1 class="mb-0">@UiText.T("Portfolios")</h1>
+        <p class="text-muted mb-0">@UiText.T("PortfolioLead")</p>
+    </div>
+    <a asp-action="Create" class="btn btn-primary">@UiText.T("CreatePortfolio")</a>
+</div>
+
+@if (TempData["Error"] is string errorMessage)
+{
+    <div class="alert alert-danger">@errorMessage</div>
+}
+
+@if (Model.Count == 0)
+{
+    <div class="alert alert-info">
+        @UiText.T("NoPortfolios")
+    </div>
+}
+else
+{
+    <table class="table table-striped align-middle">
+        <thead>
+        <tr>
+            <th>@UiText.T("Name")</th>
+            <th>@UiText.T("BaseCurrency")</th>
+            <th>@UiText.T("Status")</th>
+            <th class="text-end">@UiText.T("Actions")</th>
+        </tr>
+        </thead>
+        <tbody>
+        @foreach (var portfolio in Model)
+        {
+            <tr>
+                <td>@portfolio.Name</td>
+                <td>@portfolio.BaseCurrencyCode</td>
+                <td>
+                    @if (portfolio.IsArchived)
+                    {
+                        <span class="badge text-bg-secondary">@UiText.T("Archived")</span>
+                    }
+                    else
+                    {
+                        <span class="badge text-bg-success">@UiText.T("Active")</span>
+                    }
+                </td>
+                <td class="text-end">
+                    <a asp-action="Edit" asp-route-id="@portfolio.Id" class="btn btn-sm btn-outline-primary">@UiText.T("Edit")</a>
+                    <form asp-action="Delete" asp-route-id="@portfolio.Id" method="post" class="d-inline">
+                        @Html.AntiForgeryToken()
+                        <button type="submit" class="btn btn-sm btn-outline-danger">@UiText.T("Delete")</button>
+                    </form>
+                </td>
+            </tr>
+        }
+        </tbody>
+    </table>
+}

@@ -1,0 +1,23 @@
+@model DAL.Entities.WatchlistItem
+@{
+    ViewData["Title"] = "Delete";
+}
+
+<h1>Delete WatchlistItem</h1>
+<h3>Are you sure?</h3>
+
+<dl class="row">
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.WatchlistId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.WatchlistId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.AssetId)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.AssetId)</dd>
+    <dt class='col-sm-3'>@Html.DisplayNameFor(model => model.CreatedAt)</dt>
+    <dd class='col-sm-9'>@Html.DisplayFor(model => model.CreatedAt)</dd>
+</dl>
+
+<form asp-action="Delete" method="post">
+    <input type="hidden" asp-for="WatchlistId" />
+    <input type="hidden" asp-for="AssetId" />
+    <button type="submit" class="btn btn-danger">Delete</button>
+    <a asp-action="Index" class="btn btn-secondary">Back to List</a>
+</form>

@@ -1,0 +1,71 @@
+@model IReadOnlyCollection<DentalSaaS.Application.Xrays.XrayDto>
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.PatientLookup;
+    var overdueSummary = (DentalSaaS.Application.Xrays.XrayOverdueSummaryDto?)ViewBag.OverdueSummary;
+    ViewData["Title"] = "X-rays";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">X-rays</h1>
+    <p class="page-subtitle">Track diagnostic recency and compliance by configured interval.</p>
+    <div class="toolbar">
+        <a class="btn btn-primary" href="/@tenantSlug/xrays/create">Add X-ray</a>
+    </div>
+</div>
+
+@if (overdueSummary is not null && overdueSummary.OverduePatientCount > 0)
+{
+    <div class="alert alert-warning fade-item">
+        @overdueSummary.OverduePatientCount patient(s) are overdue for X-ray (interval @overdueSummary.XrayIntervalDays days).
+    </div>
+}
+
+<section class="card fade-item">
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>Patient</th><th>Taken</th><th>Due</th><th>Status</th><th>File</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (patientLookup is not null && patientLookup.TryGetValue(item.PatientId, out var patientName))
+                        {
+                            @patientName
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown patient</span>
+                        }
+                    </td>
+                    <td>@item.TakenAt</td>
+                    <td>@item.DueAt</td>
+                    <td>
+                        @if (item.IsOverdue)
+                        {
+                            <span class="badge badge-warning">Overdue @item.OverdueDays d</span>
+                        }
+                        else
+                        {
+                            <span class="badge badge-success">On track</span>
+                        }
+                    </td>
+                    <td><a class="btn btn-link" href="@item.FileUrl" target="_blank" rel="noopener noreferrer">Open</a></td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-secondary" href="/@tenantSlug/xrays/edit/@item.Id">Edit</a>
+                            <form method="post" action="/@tenantSlug/xrays/@item.Id/delete">
+                                @Html.AntiForgeryToken()
+                                <button class="btn btn-link" type="submit">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

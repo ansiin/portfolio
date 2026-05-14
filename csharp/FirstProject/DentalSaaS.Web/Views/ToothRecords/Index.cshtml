@@ -1,0 +1,53 @@
+@model IReadOnlyCollection<DentalSaaS.Application.ToothRecords.ToothRecordDto>
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    var patientLookup = (IReadOnlyDictionary<Guid, string>?)ViewBag.PatientLookup;
+    ViewData["Title"] = "Tooth Records";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Tooth records</h1>
+    <p class="page-subtitle">Universal numbering and per-tooth condition tracking.</p>
+    <div class="toolbar">
+        <a class="btn btn-primary" href="/@tenantSlug/tooth-records/create">Create tooth record</a>
+    </div>
+</div>
+
+<section class="card fade-item">
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>Patient</th><th>Tooth #</th><th>Condition</th><th>Notes</th><th>Actions</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var item in Model)
+            {
+                <tr>
+                    <td>
+                        @if (patientLookup is not null && patientLookup.TryGetValue(item.PatientId, out var patientName))
+                        {
+                            @patientName
+                        }
+                        else
+                        {
+                            <span class="hint">Unknown patient</span>
+                        }
+                    </td>
+                    <td>@item.ToothNumber</td>
+                    <td>@item.ConditionStatus</td>
+                    <td>@(string.IsNullOrWhiteSpace(item.Notes) ? "-" : item.Notes)</td>
+                    <td>
+                        <div class="actions">
+                            <a class="btn btn-secondary" href="/@tenantSlug/tooth-records/edit/@item.Id">Edit</a>
+                            <form method="post" action="/@tenantSlug/tooth-records/@item.Id/delete">
+                                @Html.AntiForgeryToken()
+                                <button type="submit" class="btn btn-link">Delete</button>
+                            </form>
+                        </div>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

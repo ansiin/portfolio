@@ -1,0 +1,104 @@
+@model (IReadOnlyCollection<DentalSaaS.Application.PracticeSetup.TreatmentRoomDto> Rooms, IReadOnlyCollection<DentalSaaS.Application.PracticeSetup.TreatmentTypeDto> Types, IReadOnlyCollection<DentalSaaS.Application.PracticeSetup.DentistDto> Dentists)
+@{
+    var tenantSlug = (string)ViewBag.TenantSlug;
+    ViewData["Title"] = "Practice Setup";
+}
+
+<div class="page-header fade-item">
+    <h1 class="page-title">Practice setup</h1>
+    <p class="page-subtitle">Configure rooms, treatment types, and dentists.</p>
+</div>
+
+<div class="grid grid-2 fade-item">
+    <section class="card">
+        <h2 class="card-title">Add room</h2>
+        <form method="post" action="/@tenantSlug/practice-setup/rooms" class="form">
+            @Html.AntiForgeryToken()
+            <input name="Name" placeholder="Room A" required />
+            <button type="submit" class="btn btn-primary">Add room</button>
+        </form>
+    </section>
+
+    <section class="card">
+        <h2 class="card-title">Add dentist</h2>
+        <form method="post" action="/@tenantSlug/practice-setup/dentists" class="form">
+            @Html.AntiForgeryToken()
+            <input name="Name" placeholder="Dr. Jane Doe" required />
+            <input name="LicenseNumber" placeholder="License #" required />
+            <button type="submit" class="btn btn-primary">Add dentist</button>
+        </form>
+    </section>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Add treatment type</h2>
+    <form method="post" action="/@tenantSlug/practice-setup/types" class="form">
+        @Html.AntiForgeryToken()
+        <div class="form-row">
+            <input name="Name" placeholder="Root canal" required />
+            <input name="DurationMinutes" type="number" placeholder="Duration minutes" min="5" required />
+            <input name="Price" type="number" step="0.01" placeholder="Price" min="0.01" required />
+        </div>
+        <button type="submit" class="btn btn-primary">Add type</button>
+    </form>
+</section>
+
+<div class="grid grid-2 fade-item">
+    <section class="card">
+        <h2 class="card-title">Rooms</h2>
+        <ul>
+            @foreach (var room in Model.Rooms)
+            {
+                <li>
+                    @room.Name
+                    <form method="post" action="/@tenantSlug/practice-setup/rooms/@room.Id/delete" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-link" type="submit">Delete</button>
+                    </form>
+                </li>
+            }
+        </ul>
+    </section>
+    <section class="card">
+        <h2 class="card-title">Dentists</h2>
+        <ul>
+            @foreach (var dentist in Model.Dentists)
+            {
+                <li>
+                    @dentist.Name (@dentist.LicenseNumber)
+                    <form method="post" action="/@tenantSlug/practice-setup/dentists/@dentist.Id/delete" style="display:inline;">
+                        @Html.AntiForgeryToken()
+                        <button class="btn btn-link" type="submit">Delete</button>
+                    </form>
+                </li>
+            }
+        </ul>
+    </section>
+</div>
+
+<section class="card fade-item">
+    <h2 class="card-title">Treatment types</h2>
+    <div class="table-wrap">
+        <table class="table">
+            <thead>
+            <tr><th>Name</th><th>Duration</th><th>Price</th><th>Action</th></tr>
+            </thead>
+            <tbody>
+            @foreach (var type in Model.Types)
+            {
+                <tr>
+                    <td>@type.Name</td>
+                    <td>@type.DurationMinutes min</td>
+                    <td>@type.Price</td>
+                    <td>
+                        <form method="post" action="/@tenantSlug/practice-setup/types/@type.Id/delete">
+                            @Html.AntiForgeryToken()
+                            <button class="btn btn-link" type="submit">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+            }
+            </tbody>
+        </table>
+    </div>
+</section>

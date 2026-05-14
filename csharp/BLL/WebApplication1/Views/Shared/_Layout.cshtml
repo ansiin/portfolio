@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>@ViewData["Title"] - Investment Tracker</title>
+    <link rel="stylesheet" href="~/lib/bootstrap/dist/css/bootstrap.min.css" />
+    <link rel="stylesheet" href="~/css/site.css" asp-append-version="true" />
+</head>
+<body>
+<header>
+    <nav class="navbar navbar-expand-sm navbar-light bg-light border-bottom mb-3">
+        <div class="container-fluid">
+            <a class="navbar-brand" asp-controller="Home" asp-action="Index">Investment Tracker</a>
+            <div class="navbar-collapse collapse d-sm-inline-flex justify-content-between">
+                <ul class="navbar-nav flex-grow-1 flex-wrap">
+                    <li class="nav-item"><a class="nav-link" asp-controller="Assets" asp-action="Index">Assets</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="AssetTypes" asp-action="Index">Asset Types</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="CorporateActions" asp-action="Index">Corporate Actions</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Currencies" asp-action="Index">Currencies</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Exchanges" asp-action="Index">Exchanges</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="MarketDataProviders" asp-action="Index">Providers</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Notes" asp-action="Index">Notes</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Portfolios" asp-action="Index">Portfolios</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="PositionSnapshots" asp-action="Index">Position Snapshots</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="PriceSnapshots" asp-action="Index">Price Snapshots</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Tags" asp-action="Index">Tags</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Transactions" asp-action="Index">Transactions</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="TransactionFees" asp-action="Index">Transaction Fees</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="Watchlists" asp-action="Index">Watchlists</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="AssetTags" asp-action="Index">Asset Tags</a></li>
+                    <li class="nav-item"><a class="nav-link" asp-controller="WatchlistItems" asp-action="Index">Watchlist Items</a></li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+</header>
+<div class="container">
+    <main role="main" class="pb-3">
+        @RenderBody()
+    </main>
+</div>
+<script src="~/lib/jquery/dist/jquery.min.js"></script>
+<script src="~/lib/bootstrap/dist/js/bootstrap.bundle.min.js"></script>
+<script src="~/js/site.js" asp-append-version="true"></script>
+@await RenderSectionAsync("Scripts", required: false)
+</body>
+</html>
