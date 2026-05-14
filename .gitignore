@@ -1,15 +1,5 @@
-# Dependencies
-**/node_modules/
-
-# Build outputs
-**/dist/
-
-# Logs
-**/*.log
-npm-debug.log*
-
-# OS / Editor
-.DS_Store
-Thumbs.db
-.vscode/
-.idea/
+assignment-5/
+express-hw/
+react-hw/
+typescript-task-manager/
+vue-task-manager/
